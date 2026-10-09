@@ -1,0 +1,103 @@
+/usr/local/lib/python3.13/dist-packages/neuralset/extractors/base.py:707: UserWarning: LabelEncoder: event_types has not been set, are you sure you want to apply this extractor to all events?
+  warnings.warn(
+2026-10-08 19:54:33 - WARNING - neuralset.extractors.base:798 - Missing events will be encoded using the default all-zero value (for example, 0 or a zero vector/tensor), which may be indistinguishable from a valid class if that class is also mapped to zeros. Set treat_missing_as_separate_class=True to avoid this.
+/usr/local/lib/python3.13/dist-packages/x_transformers/x_transformers.py:439: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @autocast(enabled = False)
+/usr/local/lib/python3.13/dist-packages/x_transformers/x_transformers.py:461: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @autocast(enabled = False)
+step   100  mean mse 5.686e-05  eta 282 min
+step   200  mean mse 3.306e-05  eta 303 min
+step   300  mean mse 2.570e-05  eta 298 min
+step   400  mean mse 2.255e-05  eta 292 min
+step   500  mean mse 1.970e-05  eta 288 min
+step   600  mean mse 2.120e-05  eta 281 min
+step   700  mean mse 1.658e-05  eta 274 min
+step   800  mean mse 1.673e-05  eta 269 min
+step   900  mean mse 1.362e-05  eta 265 min
+step  1000  mean mse 1.186e-05  eta 262 min
+step  1100  mean mse 1.821e-05  eta 257 min
+step  1200  mean mse 1.056e-05  eta 254 min
+step  1300  mean mse 9.677e-06  eta 249 min
+step  1400  mean mse 1.103e-05  eta 246 min
+step  1500  mean mse 8.146e-06  eta 242 min
+step  1600  mean mse 8.365e-06  eta 238 min
+step  1700  mean mse 7.206e-06  eta 234 min
+step  1800  mean mse 6.485e-06  eta 230 min
+step  1900  mean mse 6.961e-06  eta 226 min
+step  2000  mean mse 5.779e-06  eta 223 min
+step  2100  mean mse 5.811e-06  eta 219 min
+step  2200  mean mse 5.093e-06  eta 216 min
+step  2300  mean mse 4.789e-06  eta 212 min
+step  2400  mean mse 4.917e-06  eta 208 min
+step  2500  mean mse 4.242e-06  eta 204 min
+step  2600  mean mse 4.288e-06  eta 200 min
+step  2700  mean mse 4.223e-06  eta 196 min
+step  2800  mean mse 3.527e-06  eta 193 min
+step  2900  mean mse 3.450e-06  eta 189 min
+step  3000  mean mse 3.370e-06  eta 185 min
+step  3100  mean mse 2.987e-06  eta 181 min
+step  3200  mean mse 2.832e-06  eta 177 min
+step  3300  mean mse 3.027e-06  eta 173 min
+step  3400  mean mse 2.679e-06  eta 169 min
+step  3500  mean mse 2.681e-06  eta 165 min
+step  3600  mean mse 2.530e-06  eta 161 min
+step  3700  mean mse 2.246e-06  eta 157 min
+step  3800  mean mse 2.164e-06  eta 154 min
+step  3900  mean mse 2.144e-06  eta 150 min
+step  4000  mean mse 1.981e-06  eta 146 min
+step  4100  mean mse 1.941e-06  eta 142 min
+step  4200  mean mse 1.878e-06  eta 138 min
+step  4300  mean mse 1.847e-06  eta 134 min
+step  4400  mean mse 1.698e-06  eta 130 min
+step  4500  mean mse 1.630e-06  eta 128 min
+step  4600  mean mse 1.620e-06  eta 124 min
+step  4700  mean mse 1.534e-06  eta 120 min
+step  4800  mean mse 1.492e-06  eta 116 min
+step  4900  mean mse 1.447e-06  eta 112 min
+step  5000  mean mse 1.411e-06  eta 109 min
+step  5100  mean mse 1.373e-06  eta 105 min
+step  5200  mean mse 1.341e-06  eta 101 min
+step  5300  mean mse 1.309e-06  eta 97 min
+step  5400  mean mse 1.280e-06  eta 94 min
+step  5500  mean mse 1.253e-06  eta 90 min
+step  5600  mean mse 1.228e-06  eta 86 min
+step  5700  mean mse 1.205e-06  eta 83 min
+step  5800  mean mse 1.183e-06  eta 79 min
+step  5900  mean mse 1.163e-06  eta 75 min
+step  6000  mean mse 1.145e-06  eta 72 min
+step  6100  mean mse 1.128e-06  eta 68 min
+step  6200  mean mse 1.112e-06  eta 64 min
+step  6300  mean mse 1.098e-06  eta 61 min
+step  6400  mean mse 1.085e-06  eta 57 min
+step  6500  mean mse 1.073e-06  eta 53 min
+step  6600  mean mse 1.063e-06  eta 50 min
+step  6700  mean mse 1.054e-06  eta 46 min
+step  6800  mean mse 1.046e-06  eta 43 min
+step  6900  mean mse 1.039e-06  eta 39 min
+step  7000  mean mse 1.033e-06  eta 35 min
+step  7100  mean mse 1.028e-06  eta 32 min
+step  7200  mean mse 1.023e-06  eta 28 min
+step  7300  mean mse 1.020e-06  eta 25 min
+step  7400  mean mse 1.018e-06  eta 21 min
+step  7500  mean mse 1.016e-06  eta 18 min
+step  7600  mean mse 1.014e-06  eta 14 min
+step  7700  mean mse 1.013e-06  eta 11 min
+step  7800  mean mse 1.013e-06  eta 7 min
+step  7900  mean mse 1.013e-06  eta 4 min
+step  8000  mean mse 1.013e-06  eta 0 min
+Whole cortex                       n=20484 cos 0.8362  text 0.8509  audio 0.7970  video 0.8652  wholeEnc 1.379e-02
+Language (L)                       n= 1282 cos 0.7521  text 0.7642  audio 0.7070  video 0.7909  wholeEnc 2.319e-02
+Language homologue (R)             n= 1368 cos 0.7498  text 0.7645  audio 0.7095  video 0.7823  wholeEnc 2.280e-02
+Auditory                           n=  277 cos 0.3858  text 0.3986  audio 0.3483  video 0.4169  wholeEnc 6.448e-02
+Default mode                       n= 1224 cos 0.7274  text 0.7403  audio 0.6845  video 0.7608  wholeEnc 2.577e-02
+Visual                             n= 1582 cos 0.6288  text 0.6478  audio 0.5636  video 0.6752  wholeEnc 3.117e-02
+Somatomotor                        n= 1487 cos 0.8506  text 0.8634  audio 0.8214  video 0.8710  wholeEnc 1.728e-02
+Random |Language (L)|              n= 1282 cos 0.7286  text 0.7446  audio 0.6746  video 0.7681  wholeEnc 2.333e-02
+Random |Language homologue (R)|    n= 1368 cos 0.7387  text 0.7545  audio 0.6863  video 0.7771  wholeEnc 2.255e-02
+Random |Auditory|                  n=  277 cos 0.3711  text 0.3835  audio 0.3271  video 0.4026  wholeEnc 4.879e-02
+Random |Default mode|              n= 1224 cos 0.7230  text 0.7399  audio 0.6682  video 0.7622  wholeEnc 2.380e-02
+Random |Visual|                    n= 1582 cos 0.7536  text 0.7705  audio 0.7023  video 0.7905  wholeEnc 2.129e-02
+Random |Somatomotor|               n= 1487 cos 0.7484  text 0.7654  audio 0.6956  video 0.7860  wholeEnc 2.180e-02
+Random |Language (L)| rep          n= 1282 cos 0.7272  text 0.7417  audio 0.6749  video 0.7674  wholeEnc 2.355e-02
+Random |Auditory| rep              n=  277 cos 0.3838  text 0.3881  audio 0.3436  video 0.4212  wholeEnc 4.919e-02
+DONE in 282.5 min

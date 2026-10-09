@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+weights/
+data/atlas/
+data/lebel/*
+!data/lebel/pycx/
+data/lebel/pycx/*
+!data/lebel/pycx/sampler.npz
+demo/frames/
+results/*.pt
+results/synth_solutions_*.pt
+.ipynb_checkpoints/

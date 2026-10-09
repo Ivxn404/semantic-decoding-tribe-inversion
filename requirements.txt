@@ -1,0 +1,16 @@
+# TRIBE v2 itself:  pip install "tribev2[plotting] @ git+https://github.com/facebookresearch/tribev2.git"
+torch>=2.5,<2.7
+torchaudio==2.6.0
+transformers<4.57
+huggingface_hub
+numpy
+scipy
+scikit-learn
+h5py
+nibabel
+nilearn
+matplotlib
+pandas
+pyyaml
+# real-data registration only (one-off; the result is shipped as data/lebel/pycx/sampler.npz)
+antspyx

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Encoder Inversion Poster</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Sans+Condensed:wght@600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5E66}a:hover{color:#13243B}
+</style>
+</helmet>
+<div style="width: 4608px; height: 3456px; box-sizing: border-box; position: relative; overflow: hidden; font-family: 'IBM Plex Sans', sans-serif; color: #15202B; background: linear-gradient(160deg, #CFEDE7 0%, #E9F5EC 45%, #FBF4D6 100%); display: flex; flex-direction: column">
+
+<header style="height: 520px; box-sizing: border-box; padding: 48px 72px; display: flex; align-items: center; gap: 64px; background: linear-gradient(90deg, #6FC8BD 0%, #A9DDC6 40%, #F3E08A 100%); border-bottom: 8px solid #0E6E78">
+<div style="width: 340px; height: 340px; flex: none; border: 4px dashed #0E6E78; border-radius: 24px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 34px; font-weight: 600; color: #0E4F57; background: rgba(255,255,255,0.45)">[VIT LOGO]</div>
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px">
+<h1 style="margin: 0; font-family: 'IBM Plex Sans Condensed', sans-serif; font-weight: 700; font-size: 104px; line-height: 1.06; color: #0F2236; text-wrap: balance; max-width: 3300px">Conditioning and Non-Convexity of Semantic Decoding by Inverting a Deep Brain Encoding Model</h1>
+<div style="font-size: 54px; font-weight: 600; color: #0F2236">Abhranil Sarkar<sup>1</sup>, Tanisha Choudhuri<sup>1</sup>, Sharmila Nageswaran<sup>1</sup></div>
+<div style="font-size: 40px; color: #1E3446"><sup>1</sup>School of Electronics Engineering (SENSE), Vellore Institute of Technology, Vellore, Tamil Nadu, India</div>
+</div>
+<div style="width: 400px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 18px">
+<div style="width: 300px; height: 300px; border: 4px dashed #0E6E78; border-radius: 20px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 30px; font-weight: 600; color: #0E4F57; background: rgba(255,255,255,0.7)">[QR CODE<br>code + demo]</div>
+<div style="font-size: 32px; font-weight: 500; color: #0F2236; text-align: center">[CONTACT EMAIL]</div>
+</div>
+</header>
+
+<main style="flex: 1; box-sizing: border-box; padding: 48px 64px 40px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 56px; min-height: 0">
+
+<!-- COLUMN 1 -->
+<div style="display: flex; flex-direction: column; gap: 40px; min-height: 0">
+
+<section style="background: #FFFFFF; border-radius: 28px; padding: 36px 44px 40px; display: flex; flex-direction: column; gap: 22px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Introduction</h2>
+<ul style="margin: 0; padding-left: 40px; font-size: 34px; line-height: 1.4; display: flex; flex-direction: column; gap: 14px">
+<li>Encoding models predict fMRI from stimuli; decoding asks the reverse. Foundation encoders such as TRIBE v2 [1] now predict whole-cortex responses to video, audio and language.</li>
+<li>If an encoder is accurate, can it simply be <b>inverted</b> to read out the stimulus representation? A good forward fit does not guarantee a well-posed inverse [2, 8].</li>
+<li>We invert frozen TRIBE v2 by gradient descent on its 1 152-d multimodal representation and ask: <b>is the inverse unique, how is it conditioned, and which cortex carries recoverable information?</b></li>
+</ul>
+</section>
+
+<section style="background: #FFFFFF; border-radius: 28px; padding: 36px 44px 40px; display: flex; flex-direction: column; gap: 22px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Research Gap and Novelty</h2>
+<p style="margin: 0; font-size: 34px; line-height: 1.4">Earlier work inverts <b>linear</b> models, or uses deep encoders only in the <b>forward</b> direction. No prior study tests whether a deep foundation encoder's inverse is unique or how it is conditioned.</p>
+<table style="width: 100%; border-collapse: collapse; font-size: 29px; line-height: 1.25">
+<thead>
+<tr style="border-bottom: 3px solid #0F2236">
+<th style="text-align: left; padding: 10px 8px; font-weight: 700">Study</th>
+<th style="padding: 10px 6px; font-weight: 600; width: 190px">Nonlinear deep encoder</th>
+<th style="padding: 10px 6px; font-weight: 600; width: 190px">Optimises encoder input</th>
+<th style="padding: 10px 6px; font-weight: 600; width: 190px">Tests uniqueness / conditioning</th>
+<th style="padding: 10px 6px; font-weight: 600; width: 190px">Region-wise recoverability</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid #C9D3DA"><td style="padding: 10px 8px">Kay et al. 2008 [3]</td><td style="text-align: center">○</td><td style="text-align: center">○</td><td style="text-align: center">○</td><td style="text-align: center">○</td></tr>
+<tr style="border-bottom: 1px solid #C9D3DA"><td style="padding: 10px 8px">Gardner &amp; Liu 2019 [2]</td><td style="text-align: center">○</td><td style="text-align: center">●</td><td style="text-align: center">●</td><td style="text-align: center">○</td></tr>
+<tr style="border-bottom: 1px solid #C9D3DA"><td style="padding: 10px 8px">Tang et al. 2023 [4]</td><td style="text-align: center">○</td><td style="text-align: center">●</td><td style="text-align: center">○</td><td style="text-align: center">●</td></tr>
+<tr style="border-bottom: 1px solid #C9D3DA"><td style="padding: 10px 8px">d'Ascoli et al. 2026, TRIBE v2 [1]</td><td style="text-align: center">●</td><td style="text-align: center">○</td><td style="text-align: center">○</td><td style="text-align: center">○</td></tr>
+<tr style="border-bottom: 1px solid #C9D3DA"><td style="padding: 10px 8px">Bladon &amp; Bent 2026 [5]</td><td style="text-align: center">●</td><td style="text-align: center">●</td><td style="text-align: center">○</td><td style="text-align: center">○</td></tr>
+<tr style="border-bottom: 1px solid #C9D3DA"><td style="padding: 10px 8px">Benchetrit et al. 2026 [6]</td><td style="text-align: center">●</td><td style="text-align: center">○</td><td style="text-align: center">○</td><td style="text-align: center">○</td></tr>
+<tr style="background: #FFF4C2; border-bottom: 3px solid #0F2236"><td style="padding: 12px 8px; font-weight: 700">This work</td><td style="text-align: center; font-weight: 700">●</td><td style="text-align: center; font-weight: 700">●</td><td style="text-align: center; font-weight: 700">●</td><td style="text-align: center; font-weight: 700">●</td></tr>
+</tbody>
+</table>
+<p style="margin: 0; font-size: 27px; line-height: 1.35; color: #3A4650">● yes &nbsp;○ no. Literature search on 9 Oct 2026 (arXiv and web; terms: "TRIBE v2", and invert / identifiability / conditioning with "brain encoding model"). The two TRIBE v2 follow-ups found [5, 6] use the model for feature visualisation or synthetic training data; neither tests the inverse.</p>
+</section>
+
+<section style="flex: 1; background: #FFFFFF; border-radius: 28px; padding: 36px 44px 40px; display: flex; flex-direction: column; gap: 26px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Method</h2>
+<div style="display: flex; align-items: stretch; gap: 14px">
+<div style="flex: 1; border-radius: 18px; background: #E3F2EF; border: 3px solid #0E6E78; padding: 20px; font-size: 30px; line-height: 1.3; text-align: center"><b>Representation x</b><br>T × 1 152<br>text | audio | video</div>
+<svg width="56" height="120" viewBox="0 0 56 120" style="flex: none; align-self: center"><path d="M4 60 H46 M32 44 L48 60 L32 76" fill="none" stroke="#0F2236" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<div style="flex: 1; border-radius: 18px; background: #0F2236; color: #FFFFFF; padding: 20px; font-size: 30px; line-height: 1.3; text-align: center"><b>TRIBE v2, frozen</b><br>177 M parameters<br>transformer + projector</div>
+<svg width="56" height="120" viewBox="0 0 56 120" style="flex: none; align-self: center"><path d="M4 60 H46 M32 44 L48 60 L32 76" fill="none" stroke="#0F2236" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<div style="flex: 1; border-radius: 18px; background: #E3F2EF; border: 3px solid #0E6E78; padding: 20px; font-size: 30px; line-height: 1.3; text-align: center"><b>Predicted fMRI f(x)</b><br>20 484 vertices<br>fsaverage5</div>
+</div>
+<div style="display: flex; align-items: center; gap: 18px; border-radius: 18px; background: #FFF4C2; border: 3px solid #C9A227; padding: 22px 26px; font-size: 31px; line-height: 1.35">
+<svg width="70" height="70" viewBox="0 0 70 70" style="flex: none"><path d="M56 22 A26 26 0 1 0 60 42" fill="none" stroke="#0F2236" stroke-width="6" stroke-linecap="round"></path><path d="M46 20 L57 22 L58 10" fill="none" stroke="#0F2236" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<div><b>Inversion:</b> x̂ = argmin ‖f(x̂) − y*‖² by Adam (lr 0.05, cosine schedule); weights frozen, only x̂ is optimised. Target y* is the response to a known ground-truth x.</div>
+</div>
+<ul style="margin: 0; padding-left: 40px; font-size: 32px; line-height: 1.4; display: flex; flex-direction: column; gap: 10px">
+<li><b>Score:</b> cosine(x̂, x) and retrieval among distractors.</li>
+<li><b>Tests:</b> 8 initialisations × 4 ground truths, perturbation barriers, Jacobian sensitivity, gain, noise, cortical extent, priors, ridge baseline.</li>
+<li><b>Regions:</b> 6 Destrieux-atlas networks vs size-matched random vertex sets.</li>
+</ul>
+<div style="margin-top: auto; border-top: 3px solid #D7E2E6; padding-top: 22px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 36px; font-weight: 700; color: #0F2236">Project status</span><span style="font-size: 44px; font-weight: 700; color: #0B5E66">≈ 68% complete</span></div>
+<div style="display: flex; gap: 6px; height: 34px">
+<div style="flex: 1; background: #1B9E77; border-radius: 6px"></div>
+<div style="flex: 1; background: #1B9E77; border-radius: 6px"></div>
+<div style="flex: 1; background: #1B9E77; border-radius: 6px"></div>
+<div style="flex: 1; background: #1B9E77; border-radius: 6px"></div>
+<div style="flex: 1; background: #1B9E77; border-radius: 6px"></div>
+<div style="flex: 1; background: linear-gradient(90deg, #E0A100 35%, #E4E8EE 35%); border-radius: 6px"></div>
+<div style="flex: 1; background: linear-gradient(90deg, #E0A100 15%, #E4E8EE 15%); border-radius: 6px"></div>
+</div>
+<div style="display: flex; gap: 6px; font-size: 22px; line-height: 1.2; color: #3A4650; text-align: center">
+<div style="flex: 1">Formulation</div><div style="flex: 1">Instrumentation</div><div style="flex: 1">Core analysis</div><div style="flex: 1">Controls</div><div style="flex: 1">Regional</div><div style="flex: 1">Real fMRI</div><div style="flex: 1">Write-up</div>
+</div>
+<p style="margin: 0; font-size: 28px; line-height: 1.35; color: #15202B"><b style="color: #1B7F63">Done:</b> synthetic characterisation, controls, regional analysis. <b style="color: #9A6B00">In progress:</b> real-fMRI validation (first results, right) and write-up.</p>
+</div>
+</section>
+</div>
+
+<!-- COLUMN 2 -->
+<div style="display: flex; flex-direction: column; gap: 40px; min-height: 0">
+
+<section style="background: #FFFFFF; border-radius: 28px; padding: 36px 44px 40px; display: flex; flex-direction: column; gap: 22px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Result 1 · A good fit is not a good decode</h2>
+<img src="/_blob/171cabc2d04dac4b8ddb92fdefad1e62" alt="Encoding error versus recovery cosine across step budgets" style="width: 100%; height: 640px; object-fit: contain">
+<p style="margin: 0; font-size: 34px; line-height: 1.4">Encoding error falls <b>28.4×</b> across independent runs while recovery saturates near cosine 0.94; the final halving of error buys only +0.015.</p>
+</section>
+
+<section style="background: #FFFFFF; border-radius: 28px; padding: 36px 44px 40px; display: flex; flex-direction: column; gap: 22px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Result 2 · Non-convex, yet identifiable</h2>
+<img src="/_blob/5b1e105e7a541e40a20166ebd1ef5d37" alt="Solutions from eight initialisations at matched fit" style="width: 100%; height: 470px; object-fit: contain">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+<img src="/_blob/ffe5dac9de8e7f69e0879d49fbc0aafa" alt="Perturbation barrier test between solutions" style="width: 100%; height: 360px; object-fit: contain">
+<img src="/_blob/77bd732336a31601089c2a5f2a703df2" alt="Sensitivity along the solution difference versus random directions" style="width: 100%; height: 360px; object-fit: contain">
+</div>
+<p style="margin: 0; font-size: 34px; line-height: 1.4">Initialisations at matched fit reach different solutions (pairwise cosine down to <b>0.835</b>), reproducibly over 4 ground truths. Perturbations show <b>barriers between minima</b>, not a flat null space. The error lies along directions <b>less sensitive than every random direction</b> sampled (1.9× below median). Gain is identifiable: a 10% rescale gives 7.5× the noise floor.</p>
+</section>
+
+<section style="flex: 1; background: #FFFFFF; border-radius: 28px; padding: 36px 44px 40px; display: flex; flex-direction: column; gap: 22px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Conditioning in numbers</h2>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 18px">
+<div style="background: #E3F2EF; border-radius: 18px; padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 8px"><div style="font-size: 64px; font-weight: 700; color: #0B5E66">10%</div><div style="font-size: 27px; line-height: 1.3">of cortex (2 000 vertices) gives 0.78 of the 0.84 recovery</div></div>
+<div style="background: #E3F2EF; border-radius: 18px; padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 8px"><div style="font-size: 64px; font-weight: 700; color: #0B5E66">0.70</div><div style="font-size: 27px; line-height: 1.3">recovery at noise σ = 0.25 (0.84 clean)</div></div>
+<div style="background: #E3F2EF; border-radius: 18px; padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 8px"><div style="font-size: 64px; font-weight: 700; color: #0B5E66">15×</div><div style="font-size: 27px; line-height: 1.3">nonlinear inversion over best ridge decoder</div></div>
+<div style="background: #FFF4C2; border-radius: 18px; padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 8px"><div style="font-size: 64px; font-weight: 700; color: #8A5A00">10³×</div><div style="font-size: 27px; line-height: 1.3">loss from a temporal-smoothness prior</div></div>
+</div>
+</section>
+</div>
+
+<!-- COLUMN 3 -->
+<div style="display: flex; flex-direction: column; gap: 40px; min-height: 0">
+
+<section style="background: #FFFFFF; border-radius: 28px; padding: 36px 44px 40px; display: flex; flex-direction: column; gap: 22px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Result 3 · Predictable is not recoverable</h2>
+<img src="/_blob/c52e33262fb27edfecab02f540b4cc32" alt="Six cortical networks on the inflated surface" style="width: 100%; height: 250px; object-fit: contain">
+<img src="/_blob/57b149f8f102ccb40e186ac4087c5c50" alt="Recovery per network versus size-matched random vertices" style="width: 100%; height: 400px; object-fit: contain">
+<p style="margin: 0; font-size: 34px; line-height: 1.4"><b>Visual cortex</b>, the most responsive (1.60× cortex mean), recovers worst (0.63 vs 0.75 random). <b>Somatomotor</b>, the least responsive (0.73×), recovers best (0.85), above whole cortex. Control spread ≤ 0.013. Response diversity (participation ratio 18.6 vs 10.3) explains the extremes.</p>
+</section>
+
+<section style="background: #FFFFFF; border-radius: 28px; padding: 36px 44px 40px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Conclusions</h2>
+<ul style="margin: 0; padding-left: 40px; font-size: 34px; line-height: 1.4; display: flex; flex-direction: column; gap: 12px">
+<li>Inverting a foundation encoder is a <b>non-convex, direction-dependently conditioned</b> problem: forward accuracy does not certify decoding.</li>
+<li>Recoverability must be measured, not inferred from predictivity.</li>
+<li>On real fMRI the inverse <b>identifies</b> the heard moment but does not <b>reconstruct</b> its representation.</li>
+</ul>
+</section>
+
+<section style="background: #FFFFFF; border-radius: 28px; padding: 32px 44px 36px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 54px; font-weight: 700; color: {{accent}}">Real fMRI · first results</h2>
+<img src="/_blob/a6f0f2d4c5277620cd4a5c84b59f81c3" alt="Real-fMRI alignment, encoding accuracy by network and identification accuracy" style="width: 100%; height: 340px; object-fit: contain">
+<p style="margin: 0; font-size: 31px; line-height: 1.38">LeBel et al. [7], subject UTS03, held-out story; text + audio features. Encoding r = <b>0.48</b> on the top 2 000 vertices (56% of noise ceiling). Inverting measured BOLD picks the heard 100-s segment <b>4/5</b> times among 45 (chance 2.2%), yet cosine to the true x is only <b>0.02</b>.</p>
+</section>
+
+<section style="flex: 1; background: #FFFFFF; border-radius: 28px; padding: 32px 44px 36px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 6px 18px rgba(15,34,54,0.10)">
+<h2 style="margin: 0; font-size: 48px; font-weight: 700; color: {{accent}}">References</h2>
+<ol style="margin: 0; padding-left: 40px; font-size: 23px; line-height: 1.28; columns: 2; column-gap: 44px">
+<li>S. d'Ascoli et al., "A foundation model of vision, audition, and language for in-silico neuroscience," arXiv:2605.04326, 2026.</li>
+<li>J. L. Gardner, T. Liu, "Inverted encoding models reconstruct an arbitrary model response, not the stimulus," eNeuro, vol. 6, no. 2, 2019.</li>
+<li>K. N. Kay, T. Naselaris, R. J. Prenger, J. L. Gallant, "Identifying natural images from human brain activity," Nature, vol. 452, pp. 352–355, 2008.</li>
+<li>J. Tang, A. LeBel, S. Jain, A. G. Huth, "Semantic reconstruction of continuous language from non-invasive brain recordings," Nat. Neurosci., vol. 26, pp. 858–866, 2023.</li>
+<li>Bladon, Bent, "Feature visualization recovers known cortical selectivity from TRIBE v2," arXiv:2605.13904, 2026.</li>
+<li>Y. Benchetrit et al., "Boosting brain-to-image decoding with TRIBE v2 data augmentation," arXiv:2606.06345, 2026.</li>
+<li>A. LeBel et al., "A natural language fMRI dataset for voxelwise encoding models," Sci. Data, vol. 10, art. 555, 2023.</li>
+<li>P. C. Hansen, Discrete Inverse Problems: Insight and Algorithms. SIAM, 2010.</li>
+</ol>
+</section>
+</div>
+</main>
+
+<footer style="height: 190px; flex: none; box-sizing: border-box; padding: 24px 72px; display: flex; align-items: center; gap: 48px; background: #0F2236; color: #FFFFFF">
+<div style="flex: 1; font-size: 32px; line-height: 1.4"><b>Acknowledgements.</b> Guided by Dr. Sharmila Nageswaran, SENSE, VIT Vellore. TRIBE v2 weights released by Meta FAIR; fMRI data from OpenNeuro ds003020 (LeBel et al.). Final-year Project-I, 2026–27.</div>
+<div style="display: flex; gap: 28px">
+<div style="width: 260px; height: 130px; border: 3px dashed #9FB3C4; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600; color: #DDE6EE">[VIT LOGO]</div>
+<div style="width: 260px; height: 130px; border: 3px dashed #9FB3C4; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600; color: #DDE6EE">[SENSE LOGO]</div>
+<div style="width: 260px; height: 130px; border: 3px dashed #9FB3C4; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600; color: #DDE6EE">[IEEE LOGO]</div>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B5E66"},"$preview":{"width":4608,"height":3456}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0B5E66' };
+}
+}
+</script>
+</body>
+</html>

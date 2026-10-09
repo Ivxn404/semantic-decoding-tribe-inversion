@@ -1,0 +1,69 @@
+/usr/local/lib/python3.13/dist-packages/neuralset/extractors/base.py:707: UserWarning: LabelEncoder: event_types has not been set, are you sure you want to apply this extractor to all events?
+  warnings.warn(
+2026-10-09 00:41:11 - WARNING - neuralset.extractors.base:798 - Missing events will be encoded using the default all-zero value (for example, 0 or a zero vector/tensor), which may be indistinguishable from a valid class if that class is also mapped to zeros. Set treat_missing_as_separate_class=True to avoid this.
+/usr/local/lib/python3.13/dist-packages/x_transformers/x_transformers.py:439: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @autocast(enabled = False)
+/usr/local/lib/python3.13/dist-packages/x_transformers/x_transformers.py:461: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @autocast(enabled = False)
+0 0.0076
+40 0.0141
+80 0.0293
+120 0.0453
+160 0.0614
+200 0.0784
+240 0.0962
+280 0.1144
+320 0.1328
+360 0.1515
+400 0.1697
+440 0.1869
+480 0.2044
+520 0.2217
+560 0.2383
+600 0.2543
+640 0.27
+680 0.2851
+720 0.2993
+760 0.3132
+800 0.3267
+840 0.3395
+880 0.3515
+920 0.3632
+960 0.3744
+1000 0.385
+1040 0.395
+1080 0.4046
+1120 0.4136
+1160 0.4222
+1200 0.4302
+1240 0.4378
+1280 0.4449
+1320 0.4516
+1360 0.4578
+1400 0.4637
+1440 0.4691
+1480 0.4741
+1520 0.4788
+1560 0.4831
+1600 0.4871
+1640 0.4907
+1680 0.494
+1720 0.497
+1760 0.4998
+1800 0.5022
+1840 0.5044
+1880 0.5063
+1920 0.5079
+1960 0.5094
+2000 0.5106
+2040 0.5116
+2080 0.5125
+2120 0.5131
+2160 0.5136
+2200 0.514
+2240 0.5143
+2280 0.5144
+2320 0.5145
+2360 0.5145
+2400 0.5145
+DONE

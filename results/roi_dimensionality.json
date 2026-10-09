@@ -1,0 +1,83 @@
+{
+ "K": 128,
+ "rows": {
+  "Language (L)": {
+   "n_vertices": 1282,
+   "participation_ratio": 9.732608858964253,
+   "top1_variance_share": 0.2709497132967752,
+   "gain_per_vertex": 0.001722596040540498
+  },
+  "Language homologue (R)": {
+   "n_vertices": 1368,
+   "participation_ratio": 13.463094736074455,
+   "top1_variance_share": 0.19684795642358585,
+   "gain_per_vertex": 0.0017583739600301649
+  },
+  "Auditory": {
+   "n_vertices": 277,
+   "participation_ratio": 10.078192321548029,
+   "top1_variance_share": 0.2474623492710673,
+   "gain_per_vertex": 0.0017670963050416542
+  },
+  "Default mode": {
+   "n_vertices": 1224,
+   "participation_ratio": 11.905202308541723,
+   "top1_variance_share": 0.2381899830012462,
+   "gain_per_vertex": 0.0014841040763121367
+  },
+  "Visual": {
+   "n_vertices": 1582,
+   "participation_ratio": 10.25002549282733,
+   "top1_variance_share": 0.2704156666554829,
+   "gain_per_vertex": 0.002280086453600618
+  },
+  "Somatomotor": {
+   "n_vertices": 1487,
+   "participation_ratio": 18.59510304117628,
+   "top1_variance_share": 0.14583550360548672,
+   "gain_per_vertex": 0.0009906208203685793
+  },
+  "Random |Language (L)|": {
+   "n_vertices": 1282,
+   "participation_ratio": 14.945486863075926,
+   "top1_variance_share": 0.20345580656448525,
+   "gain_per_vertex": 0.001487560160771974
+  },
+  "Random |Language homologue (R)|": {
+   "n_vertices": 1368,
+   "participation_ratio": 15.127457968193323,
+   "top1_variance_share": 0.20106549758464268,
+   "gain_per_vertex": 0.0014796793861836194
+  },
+  "Random |Auditory|": {
+   "n_vertices": 277,
+   "participation_ratio": 15.456106711198634,
+   "top1_variance_share": 0.19493485697254728,
+   "gain_per_vertex": 0.0014778199281331055
+  },
+  "Random |Default mode|": {
+   "n_vertices": 1224,
+   "participation_ratio": 14.981216787574528,
+   "top1_variance_share": 0.2031890947177012,
+   "gain_per_vertex": 0.0014932795104716334
+  },
+  "Random |Visual|": {
+   "n_vertices": 1582,
+   "participation_ratio": 15.119525019426932,
+   "top1_variance_share": 0.20041784000392499,
+   "gain_per_vertex": 0.0014901316212552348
+  },
+  "Random |Somatomotor|": {
+   "n_vertices": 1487,
+   "participation_ratio": 15.158783930216021,
+   "top1_variance_share": 0.20089563716542486,
+   "gain_per_vertex": 0.0014828212077498165
+  },
+  "Whole cortex": {
+   "n_vertices": 20484,
+   "participation_ratio": 14.63033096510766,
+   "top1_variance_share": 0.20594502544456914,
+   "gain_per_vertex": 0.0015019055329069317
+  }
+ }
+}
