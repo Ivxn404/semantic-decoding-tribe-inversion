@@ -364,7 +364,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     ["Beats linear decoding", "Ridge baseline", "0.918 vs 0.060", "Indicative"],
     ["Anatomical topography", "Sensitivity maps, 6 networks", "z +27 to +41 in matching modality", "Established"],
     ["Regional recoverability", "ROI vs matched random", INTERP.table_key, INTERP.table_status],
-    ["Real-data decodability", "LeBel 2023", "—", "Final phase"],
+    ["Real-data decodability", "LeBel 2023, held-out story", "4/5 segments (chance 2.2%), cosine 0.02", "First result"],
   ], { x: 0.5, y: 1.3, w: 12.3, colW: [3.0, 3.4, 3.9, 2.0], fontSize: 13.5, rowH: 0.45 });
   s.addNotes("The ledger the panel can interrogate. 'Established' means replicated or tested against a control; 'Indicative' means the comparison has a stated caveat.");
 
@@ -431,7 +431,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   s.addNotes("State limitations before they are raised. None of them affects the central claims (dissociation, non-convexity, rejected null space), which were replicated and tested with optimiser-independent forward passes.");
 
   // ---- real data (LeBel 2023), results read from lebel/realdata_audio_text.json
-  const RD = JSON.parse(fs.readFileSync("/home/claude/work/lebel/realdata_audio_text.json", "utf8"));
+  const RD = JSON.parse(fs.readFileSync("../results/realdata_audio_text.json", "utf8"));
   const RI = RD.identification_forward.top2000, RX = RD.inversion_identification;
   s = S("Remaining work");
   s.addText("Real-data validation in progress: first results (LeBel 2023)", { placeholder: "title" });
@@ -451,6 +451,46 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   ];
   kp.forEach(([b, l, c], i) => stat(s, 0.5 + i * 3.1, 5.4, 2.95, b, l, c, 26));
   s.addNotes("Everything tunable (the 6-s alignment offset, the 2 000 vertices) was fitted on the five training stories; wheretheressmoke is held out and is not in TRIBE v2's training set. Text + audio features (LLaMA-3.2-3B and w2v-BERT, TRIBE v2's own pipeline) on a Colab T4, 2 000 inversion steps. Oracle (inverting the model's own prediction, same budget): 5/5 identified, cosine 0.22, so even noise-free inversion recovers little of x. An earlier audio-only CPU run gave the same pattern (5/5, cosine 0.06). The key real-data finding mirrors the synthetic one: identification succeeds while cosine recovery is low, i.e. the inverse pins down which moment was heard but not the full representation. Avatar fails alignment QC (no lag peak) and is kept only as a distractor, which makes identification harder, not easier.");
+
+  // ---- real data, detail 1: encoding across stories and networks
+  const RA = JSON.parse(fs.readFileSync("../results/realdata_audio.json", "utf8"));
+  const NETS = ["Auditory", "Language (L)", "Language homologue (R)", "Default mode", "Somatomotor", "Visual"];
+  const SHORT = { "Auditory": "Aud.", "Language (L)": "Lang. L", "Language homologue (R)": "Lang. R", "Default mode": "DMN", "Somatomotor": "SomMot", "Visual": "Visual" };
+  const STO = ["wheretheressmoke", "adollshouse", "avatar", "legacy", "souls", "undertheinfluence"];
+  s = S("Remaining work");
+  s.addText("Real fMRI: prediction accuracy by story and network", { placeholder: "title" });
+  table(s, ["Story", "Top 2 000", ...NETS.map(n => SHORT[n]), "Whole"], STO.map(st => {
+    const e = RD.encoding_r[st];
+    const lab = st === "wheretheressmoke" ? { text: "wheretheressmoke (held out)", options: { bold: true } } : st;
+    return [lab, { text: f2(e.top2000_by_train), options: { bold: true } }, ...NETS.map(n => f2(e[n])), f2(e.whole_cortex)];
+  }), { x: 0.5, y: 1.3, w: 12.3, colW: [3.0, 1.2, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15, 1.2], fontSize: 13, rowH: 0.42 });
+  card(s, 0.5, 4.5, 6.0, 2.3, HEX.tint);
+  txt(s, [{ text: "Held out and in-distribution alike. ", options: { bold: true, color: HEX.navy } },
+    { text: `On the held-out story the encoder reaches r = ${f2(RD.encoding_r.wheretheressmoke.top2000_by_train)} on the 2 000 vertices chosen from the other stories, ${(RD.noise_ceiling.top2000_normalised_r * 100).toFixed(0)}% of the split-half noise ceiling (${f2(RD.noise_ceiling.top2000_ceiling)}). Auditory, language and default-mode networks lead; visual and somatomotor trail, as expected for spoken stories.` }],
+    { x: 0.7, y: 4.6, w: 5.6, h: 2.1, fontSize: 13.5, valign: "middle" });
+  card(s, 6.8, 4.5, 6.0, 2.3, HEX.paleOrange);
+  txt(s, [{ text: "Adding language features. ", options: { bold: true, color: HEX.navy } },
+    { text: `Text + audio vs audio only on the held-out story: top-2 000 r ${f2(RD.encoding_r.wheretheressmoke.top2000_by_train)} vs ${f2(RA.encoding_r.wheretheressmoke.top2000_by_train)}; default mode ${f2(RD.encoding_r.wheretheressmoke["Default mode"])} vs ${f2(RA.encoding_r.wheretheressmoke["Default mode"])}. One story (avatar) shows no clear alignment peak and is kept only as a distractor, which makes identification harder, not easier.` }],
+    { x: 7.0, y: 4.6, w: 5.6, h: 2.1, fontSize: 13.5, valign: "middle" });
+  s.addNotes("Pearson r between predicted and measured BOLD per vertex, averaged within each network. The alignment offset (4 s) and the 2 000 vertices were fitted on the five training stories only. Noise ceiling from the ten repeats of the held-out story, split-half with Spearman-Brown correction.");
+
+  // ---- real data, detail 2: identification vs reconstruction, with an oracle
+  const RO = RX.oracle_prediction;
+  s = S("Remaining work");
+  s.addText("Real fMRI: the inverse identifies, but does not reconstruct", { placeholder: "title" });
+  table(s, ["Inversion target", "Top-1 identification", "Ranks of the true segment", "Cosine of x̂ to true x", "Fit (1 − r)"], [
+    ["Measured BOLD, held-out story", `${RX.real_bold.ranks.filter(r => r === 0).length} / ${RX.n_queries}`, RX.real_bold.ranks.join(", "), f2(RX.real_bold.cos_to_true_x), f2(RX.real_bold.final_1_minus_r)],
+    ["Oracle: model's own prediction", `${RO.ranks.filter(r => r === 0).length} / ${RX.n_queries}`, RO.ranks.join(", "), f2(RO.cos_to_true_x), RO.final_1_minus_r.toFixed(4)],
+    ["Chance", `${(RX.real_bold.chance_top1 * 100).toFixed(1)}% (1 of ${RX.real_bold.n_candidates})`, "—", "—", "—"],
+  ], { x: 0.5, y: 1.35, w: 12.3, colW: [3.4, 2.3, 2.6, 2.2, 1.8], fontSize: 14, rowH: 0.55 });
+  card(s, 0.5, 3.75, 12.3, 3.05, HEX.tint);
+  txt(s, [
+    { text: "Two limits, separated. ", options: { bold: true, color: HEX.navy, breakLine: true } },
+    { text: `Without noise (oracle), inversion identifies every segment yet recovers only ${f2(RO.cos_to_true_x)} of the representation: most of the loss is the operator's conditioning, not measurement noise. With real BOLD, recovery drops further to ${f2(RX.real_bold.cos_to_true_x)} while identification survives (${RX.real_bold.ranks.filter(r => r === 0).length}/${RX.n_queries}, ranked against all 45 segments of six stories, including the other six of the same story).`, options: { breakLine: true } },
+    { text: " ", options: { breakLine: true } },
+    { text: "This is the synthetic result, reproduced on a real brain: under noise, retrieval stayed near 0.99 while cosine fell. Identification needs only the directions the operator transmits well.", options: {} },
+  ], { x: 0.75, y: 3.85, w: 11.8, h: 2.85, fontSize: 15 });
+  s.addNotes("Each held-out 100-s segment of measured BOLD is inverted through the frozen model (2 000 Adam steps, correlation loss on the 2 000 training-selected vertices, only the filled modality slots optimised). The recovered x-hat is ranked against the true representations of all 45 segments by mean per-time-step cosine. The oracle inverts the model's own noise-free prediction under the same budget.");
 
   s = S("Remaining work");
   s.addText("Timeline to completion", { placeholder: "title" });

@@ -203,7 +203,7 @@ const FOOT = "BECE497J Project-I  ·  Review II  ·  A. Sarkar (23BML0077)  ·  
     ["A differentiable re-entry point into the closed TRIBE v2 pipeline", "Gradient reaches every entry of x at the aggregate_features boundary: ‖∂y/∂x‖ = 7.97 × 10³", "Shown"],
     ["Exact, decoder-independent measurement of decodability", "Synthetic ground truth: recovery measured as cosine to the true x, not a proxy rank", "Shown"],
     ["Encoding accuracy and decodability dissociate", "Encoding error falls 28.4×; final halving buys +0.015 recovery", "Shown"],
-    ["Cause of incomplete recovery: non-convexity vs. information loss", "Initialisation, perturbation and sensitivity controls running", "Review III"],
+    ["Cause of incomplete recovery: non-convexity, not information loss", "Fit-matched solutions differ (min cosine 0.817); barrier test 2.6× → 0.6×", "Shown (early)"],
   ]);
 
   // 10 SDG
@@ -484,10 +484,77 @@ const FOOT = "BECE497J Project-I  ·  Review II  ·  A. Sarkar (23BML0077)  ·  
   ], { x: 0.5, y: 1.35, w: 12.3, colW: [2.2, 2.6, 3.9, 3.6], fontSize: 15, rowH: 0.52 });
   s.addNotes("One table the panel can refer back to during viva. Every number is from results.json. Mean ± sd for the manifold comparison is over three seeds.");
 
+  // =========================================================== SECTION: EARLY RESULTS (beyond the 40% milestone)
+  pres.addSection({ title: "Early results" });
+  s = S("Early results", "Section");
+  s.addText("5  ·  Early results beyond the milestone", { placeholder: "title" });
+  s.addText("Why recovery is incomplete: first tests of the competing explanations", { placeholder: "body" });
+
+  s = S("Early results");
+  s.addText("Same fit, different answers: the inverse is non-convex", { placeholder: "title" });
+  figure(s, "fig_nonconvex.png", 0.4, 1.3, 12.5, 4.5);
+  table(s, ["Ground truth", "Best fit", "Mean pairwise", "Min pairwise"], [
+    ["0", "3.51e-7", "0.8928", "0.8068"], ["1", "3.65e-7", "0.8934", "0.8151"],
+    ["2", "3.11e-7", "0.9007", "0.8257"], ["3", "3.13e-7", "0.8996", "0.8186"],
+  ], { x: 0.5, y: 5.85, w: 12.3, colW: [2.4, 3.0, 3.45, 3.45], fontSize: 12, rowH: 0.24 });
+  s.addNotes("Different initialisations reach the same prediction error (fit-matched within 2x) yet agree with each other only at 0.82-0.90 cosine. Replicated across four ground truths (min pairwise 0.8165 +/- 0.0068). This is the first sign that the limit is the shape of the problem, not lost information.");
+
+  s = S("Early results");
+  s.addText("Information-loss hypothesis rejected", { placeholder: "title" });
+  figure(s, "fig_nullspace_test.png", 0.4, 1.3, 7.0, 5.3);
+  card(s, 7.7, 1.4, 5.1, 5.35, HEX.tint);
+  txt(s, [
+    { text: "Test", options: { bold: true, color: HEX.navy, fontSize: 17, breakLine: true } },
+    { text: "Move one solution towards the other along their difference d, and compare with random directions of equal length.", options: { breakLine: true } },
+    { text: " ", options: { breakLine: true } },
+    { text: "Result", options: { bold: true, color: HEX.navy, fontSize: 17, breakLine: true } },
+    { text: "d is cheap only for small steps (2.6x); at the full separation it changes the response more than random (0.6x).", options: { breakLine: true } },
+    { text: " ", options: { breakLine: true } },
+    { text: "Meaning", options: { bold: true, color: HEX.navy, fontSize: 17, breakLine: true } },
+    { text: "The answers are separate minima with a barrier between them: non-convexity, not a null space.", options: {} },
+  ], { x: 7.95, y: 1.55, w: 4.65, h: 5.1, fontSize: 14.5 });
+  s.addNotes("A null space would keep d cheap at every scale. It does not, so information is not destroyed. The test uses forward passes only, so it does not depend on the optimiser.");
+
+  s = S("Early results");
+  s.addText("Errors concentrate in the operator's weakest directions", { placeholder: "title" });
+  figure(s, "fig_sensitivity.png", 0.4, 1.3, 8.2, 4.6);
+  stat(s, 8.95, 1.5, 3.9, "1.9×", "lower sensitivity along d than the random median", HEX.orange, 44);
+  stat(s, 8.95, 3.2, 3.9, "6 / 6", "pairwise difference directions below the random median", HEX.blue, 44);
+  card(s, 0.5, 6.0, 12.3, 0.85, HEX.tint);
+  txt(s, "What the inverse fails to pin down is exactly what the operator responds to least: anisotropic ill-conditioning, measured.",
+    { x: 0.75, y: 6.05, w: 11.8, h: 0.75, fontSize: 14.5, valign: "middle" });
+  s.addNotes("Directional sensitivity = finite-difference probe of the Jacobian along a direction. The solution-difference direction falls below every one of 200 random directions sampled.");
+
+  s = S("Early results");
+  s.addText("Gain is identifiable; nonlinear inversion beats a linear decoder", { placeholder: "title" });
+  figure(s, "fig_gain.png", 0.4, 1.3, 6.2, 4.4);
+  figure(s, "fig_baseline.png", 6.8, 1.3, 6.0, 4.4);
+  card(s, 0.5, 5.9, 6.0, 0.95, HEX.tint);
+  txt(s, "Only the true scale fits: a 10% rescale gives 7.5× the noise floor.", { x: 0.7, y: 5.95, w: 5.6, h: 0.85, fontSize: 14, valign: "middle" });
+  card(s, 6.8, 5.9, 6.0, 0.95, HEX.paleOrange);
+  txt(s, "Gradient inversion 0.918 vs best ridge decoder 0.060 (≈15×; ridge target is easier, so a floor).", { x: 7.0, y: 5.95, w: 5.6, h: 0.85, fontSize: 14, valign: "middle" });
+  s.addNotes("Two simple alternative explanations excluded early: the decoder is not just losing overall magnitude, and a linear readout fitted on the same model does far worse.");
+
+  s = S("Early results");
+  s.addText("First look at regions: the operator's topography matches anatomy", { placeholder: "title" });
+  figure(s, "brain_topography_grid.png", 0.3, 1.25, 7.9, 5.6);
+  table(s, ["Network", "text z", "audio z", "video z"], [
+    ["Language (L)", { text: "+26.6", options: { bold: true, color: "B03A2E" } }, "-12.5", "-18.5"],
+    ["Language (R)", { text: "+28.5", options: { bold: true, color: "B03A2E" } }, "-10.6", "-23.3"],
+    ["Auditory", "-3.8", { text: "+34.7", options: { bold: true, color: "B03A2E" } }, "-32.8"],
+    ["Default mode", { text: "+26.9", options: { bold: true, color: "B03A2E" } }, "-15.1", "-16.1"],
+    ["Visual", "-38.4", "+7.5", { text: "+40.7", options: { bold: true, color: "B03A2E" } }],
+    ["Somatomotor", "-3.5", "+6.9", "-3.5"],
+  ], { x: 8.4, y: 1.35, w: 4.45, colW: [1.75, 0.9, 0.9, 0.9], fontSize: 12 });
+  card(s, 8.4, 4.35, 4.45, 2.45, HEX.tint);
+  txt(s, "Each network is driven by the modality it should be: language and default mode by text, auditory cortex by audio, visual cortex by video. Recovery per network follows at Review III.",
+    { x: 8.6, y: 4.45, w: 4.1, h: 2.3, fontSize: 13.5, valign: "middle" });
+  s.addNotes("Forward sensitivity per vertex to perturbations confined to each modality slot of x, 16 directions each, forward passes only. z against 2 000 random vertex sets of the same size (ignores spatial autocorrelation, so read as effect sizes). Independent check that the operator we invert is neuroanatomically sensible.");
+
   // =========================================================== SECTION: PLAN
   pres.addSection({ title: "Plan" });
   s = S("Plan", "Section");
-  s.addText("5  ·  Plan to completion", { placeholder: "title" });
+  s.addText("6  ·  Plan to completion", { placeholder: "title" });
   s.addText("Timeline, division of work and what Review III will show", { placeholder: "body" });
 
   // 23 timeline
@@ -548,17 +615,17 @@ const FOOT = "BECE497J Project-I  ·  Review II  ·  A. Sarkar (23BML0077)  ·  
     "The inverse is stable under noise; magnitude is the fragile part",
     "≈10% of cortex carries most recoverable signal",
     "Generic priors fail; bandwidth needs an explicit HRF model",
-  ], { x: 0.85, y: 2.05, w: 5.55, h: 4.6, fontSize: 17 });
+    "Early: the inverse is non-convex, not a null space; errors lie in weak directions",
+  ], { x: 0.85, y: 2.05, w: 5.55, h: 4.6, fontSize: 16 });
   card(s, 6.85, 1.35, 5.85, 5.45, HEX.paleOrange);
   txt(s, "Coming at Review III", { x: 7.1, y: 1.5, w: 5.4, h: 0.45, fontSize: 19, bold: true, color: HEX.navy, fontFace: K.THEME.headFontFace });
   bullets(s, [
-    "Is incomplete recovery information loss or non-convexity? (initialisation control, replication across ground truths)",
-    "Direct test of the null-space hypothesis",
-    "Directional sensitivity and gain identifiability",
-    "Linear decoder baseline",
+    "Full controls and replication of the early results",
     "Regional recoverability by anatomical network",
+    "Is the most predictable cortex the most decodable?",
+    "First validation on real fMRI (LeBel 2023)",
   ], { x: 7.1, y: 2.05, w: 5.4, h: 4.6, fontSize: 17 });
-  s.addNotes("Close on the open question: we know recovery is incomplete; Review III answers why. If pressed for a preview: replicated runs already show that different starting points reach equally good fits but different answers, which points to non-convexity; we are completing the controls before claiming it.");
+  s.addNotes("Close on the finding: recovery is incomplete because the inverse is non-convex and anisotropically conditioned, not because information is destroyed. Review III completes the controls, adds the regional analysis and starts the real-data validation.");
 
   // =========================================================== APPENDIX Q&A
   pres.addSection({ title: "Backup: anticipated questions" });
