@@ -272,7 +272,7 @@ picture(f"{FIG}/fig_roi_recovery.png", rx + 0.3, ry + 5.65, W - 0.6, 3.9)
 picture(f"{FIG}/fig_realdata_audio_text.png", rx + 0.3, ry + 9.6, W - 0.6, 3.15)
 kt = sl.shapes.add_textbox(Inches(rx + 0.3), Inches(ry + 12.75), Inches(W - 0.6), Inches(0.8))
 kt.text_frame.word_wrap = True
-runs(kt.text_frame.paragraphs[0], [("Synthetic: ", True), ("error ↓28.4× but recovery saturates (0.944); equal fits disagree (0.817) and sit in separate minima (path barrier 3.8×; 7.2× to a deeper one). ", False),
+runs(kt.text_frame.paragraphs[0], [("Synthetic: ", True), ("error ↓28.4× but recovery saturates (0.944); equal fits disagree (0.817) and sit in separate minima (barrier 4.8×; 8.1× to a deeper one; 4 truths). ", False),
                                    ("Regions: ", True), ("visual −0.125, somatomotor +0.102 vs random. ", False),
                                    ("Real fMRI: ", True), ("r = 0.48 (56% of ceiling); 4/5 segments identified (chance 2.2%), cosine 0.02.", False)], 17, BF, INK)
 

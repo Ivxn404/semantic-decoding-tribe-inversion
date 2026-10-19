@@ -84,7 +84,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   s = S("Opening");
   s.addText("Project at a glance: complete", { placeholder: "title" });
   stat(s, 0.6, 1.4, 2.9, "28.4×", "lower encoding error, while recovery saturates at 0.944", HEX.orange);
-  stat(s, 3.7, 1.4, 2.9, "3.8×", "error barrier between equally good blind solutions (7.2× to a deeper one)", HEX.blue);
+  stat(s, 3.7, 1.4, 2.9, "4.8×", "error barrier between distinct equally good blind solutions, 4 truths (8.1× to a deeper one)", HEX.blue);
   stat(s, 6.8, 1.4, 2.9, "−0.125", "visual cortex, most responsive, recovers worst vs random vertices", HEX.aqua);
   stat(s, 9.9, 1.4, 2.9, "4 / 5", "held-out real-fMRI segments identified (chance 2.2%), cosine 0.02", HEX.violet);
   txt(s, "Completion against the project plan", { x: 0.6, y: 3.75, w: 8, h: 0.35, fontSize: 15, bold: true, color: HEX.navy });
@@ -160,8 +160,8 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   addNovelty(S, "Opening", { kay: 21, gardner: 18, tang: 4, tribe2: 7, bladon: 19, benchetrit: 20 }, [
     ["First uniqueness and conditioning analysis of a deep foundation brain encoder", "Prior-art matrix and dated search protocol (previous two slides)", "Shown"],
     ["Encoding accuracy and decodability dissociate", "Encoding error falls 28.4×; the final halving buys +0.015 recovery", "Shown"],
-    ["Incomplete recovery is non-convexity, not a null space", "Equal fits disagree (min cosine 0.817 ± 0.007, 4 truths); straight paths between them rise 3.8× (7.2× to a deeper minimum)", "Shown"],
-    ["Error concentrates in the operator's least-sensitive directions", "Solution difference 2.1× below the random median (1.9× originally); below all 200 random directions", "Shown"],
+    ["Incomplete recovery is non-convexity, not a null space", "Equal fits disagree (min cosine 0.817 ± 0.007, 4 truths); straight paths between distinct ones rise 4.8× (2.4–8.2×), 8.1× to a deeper minimum", "Shown"],
+    ["Error concentrates in the operator's least-sensitive directions", "Solution difference 2.15 ± 0.17× below the random median over 4 truths (1.9× originally)", "Shown"],
     ["Predictable is not recoverable, region by region", "Visual −0.125, somatomotor +0.102 vs size-matched random sets; ≈10× the control spread", "Shown"],
     ["Nonlinear inversion beats linear decoding", "0.918 vs 0.060 for the best ridge decoder (≈15×)", "Shown"],
     ["On real fMRI the inverse identifies but does not reconstruct", "Held-out story: 4/5 segments among 45 (chance 2.2%), cosine 0.02; oracle 5/5, 0.22", "Shown"],
@@ -275,8 +275,8 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     ["Measuring the optimiser, not the operator", "Converge first; independent runs to schedule end", "Plateau ≈ 0.94 by 32 000 steps"],
     ["Under-converged runs posing as alternative solutions", "Only blind solutions within 2× of the best blind fit", "Gaussian s.d. 5 excluded (3.2× worse fit)"],
     ["One trajectory being special", "Replicate across 4 independent ground truths", "min pairwise 0.8165 ± 0.0068"],
-    ["Inference instead of demonstration", "Straight-path error between fit-matched solutions", "Rises 1.5–6.0× (median 3.8×): H1 rejected"],
-    ["Solutions that were told the answer", "Near-truth starts used only as a control", "Deeper minimum, 4.6× lower error"],
+    ["Inference instead of demonstration", "Straight-path error between fit-matched solutions, 4 truths", "Distinct pairs rise 2.4–8.2× (median 4.8×): H1 rejected"],
+    ["Solutions that were told the answer", "Near-truth starts used only as a control", "Deeper minimum, 4.2 ± 0.3× lower error"],
     ["ROI size confound", "Random vertex sets of identical size", "Paired comparison per network"],
     ["Random-seed luck in controls", "Second random seed for two networks", `Δ between seeds ≤ ${f3(INTERP.seed_gap_max)}`],
     ["Platform dependence", "Whole-cortex anchor re-run on CPU vs earlier GPU", `${f3(ROW["Whole cortex"].cosine)} vs 0.836 (GPU)`],
@@ -346,15 +346,15 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   s.addText("Barriers, not a null space (verified on the real model)", { placeholder: "title" });
   figure(s, "fig_barrier_verified.png", 0.4, 1.25, 12.5, 4.45);
   card(s, 0.5, 5.8, 6.05, 1.05, HEX.tint);
-  txt(s, [{ text: "Result. ", options: { bold: true, color: HEX.navy } }, { text: "On the straight line between any two of the five equally good blind fits the error rises 1.5–6.0× (median 3.8×). A flat null space would stay level. Starts near the truth find a minimum with 4.6× lower error, 7.2× barrier away." }],
+  txt(s, [{ text: "Result. ", options: { bold: true, color: HEX.navy } }, { text: "Four ground truths, 40 pairs: between every pair of distinct blind fits the error rises 2.4–8.2× (median 4.8×); near-identical pairs share one minimum. A null space would stay level. Near-truth starts find a minimum with 4.2× lower error, 8.1 ± 3.2× barrier away." }],
     { x: 0.7, y: 5.85, w: 5.7, h: 0.95, fontSize: 12.5, valign: "middle" });
   card(s, 6.75, 5.8, 6.05, 1.05, HEX.paleOrange);
-  txt(s, [{ text: "Correction. ", options: { bold: true, color: HEX.navy } }, { text: "Our earlier perturbation test (2.6× → 0.6×) paired an unconverged solution (Gaussian s.d. 5). It is withdrawn; the selection rule is fixed and the test was re-run on a T4 on 19 Oct 2026." }],
+  txt(s, [{ text: "Correction. ", options: { bold: true, color: HEX.navy } }, { text: "Our earlier perturbation test (2.6× → 0.6×) paired an unconverged solution (Gaussian s.d. 5). It is withdrawn; the selection rule is fixed and the test was re-run on a T4 on 19–20 Oct 2026 for four ground truths." }],
     { x: 6.95, y: 5.85, w: 5.7, h: 0.95, fontSize: 12.5, valign: "middle" });
-  s.addNotes("Verification notebook, ground truth 0, 14 000 steps, eight starts inverted together. Blind fit-matched starts: Gaussian 0.01, 0.1, 1.0, uniform, zeros (3.57-3.90e-7). Error measured against the target at 21 points on each straight line. The rise grows as the pair becomes less similar (cosine 0.999 gives 1.5x, 0.890 gives 4.6x). If asked about the old test: once both endpoints fit the target, moving along d barely changes the prediction compared with a random direction (2.6x, 6.0x, 13x, 258x), so that comparison cannot detect a barrier; the path profile can.");
+  s.addNotes("Verification notebook, four ground truths, 14 000 steps, eight starts inverted together. Ground truth 0 per pair: Blind fit-matched starts: Gaussian 0.01, 0.1, 1.0, uniform, zeros (3.57-3.90e-7). Error measured against the target at 21 points on each straight line. The rise grows as the pair becomes less similar (cosine 0.999 gives 1.5x, 0.890 gives 4.6x). If asked about the old test: once both endpoints fit the target, moving along d barely changes the prediction compared with a random direction (2.6x, 6.0x, 13x, 258x), so that comparison cannot detect a barrier; the path profile can.");
 
   s = S("Results");
-  s.addText("Blind starts settle in a worse minimum", { placeholder: "title" });
+  s.addText("Blind starts settle in a worse minimum (ground truth 0)", { placeholder: "title" });
   table(s, ["Start", "Told the truth?", "Final error (×10⁻⁷)", "× best blind", "Recovery cosine"], [
     ["Gaussian, s.d. 0.01", "no", "3.63", "1.02", "0.917"], ["Gaussian, s.d. 0.1", "no", "3.57", "1.00", "0.918"], ["zeros", "no", "3.57", "1.00", "0.918"],
     ["uniform on [−1, 1]", "no", "3.68", "1.03", "0.907"], ["Gaussian, s.d. 1.0", "no", "3.90", "1.09", "0.894"],
@@ -366,9 +366,9 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   txt(s, [{ text: "What it means", options: { bold: true, color: HEX.navy, fontSize: 17, breakLine: true } },
     { text: "Every start a real decoder could use (no knowledge of the answer) ends at almost the same error, 3.6–3.9 × 10⁻⁷, and agrees with the others only at 0.89–1.00.", options: { breakLine: true } },
     { text: " ", options: { breakLine: true } },
-    { text: "A deeper minimum exists: starting near the truth reaches 4.6× lower error and recovery 0.976.", options: { breakLine: true } },
+    { text: "A deeper minimum exists: starting near the truth reaches 4.6× lower error and recovery 0.976 (4.2 ± 0.3× over four truths).", options: { breakLine: true } },
     { text: " ", options: { breakLine: true } },
-    { text: "Between them the error rises 7.2×, so gradient descent cannot slide from one to the other. Better search, not a better encoder, is what decoding needs.", options: {} }],
+    { text: "Between them the error rises 7.2× here (8.1 ± 3.2× over four truths), so gradient descent cannot slide from one to the other. Better search, not a better encoder, is what decoding needs.", options: {} }],
     { x: 8.6, y: 1.45, w: 4.0, h: 5.2, fontSize: 14 });
   s.addNotes("Numbers from results/verification/testA.json (Colab T4, 19 Oct 2026). The near-truth starts are controls only: they tell us a deeper minimum exists, which a blind decoder cannot reach by local search.");
 
@@ -376,8 +376,8 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   s = S("Results");
   s.addText("Errors concentrate in the operator's weakest directions", { placeholder: "title" });
   figure(s, "fig_sensitivity.png", 0.4, 1.3, 8.2, 4.6);
-  stat(s, 8.95, 1.5, 3.9, "2.1×", "lower sensitivity along d than the random median (corrected pair; 1.9× originally, shown)", HEX.orange, 44);
-  stat(s, 8.95, 3.2, 3.9, "9 / 10", "blind pairs below the random median; d below all 200 random directions", HEX.blue, 44);
+  stat(s, 8.95, 1.5, 3.9, "2.15×", "lower sensitivity along d than the random median, mean of 4 truths (± 0.17; 1.9× originally, shown)", HEX.orange, 44);
+  stat(s, 8.95, 3.2, 3.9, "1.68×", "along the actual error x̂ − x (± 0.17, 4 truths); d below all 200 random directions", HEX.blue, 44);
   card(s, 0.5, 6.0, 12.3, 0.85, HEX.tint);
   txt(s, "Anisotropic ill-conditioning: what the inverse fails to pin down is what the operator responds to least (corrected pair s = 0.081 vs random 0.122–0.239; actual error 1.8× below).",
     { x: 0.75, y: 6.05, w: 11.8, h: 0.75, fontSize: 14.5, valign: "middle" });
@@ -516,7 +516,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   s = S("Regional analysis");
   s.addText("What limits semantic decoding from fMRI", { placeholder: "title" });
   const lim = [
-    [I.times, "C0392B", "Not destroyed information", "No null space: the error rises 3.8× between equal fits, 7.2× towards a deeper minimum."],
+    [I.times, "C0392B", "Not destroyed information", "No null space: the error rises 4.8× between distinct equal fits, 8.1× towards a deeper minimum (4 truths)."],
     [I.check, "138A5E", "Non-convexity", "Equally good fits disagree at 0.82 cosine, reproducibly; the answer depends on where the search starts."],
     [I.check, "138A5E", "Anisotropic conditioning", "Disagreement lives in directions the operator barely responds to (0th percentile)."],
     [I.check, "138A5E", "Measurement noise", "Graceful loss of direction, steep loss of magnitude (rel. error 0.55 → 2.06)."],
@@ -536,8 +536,8 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   table(s, ["Claim", "Evidence", "Key number", "Status"], [
     ["Encoding ≠ decoding", "8 independent budgets", "28.4× vs +0.015", "Established"],
     ["Inverse is non-convex", "Fit-matched init control, 4 truths", "min pairwise 0.8165 ± 0.0068", "Established"],
-    ["No null space", "Straight-path error, 10 blind pairs", "rise 3.8× (1.5–6.0×); 7.2× to deeper", "Verified 19 Oct"],
-    ["Errors in weak directions", "200 random directions", "2.1× below median; 9/10 pairs", "Verified 19 Oct"],
+    ["No null space", "Straight-path error, 40 pairs, 4 truths", "4.8× (2.4–8.2×); 8.1 ± 3.2× to deeper", "Verified ×4"],
+    ["Errors in weak directions", "200 random directions, 4 truths", "2.15 ± 0.17× below median", "Verified ×4"],
     ["Gain identifiable", "Forward rescaling", "±10% → 7–9× floor", "Established"],
     ["Stable under noise", "7 noise levels", "0.836 → 0.298 monotone", "Established"],
     ["≈10% cortex suffices", "6 extents", "0.777 at 2 000 vertices", "Established"],
@@ -814,7 +814,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     "Regional z-scores use a random-vertex null that ignores spatial autocorrelation; a spin test is stricter.",
     "Regional inversion uses one ground truth and one budget (8 000 steps, CPU); comparisons are internal to that run, and faster convergence cannot yet be separated from a better optimum.",
     "Real-data test: one subject (UTS03), one held-out story, 5 inversion queries; per-network inversion on real data needs held-out stories from more subjects.",
-    "Corrected barrier test so far on one ground truth (four-truth repeat optional); original perturbation test withdrawn.",
+    "Corrected barrier test on four ground truths with eight starts each; original perturbation test withdrawn.",
   ], { x: 0.6, y: 1.35, w: 12.1, h: 5.5, fontSize: 14.5 });
   s.addNotes("State limitations before they are raised. None of them affects the central claims (dissociation, non-convexity, rejected null space), which were replicated or re-verified with optimiser-independent forward passes.");
 
@@ -824,7 +824,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   [["Real data at scale", "Inversion across all eight LeBel subjects; per-network real-data test on genuinely held-out stories."],
    ["Better search", "Optimisers and priors matched to the operator's weak directions; restarts and ensembling over minima; loss re-weighting away from high-gain, low-diversity regions."],
    ["Earlier entry point", "Invert the raw extractor features and add an explicit haemodynamic model."],
-   ["Stricter statistics", "Barrier test on four ground truths; spin-permutation nulls for regional z-scores; a converged second-order optimiser control."],
+   ["Stricter statistics", "More ground truths and inits for the barrier test; spin-permutation nulls for regional z-scores; a converged second-order optimiser control."],
    ["Other modalities", "Apply the same identifiability tests to EEG and MEG encoders as they appear."]].forEach(([h, b], i) => {
     const y = 1.35 + i * 1.08;
     badge(s, 0.7, y + 0.12, 0.62, String(i + 1), i % 2 ? HEX.blue : HEX.navy, 16);
@@ -839,8 +839,8 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     { x: 0.85, y: 1.45, w: 11.6, h: 1.3, fontSize: 20, bold: true, color: "FFFFFF", valign: "middle", fontFace: K.THEME.headFontFace });
   bullets(s, [
     "Encoding error falls 28.4× while recovery saturates at 0.944: accuracy does not certify decoding",
-    "Equal fits disagree (0.817) and are separated by barriers (3.8×; 7.2× to a deeper minimum): the inverse is non-convex",
-    "What is not recovered lies in the operator's weakest directions (2.1× below random)",
+    "Equal fits disagree (0.817) and are separated by barriers (4.8×; 8.1× to a deeper minimum, 4 truths): the inverse is non-convex",
+    "What is not recovered lies in the operator's weakest directions (2.15× below random)",
     "Visual cortex, the most responsive, recovers worst (−0.125); somatomotor, the least, best (+0.102)",
     "Real fMRI: 56% of the noise ceiling; 4 of 5 held-out segments identified among 45, yet cosine 0.02",
     "Everything is released: manuscript, report, poster, code, results, live demo and four notebooks",
@@ -866,7 +866,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     sl.addNotes(note);
   };
   qa("Q: Is the non-convexity just Adam?", [
-    ["Couldn't Adam's implicit bias create the different answers?", "The barrier is shown with forward passes only: the error along the straight line between two equal fits rises 3.8×. The weak-direction result is a Jacobian probe. Neither involves an optimiser. Different initialisation distributions reach different minima reproducibly across four ground truths."],
+    ["Couldn't Adam's implicit bias create the different answers?", "The barrier is shown with forward passes only: the error along the straight line between two distinct equal fits rises 4.8× (four truths). The weak-direction result is a Jacobian probe. Neither involves an optimiser. Different initialisation distributions reach different minima reproducibly across four ground truths."],
     ["Then why did SGD and L-BFGS give different answers?", "They never reached comparable fit (1.4e-4 and 2.8e-5 vs 3.5e-7), so they are not valid comparisons. We report the control as failed rather than interpret it."],
     ["What would settle it?", "A tuned second-order method reaching ~1e-7 fit from the same initialisations. Listed as future work."],
   ], "Keep this answer short and calm: the claim rests on optimiser-independent tests.");
@@ -893,8 +893,8 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
 
   qa("Q: Your barrier result changed. Why should we trust it now?", [
     ["What was wrong?", "The original test picked the least similar pair among all eight starts, which included an unconverged one (Gaussian s.d. 5, error 3.2× the best). Its 2.6× → 0.6× numbers are withdrawn."],
-    ["What did the re-run do?", "Eight starts for 14 000 steps on a T4; only the five blind starts within 2× were compared; the error was measured at 21 points on each straight line between them. All ten pairs rise (1.5–6.0×, median 3.8×)."],
-    ["Does it change the conclusion?", "No, it strengthens it: equal fits are separate minima, and near-truth starts reveal a deeper minimum 7.2× barrier away. The selection rule is fixed in the code and the results are in the repository."],
+    ["What did the re-run do?", "Eight starts for 14 000 steps on a T4, four ground truths; only the five blind starts within 2× were compared; the error was measured at 21 points on each straight line. Every distinct pair rises (29 of 40: 2.4–8.2×, median 4.8×); near-identical pairs share one minimum."],
+    ["Does it change the conclusion?", "No, it strengthens it: equal fits are separate minima, and near-truth starts reveal a deeper minimum 8.1 ± 3.2× barrier away. The selection rule is fixed in the code and the results are in the repository."],
   ], "Say it plainly: we found and fixed our own error before submission, and the corrected test is cleaner.");
 
   pres.addSection({ title: "References" });

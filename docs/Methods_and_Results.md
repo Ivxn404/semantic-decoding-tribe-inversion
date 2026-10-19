@@ -143,12 +143,16 @@ Two explanations remain for §2.2: solutions occupy a connected flat region of t
 
 **Corrected test (19 October 2026, `notebooks/Verification_Tests.ipynb`, results in `results/verification/`).** The prediction error against the target was measured at 21 points on the straight line between every pair of fit-matched solutions that were blind to the truth (five starts within 1.1× of each other, 3.57–3.90 × 10⁻⁷ after 14 000 steps; agreement mean 0.954, minimum 0.890). A null space would keep the error flat along the line; distinct minima make it rise.
 
-| Measure | Value |
-|---|---:|
-| Peak / worse endpoint, 10 blind pairs | median 3.8× (range 1.5–6.0×) |
-| Error of the two near-truth controls vs the best blind fit | 4.6× lower (7.7 × 10⁻⁸) |
-| Recovery: near-truth controls vs blind starts | 0.951–0.976 vs 0.894–0.918 |
-| Peak on the line from the best blind solution to the near-truth one | 7.2× the blind end |
+| Measure | Ground truth 0 | Four ground truths |
+|---|---:|---:|
+| Peak / worse endpoint, distinct blind pairs (agreement < 0.99) | median 3.8× (all 10 pairs, 1.5–6.0×) | 29 pairs: median 4.8× (2.4–8.2×) |
+| Near-identical pairs (agreement ≥ 0.99) | — | 11 pairs: 1.0–2.2× (same minimum) |
+| Best blind fit vs near-truth control | 4.6× higher error | 4.2 ± 0.3× |
+| Recovery: blind vs near-truth | 0.894–0.918 vs 0.951–0.976 | 0.891–0.926 vs 0.946–0.977 |
+| Peak, best blind → near-truth | 7.2× | 8.1 ± 3.2× (4.7–12.4×) |
+| Sensitivity: random median / along d | 2.08× | 2.15 ± 0.17× |
+| Sensitivity: random median / along x̂ − x | 1.85× | 1.68 ± 0.17× |
+| Agreement among blind fit-matched starts (min) | 0.890 | 0.894 ± 0.003 |
 
 ![Corrected barrier test](../figures/fig_barrier_verified.png)
 
