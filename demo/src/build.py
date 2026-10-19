@@ -15,7 +15,14 @@ if os.path.exists(R+'/results/demo_brain_run.json') and os.path.exists(R+'/resul
     log=[{'step':l['step'],'cos':[round(c,4) for c in l['cos']],'mse':l['mse'],'pair':[round(c,4) for c in l['pair']]} for l in j['log']]
     run={'inits':j['inits'],'log':log,'barrier':j['barrier'],'steps':z['steps'].tolist(),'target':e(q(t)),
          'pred':[e(q(p.astype(np.float32))) for p in z['pred']],'r':[e(np.clip(np.round((r.astype(np.float32)+1)/2*255),0,255).astype(np.uint8)) for r in z['r']]}
-DATA={'mesh':mesh,'figs':figs,'real':real,'run':run,'qr':b64(R+'/poster/repo_qr_plain.png')}
+VB=json.load(open(R+'/results/verification/testB.json'))['0']; VA=json.load(open(R+'/results/verification/testA.json'))['0']
+import numpy as _np
+_M=_np.array(VA['pairwise_all']); _I=list(VA['per_init'])
+VD=json.load(open(R+'/results/verification/testD.json'))
+pairs=[{'e':v['errors'],'c':float(_M[_I.index(k.split('|')[0]),_I.index(k.split('|')[1])])} for k,v in VB['path']['pairs'].items()]
+for g in VD.values(): pairs+=[{'e':x['errors'],'c':x['cos']} for x in g['pairs'].values()]
+barrier={'s':VB['path']['s'],'pairs':pairs,'toTruth':[VA['path_blind_to_truth']['errors']]+[g['path_blind_to_truth']['errors'] for g in VD.values()]}
+DATA={'barrier':barrier,'mesh':mesh,'figs':figs,'real':real,'run':run,'qr':b64(R+'/poster/repo_qr_plain.png')}
 toy=open(W+'/toy.js').read().replace('if (typeof module !== "undefined") module.exports =','window.Toy =')
 page=open(W+'/page.html').read()
 html=page+'\n<script>window.DATA='+json.dumps(DATA,separators=(',',':'))+';</script>\n<script>'+toy+'</script>\n<script>'+open(W+'/brain.js').read()+'</script>\n<script>'+open(W+'/app.js').read()+'</script>\n'
