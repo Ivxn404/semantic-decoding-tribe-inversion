@@ -259,7 +259,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
       <div class="card"><h3>Recovery and agreement <span class="muted" style="font-weight:400">· dashed: lowest agreement between starts</span></h3><canvas class="chart" id="rpCos"></canvas></div>
     </div>
     <div class="kpis" id="rpKpis"></div>
-    <div class="notes"><b>Say (60 s)</b>This is not a simulation: every frame is a logged value from the real model, inverted on CPU. The middle brain converges to the target and the median vertex R² climbs from 0.66 to 0.995, yet recovery of x stops near 0.5 and the three starts agree only 0.37 to 0.54 with each other. The last tile is a forward-only check: halfway between two equally good fits the prediction is about four times worse, so a ridge separates them. The full experiments run 16 000 to 32 000 steps; numbers are in the next scene.</div>
+    <div class="notes"><b>Say (60 s)</b>This is not a simulation: every frame is a logged value from the real model, inverted on CPU. The middle brain converges to the target and the median vertex R² climbs from 0.66 to 0.995, yet recovery of x stops near 0.5 and the three starts agree only 0.37 to 0.54 with each other. The last tile is a forward-only check: along the straight path between two equally good fits the prediction changes about four times more in the middle than between the ends, which a flat null space would not do. The full experiments run 16 000 to 32 000 steps; numbers are in the next scene.</div>
   </div>
 </section>
 
@@ -835,7 +835,7 @@ function rpKpis() {
   h += `<div class="kpi"><b>${Math.round(f0.mse[0] / f.mse[0]).toLocaleString("en-IN")}×</b><span>prediction error reduction, start 1</span></div>`;
   h += `<div class="kpi"><b>${Math.min(...f.pair).toFixed(3)}</b><span>lowest agreement between starts</span></div>`;
   if (rp.barrier) { const mid = rp.barrier.find(b => b.scale === 0.5), end = rp.barrier.find(b => b.scale === 1.0);
-    h += `<div class="kpi"><b>${(mid.mse_d / end.mse_d).toFixed(1)}×</b><span>ridge: halfway between starts 1 and 2 the prediction strays this much more than at start 2 (forward passes only)</span></div>`; }
+    h += `<div class="kpi"><b>${(mid.mse_d / end.mse_d).toFixed(1)}×</b><span>not a flat null space: halfway between starts 1 and 2 the prediction changes this much more than between the two ends (forward passes only)</span></div>`; }
   $("#rpKpis").innerHTML = h;
   $("#rpLegend") && 0;
 }

@@ -284,7 +284,7 @@ function rpKpis() {
   h += `<div class="kpi"><b>${Math.round(f0.mse[0] / f.mse[0]).toLocaleString("en-IN")}×</b><span>prediction error reduction, start 1</span></div>`;
   h += `<div class="kpi"><b>${Math.min(...f.pair).toFixed(3)}</b><span>lowest agreement between starts</span></div>`;
   if (rp.barrier) { const mid = rp.barrier.find(b => b.scale === 0.5), end = rp.barrier.find(b => b.scale === 1.0);
-    h += `<div class="kpi"><b>${(mid.mse_d / end.mse_d).toFixed(1)}×</b><span>ridge: halfway between starts 1 and 2 the prediction strays this much more than at start 2 (forward passes only)</span></div>`; }
+    h += `<div class="kpi"><b>${(mid.mse_d / end.mse_d).toFixed(1)}×</b><span>not a flat null space: halfway between starts 1 and 2 the prediction changes this much more than between the two ends (forward passes only)</span></div>`; }
   $("#rpKpis").innerHTML = h;
   $("#rpLegend") && 0;
 }

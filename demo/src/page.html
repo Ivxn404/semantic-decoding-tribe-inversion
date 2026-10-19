@@ -257,7 +257,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
       <div class="card"><h3>Recovery and agreement <span class="muted" style="font-weight:400">· dashed: lowest agreement between starts</span></h3><canvas class="chart" id="rpCos"></canvas></div>
     </div>
     <div class="kpis" id="rpKpis"></div>
-    <div class="notes"><b>Say (60 s)</b>This is not a simulation: every frame is a logged value from the real model, inverted on CPU. The middle brain converges to the target and the median vertex R² climbs from 0.66 to 0.995, yet recovery of x stops near 0.5 and the three starts agree only 0.37 to 0.54 with each other. The last tile is a forward-only check: halfway between two equally good fits the prediction is about four times worse, so a ridge separates them. The full experiments run 16 000 to 32 000 steps; numbers are in the next scene.</div>
+    <div class="notes"><b>Say (60 s)</b>This is not a simulation: every frame is a logged value from the real model, inverted on CPU. The middle brain converges to the target and the median vertex R² climbs from 0.66 to 0.995, yet recovery of x stops near 0.5 and the three starts agree only 0.37 to 0.54 with each other. The last tile is a forward-only check: along the straight path between two equally good fits the prediction changes about four times more in the middle than between the ends, which a flat null space would not do. The full experiments run 16 000 to 32 000 steps; numbers are in the next scene.</div>
   </div>
 </section>
 
