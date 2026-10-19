@@ -42,3 +42,4 @@ Environment overrides: `PROJECT_ROOT`, `TRIBE_WEIGHTS` (default `weights/`), `LE
 | `make_realdata_fig.py` | Real-data figure: `python make_realdata_fig.py audio_text`. |
 | `demo_run.py` | Records one 2 400-step inversion (cosine and MSE every 40 steps) to `results/demo_run.json`. |
 | `make_demo_video.py` | Renders that log into `demo/demo_inversion.mp4` (needs ffmpeg). |
+| `demo_brain_run.py` | Records the multi-start inversion replayed by the interactive demo: three starts through frozen TRIBE v2 (2 400 steps), cortical maps and per-vertex R² every 120 steps, and a forward-only ridge test. Writes `results/demo_brain_run.json` and `results/demo_brain_maps.npz`. |

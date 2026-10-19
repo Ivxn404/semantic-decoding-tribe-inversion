@@ -10,3 +10,4 @@
 | `roi_dimensionality.json` | `roi_dimensionality.py` | Participation ratios. |
 | `demo_run.json`, `.log` | `demo_run.py` | Logged inversion used for the demo video. |
 | `synth_*.json` | `synthetic_characterisation.py` | Written when you run the synthetic experiments; the original Colab numbers are tabulated in `docs/Methods_and_Results.md`. |
+| `demo_brain_run.json`, `demo_brain_maps.npz` | `demo_brain_run.py` | Real multi-start TRIBE v2 inversion replayed in the interactive demo (scene 6). |

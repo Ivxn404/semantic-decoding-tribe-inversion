@@ -1,0 +1,327 @@
+<title>Inverting TRIBE v2 Live</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..850&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a presenter's run of full-width scenes, each one projector screen tall at most; sticky scene rail; ←/→ steps scenes. */
+:root {
+  --bg: #eef1f3; --panel: #ffffff; --ink: #14212b; --muted: #556673; --line: #d3dbe1;
+  --accent: #1b5fc1; --accent-ink: #ffffff; --hot: #d9480f; --good: #2b8a3e; --warn: #b7791f;
+  --s1: #1b5fc1; --s2: #c2255c; --s3: #2b8a3e; --s4: #b7791f; --s5: #6741d9; --s6: #0c8599;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif; --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --chip: #e3e9ee; --grid: #e2e7eb;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e151b; --panel: #151f27; --ink: #e5ecf1; --muted: #93a4b1; --line: #26343f; --accent: #5b9bff; --accent-ink: #08131d; --hot: #ff7a45; --good: #51cf66; --warn: #f2b84b;
+  --s1: #5b9bff; --s2: #f06595; --s3: #51cf66; --s4: #f2b84b; --s5: #9775fa; --s6: #3bc9db; --chip: #1d2a34; --grid: #1f2c36; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e151b; --panel: #151f27; --ink: #e5ecf1; --muted: #93a4b1; --line: #26343f; --accent: #5b9bff; --accent-ink: #08131d; --hot: #ff7a45; --good: #51cf66; --warn: #f2b84b;
+  --s1: #5b9bff; --s2: #f06595; --s3: #51cf66; --s4: #f2b84b; --s5: #9775fa; --s6: #3bc9db; --chip: #1d2a34; --grid: #1f2c36; color-scheme: dark }
+* { box-sizing: border-box }
+html { scroll-behavior: smooth; scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 56px) }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } }
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); margin: 0 }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel) }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+h1, h2, h3 { font-family: var(--display); font-stretch: 112%; text-wrap: balance; margin: 0; letter-spacing: -0.01em }
+h1 { font-size: clamp(2.1rem, 4.6vw, 3.6rem); font-weight: 820; line-height: 1.02 }
+h2 { font-size: clamp(1.55rem, 2.8vw, 2.2rem); font-weight: 760; line-height: 1.1 }
+h3 { font-size: 1.1rem; font-weight: 700; font-stretch: 105% }
+p { margin: 0; max-width: 68ch }
+.mono, .num { font-family: var(--mono); font-variant-numeric: tabular-nums }
+.eyebrow { font: 500 0.74rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted) }
+.muted { color: var(--muted) }
+a { color: var(--accent) }
+button, select, input { font: inherit; color: inherit }
+button { cursor: pointer }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+
+/* rail */
+.rail { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--panel); border-bottom: 1px solid var(--line) }
+.rail .wrap { display: flex; align-items: center; gap: 12px; height: 52px }
+.rail .brand { font: 800 0.95rem/1 var(--display); font-stretch: 115%; white-space: nowrap }
+.rail nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0 }
+.rail nav::-webkit-scrollbar { display: none }
+.rail nav a { text-decoration: none; color: var(--muted); font: 500 0.8rem/1 var(--body); padding: 8px 10px; border-radius: 6px; white-space: nowrap }
+.rail nav a.on { color: var(--accent-ink); background: var(--accent) }
+.rail .tools { display: flex; gap: 6px }
+.iconbtn { border: 1px solid var(--line); background: transparent; border-radius: 6px; padding: 6px 10px; font-size: 0.8rem }
+.iconbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+
+/* scenes */
+.scene { padding-block: 44px 40px; border-bottom: 1px solid var(--line); min-height: min(860px, calc(100vh - 52px)) }
+.scene > .wrap { display: grid; gap: 22px }
+.shead { display: grid; gap: 10px }
+.shead .lede { font-size: 1.08rem; color: var(--muted) }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px }
+.split { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 26px; align-items: start }
+@media (max-width: 900px) { .grid2, .split, .grid3 { grid-template-columns: minmax(0, 1fr) } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; min-width: 0 }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px }
+.kpi b { display: block; font: 700 1.7rem/1.1 var(--display); font-stretch: 105%; font-variant-numeric: tabular-nums }
+.kpi span { font-size: 0.82rem; color: var(--muted) }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: var(--chip); border-radius: 999px; padding: 3px 10px; font-size: 0.8rem }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none }
+canvas.brain { width: 100%; display: block; touch-action: none }
+.fallback { padding: 24px; color: var(--muted) }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { font: 600 0.74rem/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted) }
+td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums }
+.tablewrap { overflow-x: auto }
+.notes { display: none; border-left: 3px solid var(--warn); background: var(--panel); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 0.95rem }
+.notes b { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warn); display: block; margin-bottom: 4px }
+body.shownotes .notes { display: block }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 0.82rem; color: var(--muted) }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px }
+.btn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 8px 14px; font-weight: 500 }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent) }
+.btn[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); color: var(--accent) }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden }
+.seg button { border: 0; background: var(--panel); padding: 7px 12px; font-size: 0.85rem }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg) }
+.ctl { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; font-size: 0.86rem }
+.ctl label { color: var(--muted) }
+.ctl output { font-family: var(--mono); font-size: 0.82rem }
+.ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--accent) }
+.ctls { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px 18px }
+.chart { width: 100%; height: 220px; display: block }
+.figimg { width: 100%; border-radius: 8px; background: #fff; border: 1px solid var(--line) }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px }
+.tabs button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 6px 12px; font-size: 0.84rem }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+.big { font: 800 clamp(2.4rem, 6vw, 4.2rem)/1 var(--display); font-stretch: 112%; font-variant-numeric: tabular-nums }
+.thesis { font: 700 clamp(1.3rem, 2.6vw, 1.9rem)/1.2 var(--display); font-stretch: 108%; max-width: 30ch }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 30px; align-items: center }
+@media (max-width: 900px) { .hero { grid-template-columns: minmax(0, 1fr) } }
+.people { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 0.9rem }
+.people div b { display: block }
+.pipe { width: 100%; height: auto; display: block }
+.pipe text { font-family: var(--body); fill: var(--ink) }
+.pipe .small { font-size: 11px; fill: var(--muted); font-family: var(--mono) }
+.stack { display: grid; gap: 12px }
+.ranks { display: grid; gap: 8px }
+.rankrow { display: grid; grid-template-columns: 90px minmax(0, 1fr) 70px; align-items: center; gap: 10px; font-size: 0.84rem }
+.cands { display: flex; gap: 2px; flex-wrap: nowrap }
+.cands i { flex: 1; height: 20px; border-radius: 2px; background: var(--chip); transition: background .3s }
+.cands i.true { background: var(--hot) }
+.cands i.same { box-shadow: inset 0 -3px 0 var(--muted) }
+.pill { font: 600 0.72rem/1 var(--mono); padding: 4px 7px; border-radius: 4px; background: var(--chip) }
+.pill.ok { background: color-mix(in srgb, var(--good) 22%, transparent); color: var(--good) }
+.pill.no { background: color-mix(in srgb, var(--hot) 20%, transparent); color: var(--hot) }
+.qr { width: 150px; height: 150px; image-rendering: pixelated; background: #fff; padding: 8px; border-radius: 8px }
+.keys { font-size: 0.8rem; color: var(--muted) }
+kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; background: var(--panel) }
+.heat { width: 100%; image-rendering: pixelated; border-radius: 6px; border: 1px solid var(--line); display: block }
+.netlist { display: grid; gap: 6px }
+.netlist button { display: grid; grid-template-columns: 12px 1fr auto; gap: 10px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 8px 12px }
+.netlist button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink) }
+.status { font: 500 0.8rem/1.3 var(--mono); color: var(--muted) }
+</style>
+
+<header class="rail">
+  <div class="wrap">
+    <span class="brand">TRIBE&nbsp;v2 inverted</span>
+    <nav id="nav" aria-label="Scenes"></nav>
+    <div class="tools">
+      <button class="iconbtn" id="notesBtn" aria-pressed="false" title="Show presenter notes (N)">Notes</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- 1 -->
+<section class="scene" id="open" data-name="Question">
+  <div class="wrap">
+    <div class="hero">
+      <div class="stack" style="gap:18px">
+        <span class="eyebrow">VIT Project-I · BECE497J · Final review, 29 Oct 2026</span>
+        <h1>Conditioning and Non-Convexity of Semantic Decoding by Inversion of Deep Brain Encoding Models</h1>
+        <p class="thesis">A brain model can predict fMRI almost perfectly and still not let you read the meaning back out.</p>
+        <div class="people">
+          <div><b>Abhranil Sarkar</b><span class="muted mono">23BML0077</span></div>
+          <div><b>Tanisha Choudhuri</b><span class="muted mono">23BML0081</span></div>
+          <div><b>Dr. Sharmila Nageswaran</b><span class="muted">Guide, SENSE</span></div>
+        </div>
+        <p class="keys">Present with <kbd>←</kbd> <kbd>→</kbd> between scenes · <kbd>N</kbd> presenter notes · <kbd>Space</kbd> starts or pauses the live lab</p>
+      </div>
+      <div class="card" style="padding:10px">
+        <canvas class="brain" id="heroBrain" style="aspect-ratio: 1.2" aria-label="Rotating cortex coloured by which input TRIBE v2 is most sensitive to"></canvas>
+        <div class="legend" style="padding:4px 8px 6px">
+          <span><i class="dot" style="background:#e03131"></i> most sensitive to text</span><span><i class="dot" style="background:#2f9e44"></i> to audio</span><span><i class="dot" style="background:#1c7ed6"></i> to video</span>
+          <span class="mono">20 484 vertices · measured on TRIBE v2 · drag to turn</span>
+        </div>
+      </div>
+    </div>
+    <div class="notes"><b>Say (40 s)</b>Brain encoders now predict fMRI very well. Everyone assumes decoding follows: if the forward model is right, run it backwards. We test that assumption on Meta's TRIBE v2 by inverting it. The brain on the right is live: each vertex is coloured by whether TRIBE v2 reacts most to text, audio or video features, measured from the real model.</div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="scene" id="data" data-name="Data">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Review II question 1</span><h2>What TRIBE v2 learned from</h2>
+      <p class="lede">Four public 3T datasets, recorded while healthy adults watched or listened with no task. Click a dataset to see what the participants did in the scanner.</p></div>
+    <div class="kpis">
+      <div class="kpi"><b>25</b><span>training subjects</span></div><div class="kpi"><b>451.6 h</b><span>training fMRI, 2 618 sessions</span></div>
+      <div class="kpi"><b>695</b><span>further subjects, test only</span></div><div class="kpi"><b>1 117.7 h</b><span>fMRI in all, 720 subjects</span></div>
+    </div>
+    <div class="split">
+      <div class="card"><svg id="dataBars" class="pipe" viewBox="0 0 640 330" role="img" aria-label="Hours of fMRI per dataset"></svg></div>
+      <div class="card stack" id="dataCard" aria-live="polite"></div>
+    </div>
+    <div class="notes"><b>Say (45 s)</b>This answers the panel's first question. Training: CNeuroMod and Algonauts, 4 people watching Friends and films, 269 hours; BOLD Moments, 10 people, 3-second clips; LeBel, 8 people listening to podcasts; Wen, 3 people watching movie clips. 25 people, 452 hours. Then tested, without retraining, on 695 new people. Our real-data subject UTS03 is one of the LeBel 8, but the story we invert is TRIBE v2's own held-out test story.</div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="scene" id="eeg" data-name="Why fMRI">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Review II question 2</span><h2>Why fMRI and not EEG</h2>
+      <p class="lede">Left: TRIBE v2's real predicted response to a stimulus at all 20 484 cortical points. Right: the same pattern as EEG would see it, blurred by the skull and sampled at a few scalp electrodes. Change the electrode count.</p></div>
+    <div class="card" style="padding:10px">
+      <canvas class="brain" id="eegBrain" style="aspect-ratio: 2.9" aria-label="fMRI resolution versus simulated EEG resolution"></canvas>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:4px 8px">
+        <div class="legend"><span class="mono">fMRI · 20 484 vertices</span><span class="mono" id="eegLabel">EEG · 64 electrodes</span></div>
+        <div class="seg" id="eegSeg" role="group" aria-label="Electrodes"><button data-n="32">32</button><button data-n="64" aria-pressed="true">64</button><button data-n="128">128</button></div>
+      </div>
+    </div>
+    <div class="grid3" id="eegReasons"></div>
+    <div class="notes"><b>Say (50 s)</b>Five reasons. Spatial detail: compare left and right. Only fMRI has a foundation encoder to invert. EEG adds a second ill-posed inverse, source localisation, before ours. Measured: the same decoder gets 32 percent character error from MEG and 67 from EEG. And there is no open EEG–fMRI set with sustained speech, which ruled out our fusion option in Review I. EEG wins on cost and speed, which matters for a product, not for measuring invertibility. The method transfers to EEG once an EEG encoder of this size exists. (The right panel is an illustration: neighbourhood smoothing plus electrode sampling, not a full head model.)</div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="scene" id="pipe" data-name="Method">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Method</span><h2>Where we cut into the network</h2>
+      <p class="lede">The public pipeline is not differentiable end to end. The input enters at one point only, after the feature extractors. We re-enter there, freeze every weight and optimise only the stimulus representation x.</p></div>
+    <div class="card"><div class="tablewrap"><svg id="pipeSvg" class="pipe" viewBox="0 0 1180 300" role="img" aria-label="Inversion pipeline" style="min-width:760px"></svg></div></div>
+    <div class="kpis">
+      <div class="kpi"><b>177.21 M</b><span>frozen parameters</span></div><div class="kpi"><b>1 152</b><span>dimensions of x per time step</span></div>
+      <div class="kpi"><b>r = 1.0000</b><span>our re-entry reproduces the release</span></div><div class="kpi"><b>Adam</b><span>lr 5×10⁻², cosine schedule</span></div>
+    </div>
+    <div class="notes"><b>Say (35 s)</b>Speech synthesis, transcription and three big extractors are not differentiable. We found the single place the input batch is consumed, the aggregation into x, and rebuilt the forward map from there. It reproduces the released predictions exactly. Then x̂ = argmin of the squared error between f(x) and the target.</div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="scene" id="lab" data-name="Live lab">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Live · runs in this browser</span><h2>Invert an encoder yourself</h2>
+      <p class="lede">A small frozen encoder (tanh layer, ill-conditioned weights, haemodynamic smoothing) with the same maths as our TRIBE v2 runs: Adam on x, cosine schedule, exact ground truth. Several starts run at once. Watch the fit improve by orders of magnitude while recovery stalls, and watch equally good fits disagree.</p></div>
+    <div class="card stack">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
+        <div class="btnrow"><button class="btn primary" id="labRun">Run inversion</button><button class="btn" id="labReset">New target</button><button class="btn" id="labProbe" disabled>Probe sensitivity</button></div>
+        <span class="status" id="labStatus">ready · 0 / 2 400 steps</span>
+      </div>
+      <div class="ctls">
+        <div class="ctl"><label for="cK">Starts</label><output id="oK">4</output><input type="range" id="cK" min="1" max="6" value="4"></div>
+        <div class="ctl"><label for="cSpread">Start spread</label><output id="oSpread">0.150</output><input type="range" id="cSpread" min="0" max="100" value="30"></div>
+        <div class="ctl"><label for="cNoise">Measurement noise</label><output id="oNoise">0%</output><input type="range" id="cNoise" min="0" max="100" value="0"></div>
+        <div class="ctl"><label for="cObs">Observed cortex</label><output id="oObs">100%</output><input type="range" id="cObs" min="5" max="100" value="100"></div>
+        <div class="ctl"><label for="cL2">ℓ₂ prior λ</label><output id="oL2">0</output><input type="range" id="cL2" min="0" max="100" value="0"></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>Encoding error <span class="muted" style="font-weight:400">· log scale</span></h3><canvas class="chart" id="chLoss"></canvas></div>
+      <div class="card"><h3>Recovery of the true x <span class="muted" style="font-weight:400">· cosine</span></h3><canvas class="chart" id="chCos"></canvas></div>
+    </div>
+    <div class="grid3">
+      <div class="card stack"><h3>True x and recovered x̂</h3><canvas class="heat" id="hTrue" width="32" height="12" aria-label="true representation"></canvas><canvas class="heat" id="hRec" width="32" height="12" aria-label="recovered representation, start 1"></canvas><p class="muted" style="font-size:.82rem">rows = time steps, columns = input dimensions; start 1 shown</p></div>
+      <div class="card stack"><h3>Do the starts agree?</h3><canvas id="agree" style="width:100%;aspect-ratio:1"></canvas><p class="muted" style="font-size:.82rem" id="agreeTxt">pairwise cosine between solutions</p></div>
+      <div class="card stack"><h3>Where the error hides</h3><canvas class="chart" id="chSens" style="height:180px"></canvas><p class="muted" style="font-size:.82rem" id="sensTxt">After a run, probe how strongly the encoder responds along the disagreement between two starts, against 200 random directions.</p></div>
+    </div>
+    <div class="notes"><b>Demo (90 s)</b>Press Run. Left: error falls by about a million. Right: recovery stops near 0.93. That is the dissociation. Agreement matrix: fits are equally good, answers differ. Turn Start spread up and run again: starts land further apart, so the problem is non-convex. Press Probe: the encoder is about two times less sensitive along the disagreement than along random directions, so the error hides where the operator barely responds. Noise slider: recovery drops gracefully. Observed cortex: fewer vertices, less recovery. ℓ₂ prior: a generic prior does not rescue it.</div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="scene" id="replay" data-name="Real run">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Recorded from the real 177 M-parameter model</span><h2>The same experiment on TRIBE v2</h2>
+      <p class="lede" id="replayLede">Three starts inverted against one known target through frozen TRIBE v2, logged every 40 steps. Drag the slider or press play. Left brain: target response; middle: what the current x̂ predicts; right: how well each vertex is fit over the 100 output steps (R²).</p></div>
+    <div class="card" style="padding:10px">
+      <canvas class="brain" id="replayBrain" style="aspect-ratio: 2.8" aria-label="Target, predicted and fit maps on the cortex"></canvas>
+      <div class="legend" style="padding:2px 8px"><span style="flex:1">target at output step 50</span><span style="flex:1">prediction from x̂</span><span style="flex:1">per-vertex fit R² over time (grey ≤ 0 → yellow 1)</span></div>
+      <div style="display:flex;gap:12px;align-items:center;padding:8px">
+        <button class="btn" id="rpPlay">Play</button>
+        <input type="range" id="rpStep" min="0" max="20" value="0" style="flex:1;accent-color:var(--accent)" aria-label="Inversion step">
+        <span class="status" id="rpTxt">step 0</span>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>Prediction error per start</h3><canvas class="chart" id="rpLoss"></canvas></div>
+      <div class="card"><h3>Recovery and agreement <span class="muted" style="font-weight:400">· dashed: lowest agreement between starts</span></h3><canvas class="chart" id="rpCos"></canvas></div>
+    </div>
+    <div class="kpis" id="rpKpis"></div>
+    <div class="notes"><b>Say (60 s)</b>This is not a simulation: every frame is a logged value from the real model, inverted on CPU. The middle brain converges to the target and the median vertex R² climbs from 0.66 to 0.995, yet recovery of x stops near 0.5 and the three starts agree only 0.37 to 0.54 with each other. The last tile is a forward-only check: halfway between two equally good fits the prediction is about four times worse, so a ridge separates them. The full experiments run 16 000 to 32 000 steps; numbers are in the next scene.</div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="scene" id="findings" data-name="Findings">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Synthetic characterisation · exact ground truth</span><h2>Five findings about the inverse</h2></div>
+    <div class="tabs" role="tablist" id="fTabs"></div>
+    <div class="split" id="fBody"></div>
+    <div class="notes"><b>Say (2 min, one tab each)</b>Dissociation: error down 28.4×, recovery saturates at 0.944. Non-convexity: fit-matched starts disagree, minimum cosine 0.817 over four ground truths. Barrier test with forward passes only: moving along the disagreement is cheaper than random at small steps but costlier at full distance, so these are separate minima, not a flat null space. Sensitivity: the error direction is 1.9× less sensitive than the random median. Gain is identifiable; priors do not help; a ridge decoder reaches 0.06 against our 0.918.</div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="scene" id="regions" data-name="Regions">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Six anatomical networks · Destrieux atlas</span><h2>Predictable is not recoverable</h2>
+      <p class="lede">Pick a network. Its sensitivity is how strongly TRIBE v2 responds there; its recovery is how much of x comes back when only that network is observed, against random vertex sets of the same size.</p></div>
+    <div class="split">
+      <div class="card" style="padding:10px"><canvas class="brain" id="roiBrain" style="aspect-ratio: 1.45" aria-label="Cortical networks"></canvas></div>
+      <div class="stack"><div class="netlist" id="netList"></div><div class="card" id="netCard" aria-live="polite"></div></div>
+    </div>
+    <div class="card"><h3>Sensitivity against recovery advantage</h3><svg id="roiScatter" class="pipe" viewBox="0 0 760 300" role="img" aria-label="Scatter of sensitivity and recovery advantage"></svg></div>
+    <div class="notes"><b>Say (60 s)</b>Click Visual: the most responsive network, 1.6 times the cortical mean, yet 0.125 worse than random vertices. Click Somatomotor: the least responsive, yet 0.102 better, beating the whole cortex at the same budget. Both are ten times the control spread. Why: somatomotor responses are diverse, participation ratio 18.6; visual ones are concentrated in few directions, 10.3.</div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="scene" id="fmri" data-name="Real fMRI">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">LeBel et al. 2023 · subject UTS03 · held-out story “wheretheressmoke”</span><h2>On real fMRI: identify, but not reconstruct</h2></div>
+    <div class="grid3">
+      <div class="card"><h3>Alignment lag</h3><canvas class="chart" id="lagCh" style="height:190px"></canvas><p class="muted" style="font-size:.82rem">best lag 4 s, fitted on the five training stories</p></div>
+      <div class="card"><h3>Encoding accuracy by network</h3><canvas class="chart" id="encCh" style="height:190px"></canvas><p class="muted" style="font-size:.82rem">top-2 000 vertices r = 0.478, 56% of the 0.859 noise ceiling</p></div>
+      <div class="card"><h3>Which 20-s window?</h3><canvas class="chart" id="idCh" style="height:190px"></canvas><p class="muted" style="font-size:.82rem">forward identification among 194 windows, chance 0.5%</p></div>
+    </div>
+    <div class="card stack">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center">
+        <h3>Inverting measured BOLD: rank of the true segment among 45</h3>
+        <div class="btnrow"><div class="seg" id="idSeg" role="group" aria-label="Target"><button data-k="real_bold" aria-pressed="true">Measured BOLD</button><button data-k="oracle_prediction">Noise-free oracle</button></div><button class="btn" id="idPlay">Rank again</button></div>
+      </div>
+      <div class="ranks" id="ranks"></div>
+      <div class="kpis" id="idKpis"></div>
+    </div>
+    <div class="notes"><b>Say (60 s)</b>Real data, held-out story. Encoding reaches 56 percent of the noise ceiling, led by auditory and language networks. Forward identification picks the right 20-second window 59 percent of the time against 0.5 percent chance. Now press Rank again: inverting the measured BOLD puts the true 100-second segment first in 4 of 5 queries out of 45, yet the recovered x has cosine 0.02 with the truth. The noise-free oracle gets 5 of 5 and still only 0.22: most of the loss is the operator, not the noise.</div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="scene" id="close" data-name="Take-away">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Conclusion</span><h2>Recoverability has to be measured</h2></div>
+    <div class="grid3">
+      <div class="card stack"><span class="big">28.4×</span><p>lower encoding error bought only <b class="num">+0.015</b> recovery at the end: accuracy does not certify decoding.</p></div>
+      <div class="card stack"><span class="big">0.817</span><p>minimum agreement between equally good fits: the inverse is non-convex, with barriers, not a null space.</p></div>
+      <div class="card stack"><span class="big">4 / 5</span><p>held-out segments identified on real fMRI with cosine <b class="num">0.02</b>: identification works, reconstruction does not.</p></div>
+    </div>
+    <div class="split">
+      <div class="card stack"><h3>Next</h3>
+        <p>· Real-data inversion across all eight LeBel subjects and a per-network real-data test on held-out stories.<br>· Optimisers and priors matched to the operator's weak directions; restarts and ensembling over minima.<br>· Inversion of the raw extractor features and an explicit haemodynamic model.<br>· The same test on EEG and MEG encoders once they exist at this scale.</p>
+        <p class="muted">Outputs: IEEE-format manuscript (joint first authors), final report, A3 poster, open repository with two Colab notebooks.</p></div>
+      <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><img class="qr" id="qr" alt="QR code to the GitHub repository"><div class="stack" style="gap:6px;min-width:0"><b>Code, data pointers and notebooks</b><span class="mono" style="word-break:break-all">github.com/Ivxn404/semantic-decoding-tribe-inversion</span><a href="https://github.com/Ivxn404/semantic-decoding-tribe-inversion" target="_blank" rel="noopener">Open the repository</a></div></div>
+    </div>
+    <div class="notes"><b>Say (30 s)</b>A near-perfect encoder does not make meaning recoverable. The inverse identifies which moment was heard but reconstructs only what the operator transmits well. So recoverability has to be measured, region by region, not assumed from predictivity. Thank you; happy to run anything live.</div>
+  </div>
+</section>
+</main>
