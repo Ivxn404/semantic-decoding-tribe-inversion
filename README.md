@@ -16,7 +16,8 @@ School of Electronics Engineering (SENSE), Vellore Institute of Technology, Vell
 | **Run it in Colab (demo + synthetic)** | [`notebooks/Demo_and_Synthetic.ipynb`](notebooks/Demo_and_Synthetic.ipynb) · [Open in Colab](https://colab.research.google.com/github/Ivxn404/semantic-decoding-tribe-inversion/blob/main/notebooks/Demo_and_Synthetic.ipynb) |
 | **Run it in Colab (real fMRI)** | [`notebooks/RealData_TextAudio.ipynb`](notebooks/RealData_TextAudio.ipynb) · [Open in Colab](https://colab.research.google.com/github/Ivxn404/semantic-decoding-tribe-inversion/blob/main/notebooks/RealData_TextAudio.ipynb) |
 | **Full methods and results** | [`docs/Methods_and_Results.md`](docs/Methods_and_Results.md) |
-| **Poster** | [`poster/poster_preview.png`](poster/poster_preview.png) |
+| **Poster (A3, final review)** | [`poster/Poster_Sarkar_Choudhuri_Project1.pdf`](poster/Poster_Sarkar_Choudhuri_Project1.pdf) · [preview](poster/poster_preview.png) |
+| **Final report** | [`report/Report_Sarkar_Choudhuri_Project1.pdf`](report/Report_Sarkar_Choudhuri_Project1.pdf) · [`.docx`](report/Report_Sarkar_Choudhuri_Project1.docx) |
 | **Review decks** | [`deck/Review2_Sarkar_Choudhuri.pptx`](deck/Review2_Sarkar_Choudhuri.pptx) · [`deck/Review3_Sarkar_Choudhuri.pptx`](deck/Review3_Sarkar_Choudhuri.pptx) |
 
 ---
@@ -125,7 +126,8 @@ On real data, as in simulation, the inverse identifies **which** moment was hear
 ├── data/                          what is redistributable (fsaverage5 sampling matrix); see data/README.md
 ├── docs/Methods_and_Results.md    full methods and results write-up
 ├── deck/                          Review II and Review III decks (.pptx) and their source
-└── poster/                        poster preview and source
+├── poster/                        A3 final-review poster (.pptx, .pdf) and its build script
+└── report/                        final Project-I report (.pdf, .docx) and its build scripts
 ```
 
 ## 5. Quick start

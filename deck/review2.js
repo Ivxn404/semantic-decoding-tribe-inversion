@@ -130,12 +130,12 @@ const FOOT = "BECE497J Project-I  ·  Review II  ·  A. Sarkar (23BML0077)  ·  
     ["Défossez et al., Nat. Mach. Intell. 2023 [8]", "Contrastive decoding of perceived speech from MEG/EEG", "MEG far stronger than EEG; segment identification"],
     ["Scotti et al. (MindEye2), ICML 2024 [9]", "fMRI-to-image with 1 h of subject data via shared-subject model", "Vision; trained decoder, no operator analysis"],
     ["d'Ascoli et al., Nat. Commun. 2025 [10]", "Single-word decoding across 723 participants (MEG/EEG)", "Word level; accuracy limited by modality"],
-    ["Lévy et al. (Brain2Qwerty), Nat. Neurosci. 2026 [11]", "Typed sentences decoded: CER 29% with MEG vs 65% with EEG", "Shows EEG is too weak for language decoding"],
+    ["Lévy et al. (Brain2Qwerty), arXiv 2025 [11]", "Typed sentences decoded: CER 32% with MEG vs 67% with EEG", "Shows EEG is too weak for language decoding"],
     ["d'Ascoli et al. (TRIBE), ICLR 2026 [12]", "Trimodal encoder; 1st of 263 teams, Algonauts 2025", "Encoding only"],
     ["d'Ascoli et al. (TRIBE v2), 2026 [13]", "Open-weight foundation encoder: 1 117.7 h fMRI, 720 subjects, 20 484 vertices", "Explicitly an encoder; inverse never studied"],
     ["Hansen, SIAM 2010 [14]", "Theory of discrete ill-posed problems: conditioning, regularisation", "Our analytical lens"],
   ], { x: 0.5, y: 1.35, w: 12.3, colW: [3.4, 5.0, 3.9], fontSize: 15, rowH: 0.62 });
-  s.addNotes("Brain2Qwerty is the decisive reason we dropped EEG: even Meta, with 35 participants and a purpose-built architecture, gets 65% character error with EEG versus 29% with MEG. TRIBE v2's own paper frames it for in-silico neuroscience and lists decoders separately (Tang, Défossez); it never inverts itself. Weights and code are public (CC BY-NC 4.0), which makes our study possible.");
+  s.addNotes("Brain2Qwerty is the decisive reason we dropped EEG: even Meta, with 35 participants and a purpose-built architecture, gets 67% character error with EEG versus 32% with MEG. TRIBE v2's own paper frames it for in-silico neuroscience and lists decoders separately (Tang, Défossez); it never inverts itself. Weights and code are public (CC BY-NC 4.0), which makes our study possible.");
 
   // 7 gap
   s = S("Literature");
@@ -646,7 +646,7 @@ const FOOT = "BECE497J Project-I  ·  Review II  ·  A. Sarkar (23BML0077)  ·  
     sl.addNotes(note);
   };
   qa("Q: Why fMRI and not EEG? Why not simultaneous EEG–fMRI?", [
-    ["Why not EEG?", "Brain2Qwerty (Nat. Neurosci. 2026): the same architecture reaches 29% character error with MEG but 65% with EEG. EEG lacks the spatial resolution to separate semantic regions."],
+    ["Why not EEG?", "Brain2Qwerty (Lévy et al., arXiv 2502.17480): the same architecture reaches 32% character error with MEG but 67% with EEG. EEG lacks the spatial resolution to separate semantic regions."],
     ["Why not EEG–fMRI fusion?", "The best open simultaneous dataset (NKI, 22 adults) contains rest, Inscapes and short movie clips, with no sustained language. The approach is data-limited, not method-limited."],
     ["Why TRIBE v2?", "Largest open-weight encoder: trained on 451.6 h, evaluated on 1 117.7 h from 720 subjects, first of 263 teams at Algonauts 2025, and it predicts all 20 484 cortical vertices."],
   ], "Telesford et al., Sci. Data 2023 is the NKI simultaneous EEG-fMRI dataset if they ask for the source.");
@@ -681,7 +681,7 @@ const FOOT = "BECE497J Project-I  ·  Review II  ·  A. Sarkar (23BML0077)  ·  
     "[8] A. Défossez, C. Caucheteux, J. Rapin, O. Kabeli, J.-R. King, “Decoding speech perception from non-invasive brain recordings,” Nat. Mach. Intell., vol. 5, pp. 1097–1107, 2023.",
     "[9] P. S. Scotti et al., “MindEye2: Shared-subject models enable fMRI-to-image with 1 hour of data,” in Proc. ICML, 2024.",
     "[10] S. d’Ascoli et al., “Towards decoding individual words from non-invasive brain recordings,” Nat. Commun., vol. 16, art. 10521, 2025.",
-    "[11] J. Lévy, M. Zhang, S. Pinet, J. Rapin, H. Banville, S. d’Ascoli, J.-R. King, “Noninvasive decoding of typed sentences from human brain activity,” Nat. Neurosci., 2026.",
+    "[11] J. Lévy, M. Zhang, S. Pinet, J. Rapin, H. Banville, S. d’Ascoli, J.-R. King, “Brain-to-text decoding: A non-invasive approach via typing,” arXiv:2502.17480, 2025.",
     "[12] S. d’Ascoli, J. Rapin, Y. Benchetrit, H. Banville, J.-R. King, “TRIBE: TRImodal Brain Encoder for whole-brain fMRI response prediction,” in Proc. ICLR, 2026.",
     "[13] S. d’Ascoli et al., “A foundation model of vision, audition, and language for in-silico neuroscience,” arXiv:2605.04326, 2026.",
     "[14] P. C. Hansen, Discrete Inverse Problems: Insight and Algorithms. Philadelphia, PA: SIAM, 2010.",
@@ -692,7 +692,7 @@ const FOOT = "BECE497J Project-I  ·  Review II  ·  A. Sarkar (23BML0077)  ·  
   ].join("\n"), { x: 0.5, y: 1.3, w: 12.3, h: 5.6, fontSize: 12.5, paraSpaceAfter: 3, color: HEX.ink });
   s.addNotes("IEEE format, peer-reviewed sources and three arXiv preprints (TRIBE v2 and its two 2026 follow-ups, needed as novelty evidence). No websites. Placed last so it stays on screen during questions.");
 
-  await pres.writeFile({ fileName: "/home/claude/work/deck/Review2_Sarkar_Choudhuri.pptx" });
-  await applyTheme("/home/claude/work/deck/Review2_Sarkar_Choudhuri.pptx", K.THEME);
+  await pres.writeFile({ fileName: require("path").join(__dirname, "Review2_Sarkar_Choudhuri.pptx") });
+  await applyTheme(require("path").join(__dirname, "Review2_Sarkar_Choudhuri.pptx"), K.THEME);
   console.log("written");
 })();

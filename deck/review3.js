@@ -7,7 +7,7 @@ const { addNovelty } = require("./novelty");
 const { HEX, txt, bullets, card, badge, iconBadge, stat, figure, caption, table, arrow, box } = K;
 
 const FOOT = "BECE497J Project-I  ·  Review III  ·  A. Sarkar (23BML0077)  ·  T. Choudhuri (23BML0081)";
-const R = "/home/claude/work/results";
+const R = require("path").join(__dirname, "..", "results");
 const roiJ = JSON.parse(fs.readFileSync(`${R}/roi_inversion.json`, "utf8"));
 const ROW = Object.fromEntries(roiJ.rows.map(r => [r.name, r]));
 const SENS = JSON.parse(fs.readFileSync(`${R}/roi_sensitivity.json`, "utf8")).rois;
@@ -139,6 +139,44 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   txt(s, "New since Review II: ROI masks, sensitivity maps, hypothesis tests and controls (green / violet / grey).",
     { x: 0.5, y: 6.35, w: 12.3, h: 0.4, fontSize: 13, italic: true, color: HEX.ink2 });
   s.addNotes("Same core as Review II (top row). Added: the anatomical masks and sensitivity maps from the neurobiology track, the hypothesis-testing layer, and explicit controls for every regional comparison.");
+
+  // ---- where the forward model comes from (asked at Review II)
+  s = S("Method and validation");
+  s.addText("What TRIBE v2 learned from: its fMRI training data", { placeholder: "title" });
+  table(s, ["Dataset (train)", "What participants did in the scanner", "Subjects", "Sessions", "fMRI (h)", "TR (s)"], [
+    ["CNeuroMod / Algonauts 2025 [23]", "Watched TV (Friends, seasons 1–6) and 4 feature films: video + audio + dialogue", "4", "1 408", "268.7", "1.49"],
+    ["BOLD Moments [24]", "Watched 1 102 three-second naturalistic video clips (1 000 train, 102 test × 10)", "10", "520", "61.9", "1.75"],
+    ["LeBel et al. 2023 [5]", "Listened to spoken autobiographical stories (podcasts); 82 stories for 3 subjects", "8", "432", "85.8", "2.0"],
+    ["Wen et al. 2018 [25]", "Watched natural movie clips (8-min segments, test segments ×10)", "3", "258", "35.2", "2.0"],
+    [{ text: "Training total", options: { bold: true } }, "All 3T; passive viewing / listening, no task", { text: "25", options: { bold: true } }, { text: "2 618", options: { bold: true } }, { text: "451.6", options: { bold: true } }, "—"],
+  ], { x: 0.5, y: 1.3, w: 12.3, colW: [2.9, 5.0, 1.0, 1.1, 1.1, 1.2], fontSize: 12.5, rowH: 0.5 });
+  card(s, 0.5, 4.75, 6.0, 2.05, HEX.tint);
+  txt(s, [{ text: "Evaluation (never trained on). ", options: { bold: true, color: HEX.navy } },
+    { text: "NNDb (86 subjects, films), Le Petit Prince (112, audiobook), Narratives (321, spoken stories), HCP 7T (176, movie clips): 695 subjects, 666.1 h. With training: 720 subjects, 5 094 sessions, 1 117.7 h of fMRI [7]." }],
+    { x: 0.7, y: 4.85, w: 5.6, h: 1.85, fontSize: 13.5, valign: "middle" });
+  card(s, 6.8, 4.75, 6.0, 2.05, HEX.paleOrange);
+  txt(s, [{ text: "What this means for us. ", options: { bold: true, color: HEX.navy } },
+    { text: "Our real-data subject UTS03 is one of the 8 LeBel training subjects, but our test story (wheretheressmoke) is TRIBE v2's own held-out test split, so the encoder never saw the responses we invert. The released weights use one averaged 'unseen subject' layer, so we invert the population model." }],
+    { x: 7.0, y: 4.85, w: 5.6, h: 1.85, fontSize: 13.5, valign: "middle" });
+  s.addNotes("Numbers from Table 1 of d'Ascoli et al. 2026 (arXiv 2605.04326) and the study definitions shipped with the TRIBE v2 code (subject IDs and TRs: Algonauts2025 sub-01/02/03/05, BOLD Moments 10 subjects, LeBel UTS01-08, Wen subject1-3). All participants were healthy adults scanned at 3T (HCP at 7T) while passively watching or listening; no task, no button presses. Consent and ethics are those of the original studies; all four training sets are public. Modalities: CNeuroMod has video, audio and text; BOLD Moments video and audio; LeBel audio and text; Wen video only.");
+
+  // ---- why fMRI and not EEG (asked at Review II)
+  s = S("Method and validation");
+  s.addText("Why fMRI, not EEG", { placeholder: "title" });
+  table(s, ["Criterion", "fMRI (this work)", "EEG"], [
+    ["Spatial detail", "≈2–3 mm voxels; 20 484 cortical vertices", "32–128 scalp channels, cm-scale, blurred"],
+    ["Foundation encoder to invert", "TRIBE v2: 177 M parameters, 1 117.7 h, 720 subjects", "No open whole-brain encoder of naturalistic EEG at this scale"],
+    ["Number of inverse problems", "One: response → representation", "Two: scalp → cortical sources (itself ill-posed) → representation"],
+    ["Measured language-decoding evidence", "Continuous language reconstructed from fMRI [4]", "Same decoder: 67% character error with EEG vs 32% with MEG [6]"],
+    ["Open naturalistic language data", "LeBel 2023: 8 subjects, 85.8 h of stories", "No open simultaneous EEG–fMRI set with sustained speech"],
+    [{ text: "Temporal resolution", options: { color: "B03A2E", bold: true } }, { text: "1.5–2 s samples, ≈5 s haemodynamic lag (cost)", options: { color: "B03A2E" } }, "Milliseconds (EEG advantage)"],
+    [{ text: "Cost and portability", options: { color: "B03A2E", bold: true } }, { text: "Scanner-bound (cost)", options: { color: "B03A2E" } }, "Wearable, low cost (EEG advantage)"],
+  ], { x: 0.5, y: 1.25, w: 12.3, colW: [2.8, 4.5, 5.0], fontSize: 12, rowH: 0.44 });
+  card(s, 0.5, 5.85, 12.3, 1.05, HEX.navy);
+  txt(s, [{ text: "Decision.  ", options: { bold: true, color: "FFC9A8" } },
+    { text: "fMRI is where the question can be answered today: it has the spatial detail, the data and the only deep encoder large enough to invert. EEG's real advantages (speed, cost) matter for a deployed device, not for measuring how invertible an encoder is. The method transfers to EEG once a comparable EEG encoder exists.", options: { color: "FFFFFF" } }],
+    { x: 0.75, y: 5.88, w: 11.8, h: 1.0, fontSize: 12.5, valign: "middle" });
+  s.addNotes("Answer in one breath: EEG would add a second ill-posed inverse problem (source localisation) on top of the one we study, and no EEG foundation encoder exists to invert. We considered simultaneous EEG-fMRI (Report I, Solution 3): the open NKI simultaneous dataset has rest, Inscapes and short movie clips but no sustained language. Brain2Qwerty numbers are from the arXiv preprint (Lévy et al. 2025). Be honest about the two rows in red: fMRI is slow and expensive, which is why a clinical device would eventually need EEG or MEG; our contribution is to measure the limits first.");
 
   // hypotheses
   s = S("Method and validation");
@@ -431,7 +469,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   s.addNotes("State limitations before they are raised. None of them affects the central claims (dissociation, non-convexity, rejected null space), which were replicated and tested with optimiser-independent forward passes.");
 
   // ---- real data (LeBel 2023), results read from lebel/realdata_audio_text.json
-  const RD = JSON.parse(fs.readFileSync("../results/realdata_audio_text.json", "utf8"));
+  const RD = JSON.parse(fs.readFileSync(require("path").join(R, "realdata_audio_text.json"), "utf8"));
   const RI = RD.identification_forward.top2000, RX = RD.inversion_identification;
   s = S("Remaining work");
   s.addText("Real-data validation in progress: first results (LeBel 2023)", { placeholder: "title" });
@@ -453,7 +491,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   s.addNotes("Everything tunable (the 6-s alignment offset, the 2 000 vertices) was fitted on the five training stories; wheretheressmoke is held out and is not in TRIBE v2's training set. Text + audio features (LLaMA-3.2-3B and w2v-BERT, TRIBE v2's own pipeline) on a Colab T4, 2 000 inversion steps. Oracle (inverting the model's own prediction, same budget): 5/5 identified, cosine 0.22, so even noise-free inversion recovers little of x. An earlier audio-only CPU run gave the same pattern (5/5, cosine 0.06). The key real-data finding mirrors the synthetic one: identification succeeds while cosine recovery is low, i.e. the inverse pins down which moment was heard but not the full representation. Avatar fails alignment QC (no lag peak) and is kept only as a distractor, which makes identification harder, not easier.");
 
   // ---- real data, detail 1: encoding across stories and networks
-  const RA = JSON.parse(fs.readFileSync("../results/realdata_audio.json", "utf8"));
+  const RA = JSON.parse(fs.readFileSync(require("path").join(R, "realdata_audio.json"), "utf8"));
   const NETS = ["Auditory", "Language (L)", "Language homologue (R)", "Default mode", "Somatomotor", "Visual"];
   const SHORT = { "Auditory": "Aud.", "Language (L)": "Lang. L", "Language homologue (R)": "Lang. R", "Default mode": "DMN", "Somatomotor": "SomMot", "Visual": "Visual" };
   const STO = ["wheretheressmoke", "adollshouse", "avatar", "legacy", "souls", "undertheinfluence"];
@@ -563,7 +601,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     ["Why should a clinician care?", "Because the bottleneck is search, not encoder size: better decoders will come from restarts, ensembling over minima and language-derived priors."],
   ], "Return to the conclusion slide after this one if the discussion drifts.");
   qa("Q: Why fMRI, not EEG? Why TRIBE v2?", [
-    ["Why not EEG?", "Brain2Qwerty (Nat. Neurosci. 2026): 29% character error with MEG vs 65% with EEG on the same architecture."],
+    ["Why not EEG?", "Brain2Qwerty (Lévy et al., arXiv 2502.17480): 32% character error with MEG vs 67% with EEG on the same architecture."],
     ["Why not simultaneous EEG–fMRI?", "The best open simultaneous dataset (NKI, 22 adults) has rest, Inscapes and short movie clips, no sustained language: data-limited, not method-limited."],
     ["Why TRIBE v2?", "Largest open-weight encoder: 451.6 h training, 1 117.7 h evaluation across 720 subjects, all 20 484 cortical vertices, first at Algonauts 2025."],
   ], "Same answers as Review II, kept for continuity.");
@@ -577,7 +615,7 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     "[3] R. Antonello, A. Vaidya, A. G. Huth, “Scaling laws for language encoding models in fMRI,” in Proc. NeurIPS, vol. 36, 2023.",
     "[4] J. Tang, A. LeBel, S. Jain, A. G. Huth, “Semantic reconstruction of continuous language from non-invasive brain recordings,” Nat. Neurosci., vol. 26, pp. 858–866, 2023.",
     "[5] A. LeBel et al., “A natural language fMRI dataset for voxelwise encoding models,” Sci. Data, vol. 10, art. 555, 2023.",
-    "[6] J. Lévy et al., “Noninvasive decoding of typed sentences from human brain activity,” Nat. Neurosci., 2026.",
+    "[6] J. Lévy, M. Zhang, S. Pinet, J. Rapin, H. Banville, S. d’Ascoli, J.-R. King, “Brain-to-text decoding: A non-invasive approach via typing,” arXiv:2502.17480, 2025.",
     "[7] S. d’Ascoli et al., “A foundation model of vision, audition, and language for in-silico neuroscience,” arXiv:2605.04326, 2026.",
     "[8] P. C. Hansen, Discrete Inverse Problems: Insight and Algorithms. Philadelphia, PA: SIAM, 2010.",
     "[9] C. Destrieux, B. Fischl, A. Dale, E. Halgren, “Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature,” NeuroImage, vol. 53, no. 1, pp. 1–15, 2010.",
@@ -594,10 +632,13 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     "[20] Y. Benchetrit et al., “Boosting brain-to-image decoding with TRIBE v2 data augmentation,” arXiv:2606.06345, 2026.",
     "[21] K. N. Kay, T. Naselaris, R. J. Prenger, J. L. Gallant, “Identifying natural images from human brain activity,” Nature, vol. 452, pp. 352–355, 2008.",
     "[22] A. Défossez, C. Caucheteux, J. Rapin, O. Kabeli, J.-R. King, “Decoding speech perception from non-invasive brain recordings,” Nat. Mach. Intell., vol. 5, pp. 1097–1107, 2023.",
-  ].join("\n"), { x: 0.5, y: 1.3, w: 12.3, h: 5.6, fontSize: 11.5, paraSpaceAfter: 2 });
+    "[23] A. T. Gifford et al., “The Algonauts Project 2025 challenge: How the human brain makes sense of multimodal movies,” arXiv:2501.00504, 2025.",
+    "[24] B. Lahner et al., “Modeling short visual events through the BOLD Moments video fMRI dataset and metadata,” Nat. Commun., vol. 15, art. 6241, 2024.",
+    "[25] H. Wen, J. Shi, Y. Zhang, K.-H. Lu, J. Cao, Z. Liu, “Neural encoding and decoding with deep learning for dynamic natural vision,” Cereb. Cortex, vol. 28, no. 12, pp. 4136–4160, 2018.",
+  ].join("\n"), { x: 0.5, y: 1.3, w: 12.3, h: 5.6, fontSize: 10.5, paraSpaceAfter: 1.5 });
   s.addNotes("IEEE format. OECD and UNESCO entries are normative instruments, cited as such.");
 
-  await pres.writeFile({ fileName: "/home/claude/work/deck/Review3_Sarkar_Choudhuri.pptx" });
-  await applyTheme("/home/claude/work/deck/Review3_Sarkar_Choudhuri.pptx", K.THEME);
+  await pres.writeFile({ fileName: require("path").join(__dirname, "Review3_Sarkar_Choudhuri.pptx") });
+  await applyTheme(require("path").join(__dirname, "Review3_Sarkar_Choudhuri.pptx"), K.THEME);
   console.log("written");
 })();
