@@ -1,0 +1,28 @@
+{
+ "0": {
+  "pair": [
+   "gauss_1.0",
+   "uniform"
+  ],
+  "sens_d": 0.08096306025981903,
+  "sens_error": 0.09111198782920837,
+  "random_median": 0.1684214472770691,
+  "random_min": 0.12176662683486938,
+  "random_max": 0.23909126222133636,
+  "ratio_median_over_d": 2.0802258058994663,
+  "percentile_of_d": 0.0,
+  "ratio_median_over_error": 1.8485102925509558,
+  "all_matched_pairs_ratio": {
+   "gauss_0.01|gauss_0.1": 1.1434208323322248,
+   "gauss_0.01|gauss_1.0": 1.7467784680189735,
+   "gauss_0.01|uniform": 1.8841180983205825,
+   "gauss_0.01|zeros": 0.6349278004196311,
+   "gauss_0.1|gauss_1.0": 1.8102034766255812,
+   "gauss_0.1|uniform": 1.8239484969606297,
+   "gauss_0.1|zeros": 1.076006972842528,
+   "gauss_1.0|uniform": 2.0802258058994663,
+   "gauss_1.0|zeros": 1.6761727536202653,
+   "uniform|zeros": 1.8775746093394725
+  }
+ }
+}

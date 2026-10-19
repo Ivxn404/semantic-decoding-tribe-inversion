@@ -20,7 +20,7 @@ Total: about 12 minutes of demo, plus questions. Two screens: the **interactive 
 | 5 | Live lab | Abhranil | 1:30 | **Space** to run; then **Probe sensitivity**; then raise *Start spread* and run again; then raise *Measurement noise* | Error falls about a million-fold, recovery stops near 0.9: the dissociation. Equal fits, different answers: non-convex. The disagreement sits where the encoder barely responds. |
 | 6 | Real run | Abhranil | 1:00 | **Play** | Same experiment on the real model, every frame logged: median vertex R² climbs to 0.995, but recovery stops near 0.5 and the three starts agree only 0.37–0.54. |
 | — | Colab | Abhranil | 3:00 | Run **Step 4**, then **5** | The real model, live. Plots update every 50 steps. Barrier test and sensitivity probe use forward passes only. |
-| 7 | Findings | Tanisha | 2:00 | One tab each | 28.4× vs +0.015 · 0.817 · 2.6× → 0.6× · 1.9× · 0.918 vs 0.060. |
+| 7 | Findings | Tanisha | 2:00 | One tab each | 28.4× vs +0.015 · 0.817 · barrier 3.8× (7.2× to a deeper minimum) · 2.1× · 0.918 vs 0.060. |
 | 8 | Regions | Tanisha | 1:00 | Click Visual, then Somatomotor | Most responsive network is the worst to decode from (−0.125); the least responsive is the best (+0.102). Diversity of responses explains it (PR 18.6 vs 10.3). |
 | 9 | Real fMRI | Abhranil | 1:00 | **Rank again**, then switch to *Noise-free oracle* | Encoding at 56% of the noise ceiling; 4 of 5 held-out segments identified among 45, cosine 0.02. Oracle 5 of 5 but only 0.22: the limit is the operator. |
 | 10 | Take-away | Both | 0:30 | Leave the QR code on screen | Recoverability has to be measured, not assumed from predictivity. |

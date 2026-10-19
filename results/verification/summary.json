@@ -1,0 +1,39 @@
+{
+ "steps": 14000,
+ "ground_truths": [
+  0
+ ],
+ "gt0": {
+  "matched": [
+   "gauss_0.01",
+   "gauss_0.1",
+   "gauss_1.0",
+   "uniform",
+   "zeros"
+  ],
+  "best_mse": 7.738151452940656e-08,
+  "agreement_mean": 0.9538653254508972,
+  "agreement_min": 0.8900858759880066,
+  "old_rule_pair": [
+   "gauss_5.0",
+   "uniform"
+  ],
+  "old_rule_fits": [
+   1.153897983385832e-06,
+   3.676903759242123e-07
+  ],
+  "pair": [
+   "gauss_1.0",
+   "uniform"
+  ],
+  "barrier_random_over_d": [
+   2.581,
+   5.969,
+   13.275,
+   257.673
+  ],
+  "path_peak_over_end_median": 3.802496537009766,
+  "sensitivity_ratio": 2.0802258058994663,
+  "sensitivity_ratio_error": 1.8485102925509558
+ }
+}

@@ -5,7 +5,7 @@ so recovery error is exact. One sub-command per experiment; each writes results/
 
     python synthetic_characterisation.py dissociation      # IV-A  encoding error vs recovery over step budgets
     python synthetic_characterisation.py inits             # IV-B  8 initialisations x 4 ground truths
-    python synthetic_characterisation.py barrier           # IV-C  perturbation along d vs random directions
+    python synthetic_characterisation.py barrier           # IV-C  straight-path barrier between fit-matched blind solutions
     python synthetic_characterisation.py sensitivity       # IV-D  directional sensitivity of d vs 200 random directions
     python synthetic_characterisation.py gain noise extent priors ridge bandwidth manifold   # IV-E (Table IV)
     python synthetic_characterisation.py all
@@ -114,16 +114,22 @@ def exp_inits(fwd, q):
 
 
 def _two_solutions(fwd, q):
+    """Least similar pair among fit-matched solutions that were blind to the truth
+    (within 2x of the best blind fit). Corrected 19 Oct 2026: the earlier version searched all eight starts,
+    so it could pair an under-converged solution (gauss_5.0) or one started next to the truth."""
     p = f"{OUT}/synth_solutions_gt0.pt"
     if not os.path.exists(p):
         exp_inits(fwd, q)
     sols = {k: v.to(DEV) for k, v in torch.load(p).items()}
-    ks = list(sols); best = (None, 2.0)
+    x = make_truth(); y = fwd(x).detach()
+    with torch.no_grad():
+        fit = {k: ((fwd(v) - y) ** 2).mean().item() for k, v in sols.items() if not k.startswith("truth")}
+    best = min(fit.values()); ks = [k for k, m in fit.items() if m <= 2 * best]; pair = (None, 2.0)
     for i in range(len(ks)):
         for j in range(i + 1, len(ks)):
             c = torch.nn.functional.cosine_similarity(sols[ks[i]], sols[ks[j]], dim=-1).mean().item()
-            if c < best[1]: best = ((ks[i], ks[j]), c)
-    (a, b), _ = best
+            if c < pair[1]: pair = ((ks[i], ks[j]), c)
+    (a, b), _ = pair
     return sols[a], sols[b], (a, b)
 
 
@@ -138,7 +144,8 @@ def exp_barrier(fwd, q):
                 rnd.append(((fwd(x1 + s * r) - y) ** 2).mean().item())
             rows.append({"scale": s, "mse_along_d": along, "mse_random_median": float(np.median(rnd)),
                          "random_over_d": float(np.median(rnd) / along)}); print(rows[-1], flush=True)
-    save("barrier", {"pair": pair, "rows": rows})
+        path = [((fwd(x1 + t * d) - y) ** 2).mean().item() for t in np.linspace(0, 1, 21)]
+    save("barrier", {"pair": pair, "rows": rows, "path": path, "path_peak_over_worse_end": max(path[1:-1]) / max(path[0], path[-1])})
 
 
 def exp_sensitivity(fwd, q):

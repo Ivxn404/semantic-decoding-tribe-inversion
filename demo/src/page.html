@@ -267,7 +267,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
     <div class="shead"><span class="eyebrow">Synthetic characterisation · exact ground truth</span><h2>Five findings about the inverse</h2></div>
     <div class="tabs" role="tablist" id="fTabs"></div>
     <div class="split" id="fBody"></div>
-    <div class="notes"><b>Say (2 min, one tab each)</b>Dissociation: error down 28.4×, recovery saturates at 0.944. Non-convexity: fit-matched starts disagree, minimum cosine 0.817 over four ground truths. Barrier test with forward passes only: moving along the disagreement is cheaper than random at small steps but costlier at full distance, so these are separate minima, not a flat null space. Sensitivity: the error direction is 1.9× less sensitive than the random median. Gain is identifiable; priors do not help; a ridge decoder reaches 0.06 against our 0.918.</div>
+    <div class="notes"><b>Say (2 min, one tab each)</b>Dissociation: error down 28.4×, recovery saturates at 0.944. Non-convexity: fit-matched starts disagree, minimum cosine 0.817 over four ground truths. Barrier test with forward passes only: on the straight line between two equally good blind fits the error rises 3.8× in the middle, and 7.2× towards a deeper minimum near the truth, so these are separate minima, not a flat null space. Sensitivity: the solution difference is 2.1× less sensitive than the random median. Gain is identifiable; priors do not help; a ridge decoder reaches 0.06 against our 0.918.</div>
   </div>
 </section>
 

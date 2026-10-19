@@ -141,18 +141,20 @@ The effect is highly reproducible (spread 0.019 across all four), the worst-disa
 
 Two explanations remain for §2.2: solutions occupy a connected flat region of the loss surface (a null space, implying information loss), or they are distinct local minima separated by barriers (non-convexity, implying an optimisation limit). These were distinguished directly.
 
-Let **d** be the difference between two fit-matched solutions. Perturbing a solution along **d** was compared against random directions of identical magnitude:
+**Corrected test (19 October 2026, `notebooks/Verification_Tests.ipynb`, results in `results/verification/`).** The prediction error against the target was measured at 21 points on the straight line between every pair of fit-matched solutions that were blind to the truth (five starts within 1.1× of each other, 3.57–3.90 × 10⁻⁷ after 14 000 steps; agreement mean 0.954, minimum 0.890). A null space would keep the error flat along the line; distinct minima make it rise.
 
-| Perturbation scale | MSE along **d** | MSE random (median) | Ratio |
-|---:|---:|---:|---:|
-| 0.10 | 9.311 × 10⁻⁷ | 2.394 × 10⁻⁶ | 2.6× |
-| 0.25 | 7.749 × 10⁻⁶ | 1.522 × 10⁻⁵ | 2.0× |
-| 0.50 | 4.516 × 10⁻⁵ | 6.191 × 10⁻⁵ | 1.4× |
-| 1.00 | 3.908 × 10⁻⁴ | 2.197 × 10⁻⁴ | 0.6× |
+| Measure | Value |
+|---|---:|
+| Peak / worse endpoint, 10 blind pairs | median 3.8× (range 1.5–6.0×) |
+| Error of the two near-truth controls vs the best blind fit | 4.6× lower (7.7 × 10⁻⁸) |
+| Recovery: near-truth controls vs blind starts | 0.951–0.976 vs 0.894–0.918 |
+| Peak on the line from the best blind solution to the near-truth one | 7.2× the blind end |
 
-At the full separation between two solutions, moving along **d** changes the predicted response **more** than a random direction of the same length. A null space would show a large ratio sustained or growing with scale.
+![Corrected barrier test](../figures/fig_barrier_verified.png)
 
-**The null-space hypothesis is therefore rejected.** Fit-matched solutions are separated by a barrier in the loss surface: the inverse problem is non-convex, and incomplete recovery is an optimisation limit rather than an information-theoretic one.
+**Withdrawn.** The earlier version of this test (perturbation along **d** against random directions; ratios 2.6× → 0.6×) chose its pair as the least similar of all eight starts, which paired an under-converged solution (Gaussian s.d. 5, error 1.15 × 10⁻⁶). With a fit-matched pair the change along **d** stays far below random directions at every scale (2.6×, 6.0×, 13×, 258×), as it must when both ends fit the target, so that comparison cannot detect a barrier. `scripts/synthetic_characterisation.py` now selects the pair among fit-matched blind solutions and also records the straight-path profile.
+
+**The null-space hypothesis is therefore rejected.** Fit-matched blind solutions are separated by barriers from each other and from a deeper minimum near the truth: the inverse problem is non-convex, and incomplete recovery is an optimisation limit rather than an information-theoretic one.
 
 Locality was confirmed independently: the sensitivity advantage of **d** falls from 2.0× at the trajectory where it was found to 1.0–1.1× at unrelated ground truths, so **d** is not a globally privileged direction.
 

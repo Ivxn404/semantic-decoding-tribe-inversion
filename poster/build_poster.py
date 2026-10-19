@@ -234,7 +234,7 @@ c = sl.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(xs[0] + bw / 2), Inch
 arrow(xs[0] + bw / 2, Y2 + bh + 0.35, xs[0] + bw / 2, Y2 + bh, ORANGE)
 arrow(xs[0] + bw / 2, Y2, xs[2] + 0.6, Y1 + bh, ORANGE)
 rect(xs[0], Y3 + 0.2, bw * 2 + gx, 1.5, NAVY, None, ["Evaluate x̂: cosine to truth, identification rank"], 22, True, WHITE)
-rect(xs[2], Y3 + 0.2, bw * 2 + gx, 1.5, TEAL, None, ["Controls: 8 inits × 4 truths, sensitivity, ROI vs random"], 22, True, WHITE)
+rect(xs[2], Y3 + 0.2, bw * 2 + gx, 1.5, TEAL, None, ["Controls: 8 inits × 4 truths, barrier, ROI vs random"], 22, True, WHITE)
 cap = sl.shapes.add_textbox(Inches(bx + 0.3), Inches(by + 8.55), Inches(W - 0.6), Inches(0.7))
 cap.text_frame.word_wrap = True
 runs(cap.text_frame.paragraphs[0], "Only x is optimised; network weights stay frozen. Re-entering after feature aggregation reproduces TRIBE v2's predictions exactly (r = 1.0000).", 19, BF, GREY)
@@ -245,7 +245,7 @@ fill(box["Design Methodology and Novelty"], "Design Methodology and Novelty", [
     [("1  Forward operator. ", True), ("TRIBE v2 (trained on 451.6 h of fMRI from 25 people watching films and video clips and listening to stories), frozen.", False)],
     [("2  Inversion. ", True), ("x̂ = argmin ‖f(x) − y‖², Adam (lr 0.05, cosine schedule), weights frozen.", False)],
     [("3  Exact evaluation. ", True), ("Known synthetic x → y = f(x) → recover x; budget, noise, extent, priors, 8 initialisations × 4 truths.", False)],
-    [("4  Mechanism tests. ", True), ("Agreement between fit-matched solutions; forward-only probes along their difference; Jacobian sensitivity vs 200 random directions.", False)],
+    [("4  Mechanism tests. ", True), ("Agreement of fit-matched solutions; forward-only straight-path barrier test; Jacobian sensitivity vs 200 random directions.", False)],
     [("5  Regions. ", True), ("6 Destrieux networks vs size-matched random vertex sets, with a second random seed as the control spread.", False)],
     [("6  Real fMRI. ", True), ("LeBel 2023 subject UTS03 projected to fsaverage5; lag and vertices chosen on five training stories; held-out story inverted and ranked among 45 segments.", False)],
     [("Why fMRI, not EEG: ", True), ("millimetre detail on 20 484 vertices, the only deep encoder large enough to invert, and one inverse problem instead of two (EEG adds source localisation). EEG is faster and cheaper, which matters for a device, not for this measurement.", False)],
@@ -267,12 +267,12 @@ rx, ry = R, 22.4
 fill(box["Project Results"], "Project Results", [
     [("A good fit is not a good decode, and the inverse identifies but does not reconstruct.", True)]], size=23)
 picture(f"{FIG}/fig_dissociation.png", rx + 0.25, ry + 1.75, 7.6, 3.8)
-picture(f"{FIG}/fig_nonconvex.png", rx + 7.95, ry + 1.75, 7.6, 3.8)
+picture(f"{FIG}/fig_barrier_path.png", rx + 7.95, ry + 1.75, 7.6, 3.8)
 picture(f"{FIG}/fig_roi_recovery.png", rx + 0.3, ry + 5.65, W - 0.6, 3.9)
 picture(f"{FIG}/fig_realdata_audio_text.png", rx + 0.3, ry + 9.6, W - 0.6, 3.15)
 kt = sl.shapes.add_textbox(Inches(rx + 0.3), Inches(ry + 12.75), Inches(W - 0.6), Inches(0.8))
 kt.text_frame.word_wrap = True
-runs(kt.text_frame.paragraphs[0], [("Synthetic: ", True), ("error ↓28.4× but recovery saturates (0.944); equally good fits disagree (min. cosine 0.817 over 4 truths); errors lie in weakly sensed directions. ", False),
+runs(kt.text_frame.paragraphs[0], [("Synthetic: ", True), ("error ↓28.4× but recovery saturates (0.944); equal fits disagree (0.817) and sit in separate minima (path barrier 3.8×; 7.2× to a deeper one). ", False),
                                    ("Regions: ", True), ("visual −0.125, somatomotor +0.102 vs random. ", False),
                                    ("Real fMRI: ", True), ("r = 0.48 (56% of ceiling); 4/5 segments identified (chance 2.2%), cosine 0.02.", False)], 17, BF, INK)
 
