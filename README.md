@@ -21,6 +21,7 @@ School of Electronics Engineering (SENSE), Vellore Institute of Technology, Vell
 | **Full methods and results** | [`docs/Methods_and_Results.md`](docs/Methods_and_Results.md) |
 | **Poster (A3, final review)** | [`poster/Poster_Sarkar_Choudhuri_Project1.pdf`](poster/Poster_Sarkar_Choudhuri_Project1.pdf) · [preview](poster/poster_preview.png) |
 | **Final report** | [`report/Report_Sarkar_Choudhuri_Project1.pdf`](report/Report_Sarkar_Choudhuri_Project1.pdf) · [`.docx`](report/Report_Sarkar_Choudhuri_Project1.docx) |
+| **Final presentation** | [`deck/Final_Sarkar_Choudhuri.pptx`](deck/Final_Sarkar_Choudhuri.pptx): the complete project in 70 slides |
 | **Review decks** | [`deck/Review2_Sarkar_Choudhuri.pptx`](deck/Review2_Sarkar_Choudhuri.pptx) · [`deck/Review3_Sarkar_Choudhuri.pptx`](deck/Review3_Sarkar_Choudhuri.pptx) |
 
 ---
