@@ -97,7 +97,7 @@ ax.axvline(2000, color=MUTED, ls="--", lw=1.2)
 ax.text(2150, 0.12, "≈10% of cortex\nrecovers 93% of the\nfull-cortex score", color=INK2, fontsize=11)
 for x, y in zip(nv, ecos):
     ax.text(x, y + 0.035, f"{y:.2f}", ha="center", fontsize=11, color=INK)
-ax.set_title("Recovery saturates at ~2 000 of 20 484 vertices")
+ax.set_title("Recovery saturates at ~2,000 of 20,484 vertices")
 save(fig, "fig_extent")
 
 # ---------------------------------------------------------------- 5 priors
@@ -199,7 +199,7 @@ save(fig, "fig_gain")
 
 # ---------------------------------------------------------------- 11 linear baseline
 fig, ax = plt.subplots(figsize=(6.6, 4.6))
-ax.bar(["Ridge decoder\n(best λ = 1e-2)", "Gradient inversion\n(this work)"], [0.0599, 0.9181],
+ax.bar(["Ridge decoder\n(best λ = 1e-2)", "Gradient inversion\n(proposed work)"], [0.0599, 0.9181],
        color=[MUTED, S1], width=0.55)
 ax.text(0, 0.0599 + 0.03, "0.060", ha="center", fontsize=13); ax.text(1, 0.9181 + 0.03, "0.918", ha="center", fontsize=13)
 ax.set_ylim(0, 1.05); ax.set_ylabel("Test cosine")

@@ -191,18 +191,18 @@ fill(box["Team members and Guide"], "Team members and Guide", [
 ], size=29, bullets=True, space=10)
 
 fill(box["Project Overview"], "Project Overview", [
-    "Encoding models predict fMRI from what a person sees and hears; decoding runs the other way. Can a near-perfect encoder simply be inverted to read meaning back out?",
-    [("We invert Meta's open 177 M-parameter TRIBE v2 encoder by gradient descent, measure ", False), ("uniqueness, conditioning and regional recoverability", True),
-     (" with exact ground truth, and validate on real fMRI from a held-out story.", False)],
-    [("Answer: no. ", True), ("Error falls 28.4× while recovery saturates; on real fMRI 4 of 5 held-out segments are identified (chance 2.2%), yet cosine to the truth is only 0.02.", False)],
+    "Encoding models predict fMRI from the stimuli a person sees and hears; decoding runs the other way. This project tests whether a near-perfect encoder can be inverted to read meaning back out.",
+    [("Meta's open 177 M-parameter TRIBE v2 encoder is inverted by gradient descent; its ", False), ("uniqueness, conditioning and regional recoverability", True),
+     (" are measured with exact ground truth and validated on real fMRI from a story unseen in training.", False)],
+    [("Finding: ", True), ("error falls 28.4× while recovery saturates; on real fMRI 4 of 5 unseen test segments are identified (chance 2.2%), yet cosine to the truth is only 0.02.", False)],
 ], size=29, space=10)
 
 # ---------------------------------------------------------------- complex engineering problem
 fill(box["Justification of Complex Engineering Problem"], "Justification of Complex Engineering Problem", [
     [("No closed-form answer. ", True), ("The forward model is a 177 M-parameter nonlinear transformer mapping a 32 × 1,152 representation to 20,484 cortical vertices; its inverse cannot be written down and must be measured.", False)],
     [("Ill-posed by nature. ", True), ("Existence, uniqueness and stability of the inverse (Hadamard) are all open: fMRI is slow, blurred and noisy.", False)],
-    [("No ground truth in real data. ", True), ("The true meaning behind a brain recording is unknown, so we built a synthetic framework with exact error, then a real-fMRI test with identification at a known chance level.", False)],
-    [("Engineering obstacle. ", True), ("The released pipeline is not differentiable (speech synthesis, transcription, frozen extractors); we found and re-entered the one differentiable boundary.", False)],
+    [("No ground truth in real data. ", True), ("The true meaning behind a brain recording is unknown, so a synthetic framework with exact error was built, followed by a real-fMRI test with identification at a known chance level.", False)],
+    [("Engineering obstacle. ", True), ("The released pipeline is not differentiable (speech synthesis, transcription, frozen extractors); the one differentiable boundary was located and re-entered.", False)],
     [("Conflicting requirements. ", True), ("Decoding fidelity vs non-invasive, low-cost acquisition vs mental privacy cannot all be maximised.", False)],
     [("Interdisciplinary. ", True), ("Inverse-problem theory, deep learning, neuroimaging (surface registration, atlases) and neuroanatomy must work together.", False)],
     [("Scale on free hardware. ", True), ("20,484 × 100 outputs per pass, tens of thousands of passes per experiment, one 15 GB GPU.", False)],
@@ -245,8 +245,8 @@ fill(box["Design Methodology and Novelty"], "Design Methodology and Novelty", [
     [("3  Exact evaluation. ", True), ("Known x in TRIBE v2's input space (8-D, unit scale; real stimuli: 4.9-D) → y = f(x) → recover x; budget, noise, extent, priors, 8 inits × 4 truths; re-checked with a real stimulus as truth.", False)],
     [("4  Mechanism tests. ", True), ("Agreement of fit-matched solutions; forward-only straight-path barrier test; Jacobian sensitivity vs 200 random directions.", False)],
     [("5  Regions. ", True), ("6 Destrieux networks vs size-matched random vertex sets, with a second random seed as the control spread.", False)],
-    [("6  Real fMRI. ", True), ("LeBel 2023 subject UTS03 projected to fsaverage5; lag and vertices chosen on five training stories; held-out story inverted and ranked among 45 segments.", False)],
-    [("Why fMRI, not EEG: ", True), ("millimetre detail on 20,484 vertices, the only deep encoder large enough to invert, and one inverse problem instead of two (EEG adds source localisation). EEG is faster and cheaper, which matters for a device, not for this measurement.", False)],
+    [("6  Real fMRI. ", True), ("LeBel 2023 subject UTS03 projected to fsaverage5; lag and vertices chosen on five training stories; a story unseen in TRIBE v2's training inverted and ranked among 45 segments.", False)],
+    [("fMRI over EEG: ", True), ("millimetre detail on 20,484 vertices, the only deep encoder large enough to invert, and one inverse problem instead of two (EEG adds source localisation). EEG is faster and cheaper, which matters for a device, not for this measurement.", False)],
 ], size=26, space=8)
 table(mx + 0.3, my + 8.25, W - 0.6, [
     ["Novelty: closest prior work", "Deep encoder", "Optimises input", "Tests uniqueness", "Per region"],
@@ -254,7 +254,7 @@ table(mx + 0.3, my + 8.25, W - 0.6, [
     ["Gardner & Liu 2019 (linear IEM)", "○", "●", "●", "○"],
     ["Tang et al. 2023", "○", "●", "○", "●"],
     ["TRIBE v2 (2026) and its two follow-ups", "●", "○ / ●", "○", "○"],
-    ["This work", "●", "●", "●", "●"],
+    ["Proposed work", "●", "●", "●", "●"],
 ], [6.05, 2.2, 2.3, 2.5, 2.2], size=20, rowh=0.68, bold_last=True)
 nt = sl.shapes.add_textbox(Inches(mx + 0.3), Inches(my + 12.5), Inches(W - 0.6), Inches(1.4))
 nt.text_frame.word_wrap = True
@@ -295,10 +295,10 @@ fill(box["WP mapping with justification"], "WP mapping", [
     [("Knowledge profile: ", True), ("WK3 signals and systems, WK4 inverse problems, WK5 design of the inversion pipeline, WK6 modern tools, WK8 current research literature.", False)],
 ], size=25, space=12)
 fill(box["SDG mapping with justification"], "SDG mapping", [
-    [("SDG 3 (Target 3.4): ", True), ("well-being for people with ALS, stroke or locked-in syndrome who keep comprehension but lose speech: we measure what non-invasive decoding can deliver.", False)],
+    [("SDG 3 (Target 3.4): ", True), ("well-being for people with ALS, stroke or locked-in syndrome who keep comprehension but lose speech: the project measures the limits of non-invasive decoding.", False)],
     [("SDG 9 (Target 9.5): ", True), ("open, reproducible research capability in neural-interface engineering on free compute.", False)],
     [("SDG 10 (Target 10.2): ", True), ("communication access is a precondition for inclusion of people with severe motor disability.", False)],
-    [("Scope: ", True), ("enabling research, not a deployed device; the contribution is evidence of what non-invasive decoding can and cannot achieve.", False)],
+    [("Scope: ", True), ("enabling research, not a deployed device; the contribution is evidence on the achievable limits of non-invasive decoding.", False)],
     [("Responsible use: ", True), ("the inverse identifies which known moment was heard but does not reconstruct thought, evidence for mental-privacy policy (OECD 2019, UNESCO 2025). No new human data collected.", False)],
 ], size=25, space=14)
 
@@ -308,7 +308,7 @@ fill(box["References"], "References", [
 ], size=18.5, head_size=28, space=0)
 fill(box["Project outcome"], "Project outcome", [
     [("Manuscript: ", True), ("IEEE-format paper, A. Sarkar*, T. Choudhuri*, S. Nageswaran; ready for submission.  ", False), ("Report: ", True), ("final Project-I report in the 2026 VIT format.", False)],
-    [("Open release: ", True), ("GitHub repository (QR code above) with all code, logged results, an interactive live demo and four Colab notebooks, including a live run of TRIBE v2.  ", False), ("Cost: ", True), ("₹0 compute on free GPUs.", False)],
+    [("Open release: ", True), ("GitHub repository (QR code above): code, logged results, interactive demo, four Colab notebooks.  ", False), ("Tools and cost: ", True), ("Python, PyTorch, nilearn, Colab (free T4), GitHub, Google Drive, MS Word and PowerPoint (VIT licence), LibreOffice: ₹0; printing only.", False)],
     [("Finding: ", True), ("encoding accuracy does not certify decoding; recoverability must be measured, region by region.", False)],
 ], size=20, head_size=28, space=5)
 

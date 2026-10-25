@@ -66,7 +66,7 @@ for ax, (hemi, view) in zip(axs, [("left", "lateral"), ("left", "medial"), ("rig
                            cmap=ListedColormap(["#dcdbd6"] + cols), vmin=0, vmax=len(order), axes=ax, figure=fig,
                            colorbar=False)
     ax.set_title(f"{hemi} {view}", fontsize=11, color="#52514e")
-handles = [plt.Line2D([0], [0], marker="s", ls="", color=c, ms=12, label=f"{k} ({len(rois[k])})")
+handles = [plt.Line2D([0], [0], marker="s", ls="", color=c, ms=12, label=f"{k} ({len(rois[k]):,})")
            for k, c in zip(order, cols)]
 fig.legend(handles=handles, loc="lower center", ncol=6, fontsize=11, frameon=False)
 fig.suptitle("Six anatomical ROIs (Destrieux atlas, fsaverage5; vertex counts in brackets)",

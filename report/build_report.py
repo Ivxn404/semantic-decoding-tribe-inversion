@@ -99,15 +99,52 @@ for t in reversed(ACK):
     pf = para.paragraph_format
     pf.line_spacing = 1.5
     pf.space_after = Pt(10)
-    pf.first_line_indent = Inches(0.5)
+    pf.first_line_indent = Inches(0)
 for sp in spacers[:-8]:
     sp._p.getparent().remove(sp._p)
 
-# executive summary
-set_text(P[148], EXEC_SUMMARY)
-P[148].alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-P[148].paragraph_format.line_spacing = 1.5
+# executive summary: titled sections
 P[149]._p.getparent().remove(P[149]._p)
+es_anchor = P[148]
+set_text(es_anchor, "")
+cur = es_anchor
+for k, (head, text) in enumerate(EXEC_SUMMARY):
+    hp = cur if k == 0 else Paragraph(copy.deepcopy(es_anchor._p), es_anchor._parent)
+    if k: cur._p.addnext(hp._p)
+    set_text(hp, head)
+    for r in hp.runs: r.bold = True; r.font.size = Pt(12); r.font.name = FONT
+    hp.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    hf = hp.paragraph_format; hf.keep_with_next = True; hf.space_before = Pt(8 if k else 0); hf.space_after = Pt(2); hf.line_spacing = 1.15
+    tp = Paragraph(copy.deepcopy(es_anchor._p), es_anchor._parent); hp._p.addnext(tp._p)
+    set_text(tp, text)
+    for r in tp.runs: r.bold = False; r.font.size = Pt(12); r.font.name = FONT
+    tp.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    tf = tp.paragraph_format; tf.space_before = Pt(0); tf.space_after = Pt(4); tf.line_spacing = 1.3
+    cur = tp
+
+# front pages: every paragraph starts at the left margin; text blocks justified
+def flush(p, align=None):
+    pf = p.paragraph_format
+    pf.left_indent = Inches(0); pf.right_indent = Inches(0); pf.first_line_indent = Inches(0)
+    if align is not None: p.alignment = align
+for p in list(d.paragraphs):
+    t = p.text.strip()
+    if t == "CONTENTS": break
+    if p.alignment == WD_ALIGN_PARAGRAPH.CENTER or (p.style is not None and p.style.name == "Title"):
+        flush(p); continue
+    if t.startswith("Signature of the Candidates") or t == "Internal Examiner" or t.startswith("Abhranil Sarkar "):
+        flush(p, WD_ALIGN_PARAGRAPH.RIGHT); continue
+    if t.startswith(("Place", "Date")) or not t:
+        flush(p)
+        if t.startswith("Place") and "Date" in t:   # put Date on its own line
+            for r in p.runs:
+                if r.text == " ": r.text = ""
+                if r.text == "Date": r.add_break(); r._r.remove(r._r[-1]); r._r.insert(0 if r._r.rPr is None else 1, OxmlElement("w:br"))
+        continue
+    if p.alignment != WD_ALIGN_PARAGRAPH.LEFT or len(t) > 60:
+        flush(p, WD_ALIGN_PARAGRAPH.JUSTIFY)
+    else:
+        flush(p)
 
 # drop template body after the executive-summary section break
 sect_par = None
@@ -177,6 +214,8 @@ for nm in ("toc 1", "toc 2", "toc 3"):
     s.font.bold = nm == "toc 1"
     s.paragraph_format.space_before = Pt(4)
     s.paragraph_format.space_after = Pt(2)
+    s.paragraph_format.left_indent = Inches({"toc 1": 0, "toc 2": 0.3, "toc 3": 0.6}[nm])
+    s.paragraph_format.first_line_indent = Inches(0)
 
 # ---------------------------------------------------------------- citations
 order = {}
@@ -354,7 +393,7 @@ def emit(blocks):
             label = f"Table {chap[0]}.{counters['tab']}"
             c = d.add_paragraph(style="Table Caption")
             runs_md(c, f"{label}: {cap}", size=10)
-            last_total = rows and any(w in rows[-1][0] for w in ("total", "Total", "This work", "Mean"))
+            last_total = rows and any(w in rows[-1][0] for w in ("total", "Total", "Proposed work", "Mean"))
             add_table(header, rows, widths, bold_last=last_total)
             sp = d.add_paragraph(style="Normal"); sp.paragraph_format.space_after = Pt(4)
             sp.paragraph_format.line_spacing = 1.0

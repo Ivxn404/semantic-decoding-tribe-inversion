@@ -1,29 +1,23 @@
 """Body of the Project-I final report. Markup: **bold**, [@key] or [@a,b] citations.
 Blocks: ("h1", text) chapter (new page) · ("h2", text) · ("h3", text) · ("p", text) · ("bul", [items]) · ("num", [items])
 ("fig", file, caption, width_in) · ("tab", caption, header, rows, col_widths_in) · ("eq", text)"""
-import os
-_R = os.path.dirname(os.path.abspath(__file__))
-F = os.path.join(os.path.dirname(_R), "figures") + "/"
-A = os.path.join(_R, "assets") + "/"
+F = "/home/claude/work/figs/"
+A = "/home/claude/work/report_final/assets/"
 
 TITLE = "Conditioning and Non-Convexity of Semantic Decoding by Inversion of Deep Brain Encoding Models"
 
-EXEC_SUMMARY = (
-    "Brain encoding models now predict fMRI responses to natural stimuli with high accuracy, and decoding meaning from brain activity is often assumed "
-    "to follow. This project tests that assumption directly by inverting TRIBE v2, Meta's open-weight 177-million-parameter trimodal brain encoder, "
-    "by gradient descent on its 1 152-dimensional stimulus representation. A differentiable entry point after feature aggregation was identified, "
-    "and the inverse was characterised with exact synthetic ground truth and then on real fMRI from a held-out story (LeBel et al., 2023). "
-    "Encoding error fell 28.4-fold while recovery saturated at cosine 0.944. Equally good fits from different starting points disagreed "
-    "(minimum pairwise cosine 0.817), and forward-only tests showed barriers between solutions rather than a null space: the inverse is non-convex "
-    "and its errors lie in the operator's least-sensitive directions. Across six cortical networks, the most responsive (visual) was the hardest to "
-    "decode from and the least responsive (somatomotor) the easiest. On real fMRI, inversion identified the heard segment in 4 of 5 cases among 45 "
-    "(chance 2.2%) while recovering little of the representation (cosine 0.02). Encoding accuracy does not certify decoding: recoverability must be measured."
-)
+EXEC_SUMMARY = [
+    ("Clinical problem", "People with amyotrophic lateral sclerosis (ALS), brainstem stroke, locked-in syndrome or severe aphasia often keep their understanding of language but lose speech and writing. A non-invasive decoder that reads meaning from brain activity would give them a communication channel without neurosurgery. Such decoders are built on brain encoding models, which now predict fMRI responses to natural stimuli with high accuracy, and reliable decoding is widely assumed to follow from accurate encoding. That assumption had not been tested."),
+    ("Rationale for the approach", "TRIBE v2, Meta's open-weight 177-million-parameter trimodal brain encoder, is the most accurate public fMRI encoder, so inverting it tests directly whether an accurate encoder is also invertible. fMRI was chosen over EEG for its millimetre-scale detail at 20,484 cortical points, because a foundation encoder exists only for fMRI, and because EEG would add a second ill-posed inverse problem (source localisation). A synthetic ground truth placed in the encoder's own input space makes the recovery error exactly measurable, which real fMRI alone cannot provide."),
+    ("Approach to the problem", "A differentiable entry point after feature aggregation was identified, and the 1,152-dimensional stimulus representation was recovered by gradient descent through the frozen network. The inverse was characterised with exact synthetic ground truth across optimisation budget, starting points, measurement noise, cortical extent, priors and six cortical networks, and was then validated on real fMRI from a story that TRIBE v2 never saw during training (LeBel et al., 2023)."),
+    ("Key results", "Encoding error fell 28.4-fold while recovery saturated at cosine 0.944. Equally good fits from different starting points disagreed (minimum pairwise cosine 0.817), and forward-only tests showed barriers between solutions (median 4.8×) rather than a null space: the inverse is non-convex, and its errors lie in the operator's least-sensitive directions. Across six cortical networks, the most responsive (visual) was the hardest to decode from and the least responsive (somatomotor) the easiest. On real fMRI, inversion identified the heard segment in 4 of 5 cases among 45 (chance 2.2%) while recovering little of the representation (cosine 0.02)."),
+    ("Conclusion", "Encoding accuracy does not certify decoding. Recoverability has to be measured directly, region by region, before an encoder is relied on for assistive communication."),
+]
 
 ACK = [
     "We express our sincere gratitude to our guide, Dr. Sharmila Nageswaran, Associate Professor, School of Electronics Engineering (SENSE), VIT Vellore, for her guidance, encouragement and critical feedback at every stage of this project.",
-    "We thank the Dean and the Head of the Department, School of Electronics Engineering, and the members of the review panels for their suggestions, which shaped the final form of this work, in particular the questions on the data behind the TRIBE v2 model and on the choice of fMRI over EEG.",
-    "We thank Meta FAIR for releasing the TRIBE v2 model and code openly, the authors of the LeBel et al. natural-language fMRI dataset for making their data public on OpenNeuro, and the developers of the open-source tools on which this work depends.",
+    "We thank the Dean and the Head of the Department, School of Electronics Engineering, and the members of the review panels for their suggestions, which shaped the final form of the proposed work, in particular the questions on the data behind the TRIBE v2 model and on the choice of fMRI over EEG.",
+    "We thank Meta FAIR for releasing the TRIBE v2 model and code openly, the authors of the LeBel et al. natural-language fMRI dataset for making their data public on OpenNeuro, and the developers of the open-source tools on which the proposed work depends.",
     "Finally, we thank our families and friends for their constant support.",
 ]
 
@@ -39,10 +33,10 @@ ABBR = [
 ]
 
 SYMBOLS = [
-    ("x", "Aggregated stimulus representation, x ∈ ℝ^(T×H), T = 32 (synthetic) or 200 (real), H = 1 152"),
+    ("x", "Aggregated stimulus representation, x ∈ ℝ^(T×H), T = 32 (synthetic) or 200 (real), H = 1,152"),
     ("x̂", "Representation recovered by inversion"),
     ("f(·)", "Frozen TRIBE v2 forward operator from x to predicted fMRI"),
-    ("y", "Observed or target cortical response, y ∈ ℝ^(V×T′), V = 20 484, T′ = 100"),
+    ("y", "Observed or target cortical response, y ∈ ℝ^(V×T′), V = 20,484, T′ = 100"),
     ("d", "Difference between two fit-matched solutions"),
     ("s(v)", "Directional sensitivity of f along unit direction v"),
     ("ε", "Finite-difference step size"),
@@ -56,9 +50,9 @@ BODY = [
     ("h1", "1. INTRODUCTION"),
     ("p", "A brain encoding model predicts the brain response that a stimulus evokes; decoding runs the other way, from measured brain activity back to the stimulus. For fifteen years the dominant route to decoding has been through encoding: fit a forward model, then identify or reconstruct the stimulus whose predicted response best matches what was measured [@naselaris2011,kay2008]. Encoding models have since grown from linear maps on hand-built features [@mitchell2008,huth2016] to deep networks trained on hundreds of hours of fMRI, and their accuracy keeps improving with model size and data [@antonello2023,tribev2]."),
     ("p", "Decoding meaning from non-invasive brain recordings matters clinically. Amyotrophic lateral sclerosis, brainstem stroke, locked-in syndrome and severe aphasia can leave comprehension intact while removing speech and writing. A non-invasive decoder would restore a communication channel without neurosurgery. It also raises ethical questions of mental privacy, so the limits of what can be decoded matter as much as the successes."),
-    ("p", "This project asks a question that the field has largely skipped: when an encoder becomes very accurate, does it become invertible? A forward model can be highly predictive and still have an inverse that is non-unique or unstable [@hadamard1902,hansen2010]. The question became answerable in 2026, when Meta released TRIBE v2, an open-weight foundation encoder that predicts fMRI at 20 484 cortical locations from video, audio and language [@tribev2]."),
+    ("p", "This project addresses a question that the field has largely skipped: whether an encoder that becomes very accurate also becomes invertible. A forward model can be highly predictive and still have an inverse that is non-unique or unstable [@hadamard1902,hansen2010]. The question became answerable in 2026, when Meta released TRIBE v2, an open-weight foundation encoder that predicts fMRI at 20,484 cortical locations from video, audio and language [@tribev2]."),
     ("h2", "1.1 Literature Review"),
-    ("p", "**Encoding models.** Mitchell et al. predicted fMRI responses to nouns from word co-occurrence statistics [@mitchell2008]; Huth et al. mapped semantic selectivity across the whole cortex during natural speech [@huth2016]; and Antonello et al. showed that encoding accuracy with language-model features rises log-linearly with model size [@antonello2023]. TRIBE won the Algonauts 2025 challenge [@tribe1,gifford2025] and TRIBE v2 extends it to a foundation model trained on 451.6 h of fMRI and evaluated on 1 117.7 h from 720 subjects [@tribev2]."),
+    ("p", "**Encoding models.** Mitchell et al. predicted fMRI responses to nouns from word co-occurrence statistics [@mitchell2008]; Huth et al. mapped semantic selectivity across the whole cortex during natural speech [@huth2016]; and Antonello et al. showed that encoding accuracy with language-model features rises log-linearly with model size [@antonello2023]. TRIBE won the Algonauts 2025 challenge [@tribe1,gifford2025] and TRIBE v2 extends it to a foundation model trained on 451.6 h of fMRI and evaluated on 1,117.7 h from 720 subjects [@tribev2]."),
     ("p", "**Decoding.** Kay et al. identified which image a person was viewing by comparing measured responses with responses predicted for candidate images [@kay2008]. Tang et al. reconstructed continuous language from fMRI by searching word sequences with a language model and scoring them with an encoder [@tang2023]. With MEG and EEG, contrastive decoders identify perceived speech segments [@defossez2023], and Brain2Qwerty decoded typed sentences with a 32% character error rate from MEG but 67% from EEG with the same architecture [@levy2025]. Shared-subject models reduce the data each subject needs for image reconstruction [@scotti2024]. All of these evaluate decoding by proxies such as rank, retrieval or word error, because the true representation behind real fMRI is unknown."),
     ("p", "**Inverting encoders.** Inverted encoding models reconstruct channel responses from voxel patterns [@brouwer2009]. Gardner and Liu proved that such linear models recover the stimulus only up to an invertible linear transform [@gardner2019]. In computer vision, inverting deep networks from their activations shows which information each layer keeps [@mahendran2015]. Two 2026 follow-ups use TRIBE v2: Bladon and Bent optimise inputs to maximise a region's predicted response (feature visualisation) [@bladon2026], and Benchetrit et al. use TRIBE v2 forwards to synthesise training data for image decoders [@benchetrit2026]."),
     ("tab", "Summary of the literature most relevant to this project", ["Work", "Contribution", "Limitation relevant here"], [
@@ -78,7 +72,7 @@ BODY = [
     ("tab", "Novelty: closest prior work against the four properties combined here (● yes, ○ no)", ["Study", "Nonlinear deep encoder", "Optimises encoder input", "Tests uniqueness / conditioning", "Region-wise recoverability"], [
         ["Kay et al., 2008", "○", "○", "○", "○"], ["Gardner & Liu, 2019", "○", "●", "●", "○"], ["Tang et al., 2023", "○", "●", "○", "●"],
         ["TRIBE v2, 2026", "●", "○", "○", "○"], ["Bladon & Bent, 2026", "●", "●", "○", "○"], ["Benchetrit et al., 2026", "●", "○", "○", "○"],
-        ["This work", "●", "●", "●", "●"],
+        ["Proposed work", "●", "●", "●", "●"],
     ], [2.2, 1.0, 1.0, 1.1, 1.0]),
     ("h2", "1.3 Problem Statement"),
     ("p", "Characterise semantic decoding from fMRI as the inverse of a frozen, differentiable deep brain encoder (TRIBE v2): measure whether the inverse is unique, how it is conditioned, and where in cortex the stimulus representation is recoverable, first with exact synthetic ground truth and then on real naturalistic fMRI."),
@@ -90,13 +84,13 @@ BODY = [
         "Characterise the inverse with respect to optimisation budget, measurement noise, cortical extent, temporal rate of change and regularising priors.",
         "Discriminate the causes of incomplete recovery: information loss (a null space), non-convexity, an optimiser artefact, or unidentifiable gain.",
         "Benchmark gradient inversion against a linear decoder and map recoverability across six anatomical cortical networks.",
-        "Validate on real naturalistic fMRI (LeBel et al., 2023) with a held-out story, using text and audio features.",
+        "Validate on real naturalistic fMRI (LeBel et al., 2023) with text and audio features, using a story that TRIBE v2 never saw during training.",
     ]),
     ("p", "All six objectives were achieved. Their evidence is presented in Chapter 8 and summarised in Chapter 9."),
     # ======================================================================= 3
     ("h1", "3. RELEVANCE OF PROBLEM STATEMENT W.R.T SDG"),
     ("tab", "Mapping to specific SDG targets", ["SDG target", "Link to this project", "Evidence from this project"], [
-        ["SDG 3, Target 3.4 (promote mental health and well-being)", "People with ALS, brainstem stroke or locked-in syndrome often keep comprehension but lose speech; non-invasive decoding could restore communication", "Quantitative limits on what fMRI decoding can and cannot recover tell clinicians what to expect"],
+        ["SDG 3, Target 3.4 (promote mental health and well-being)", "People with ALS, brainstem stroke or locked-in syndrome often keep comprehension but lose speech; non-invasive decoding could restore communication", "Quantitative limits on the information fMRI decoding can recover set realistic clinical expectations"],
         ["SDG 9, Target 9.5 (enhance research, upgrade technological capability)", "Methodological contribution to neural-interface engineering with open models and data", "Fully reproducible pipeline on free compute; public code, results and notebooks"],
         ["SDG 10, Target 10.2 (inclusion irrespective of disability)", "Communication access is a precondition for social and economic inclusion", "Identifies which approaches are worth pursuing for assistive communication"],
     ], [1.8, 2.3, 2.1]),
@@ -107,17 +101,17 @@ BODY = [
     ("fig", A + "pipeline.png", "Inversion pipeline: the network is re-entered after feature aggregation; only the representation x is optimised, the network stays frozen", 6.2),
     ("h2", "4.1 Design Approach / Materials & Methods"),
     ("h3", "4.1.1 The forward operator: TRIBE v2"),
-    ("p", "TRIBE v2 [@tribev2] maps a multimodal stimulus representation x ∈ ℝ^(T×1152), made of text, audio and video slots of 384 dimensions each sampled at 2 Hz, to a predicted response at V = 20 484 vertices of the fsaverage5 cortical surface [@fischl1999], 100 output steps at 1 Hz. The network has 177.21 M parameters: a transformer encoder (127.47 M), a low-rank head (1 152 → 2 048), a subject-layer predictor (41.97 M) and a temporal pooler. The public release ships a single averaged “unseen subject” layer. All weights are frozen in this work."),
-    ("h3", "4.1.2 What TRIBE v2 was trained on"),
-    ("p", "Because every conclusion depends on the encoder, it matters what data it learned from. TRIBE v2 was trained on four public datasets totalling 25 healthy adults and 451.6 hours of 3T fMRI, recorded while participants passively watched or listened to naturalistic stimuli with no task (Table 4.1). The figures come from Table 1 of the TRIBE v2 paper [@tribev2] and the study definitions shipped with its code."),
-    ("tab", "TRIBE v2 training data: who was scanned and what they were exposed to", ["Dataset", "What participants did in the scanner", "Subjects", "Sessions", "fMRI (h)", "TR (s)"], [
-        ["CNeuroMod / Algonauts 2025 [@gifford2025]", "Watched the sitcom Friends (seasons 1–6) and four feature films; video, audio and dialogue", "4", "1 408", "268.7", "1.49"],
-        ["BOLD Moments [@lahner2024]", "Watched 1 102 three-second naturalistic video clips (1 000 training clips; 102 test clips repeated 10 times)", "10", "520", "61.9", "1.75"],
+    ("p", "TRIBE v2 [@tribev2] maps a multimodal stimulus representation x ∈ ℝ^(T×1,152), made of text, audio and video slots of 384 dimensions each sampled at 2 Hz, to a predicted response at V = 20,484 vertices of the fsaverage5 cortical surface [@fischl1999], 100 output steps at 1 Hz. The network has 177.21 M parameters: a transformer encoder (127.47 M), a low-rank head (1,152 → 2,048), a subject-layer predictor (41.97 M) and a temporal pooler. The public release ships a single averaged “unseen subject” layer. All weights are frozen in the proposed work."),
+    ("h3", "4.1.2 Training data of TRIBE v2"),
+    ("p", "Every conclusion depends on the encoder, so the data it learned from is stated here. TRIBE v2 was trained on four public datasets totalling 25 healthy adults and 451.6 hours of 3T fMRI, recorded while participants passively watched or listened to naturalistic stimuli with no task (Table 4.1). The figures come from Table 1 of the TRIBE v2 paper [@tribev2] and the study definitions shipped with its code."),
+    ("tab", "TRIBE v2 training data: participants and stimuli", ["Dataset", "Task in the scanner", "Subjects", "Sessions", "fMRI (h)", "TR (s)"], [
+        ["CNeuroMod / Algonauts 2025 [@gifford2025]", "Watched the sitcom Friends (seasons 1–6) and four feature films; video, audio and dialogue", "4", "1,408", "268.7", "1.49"],
+        ["BOLD Moments [@lahner2024]", "Watched 1,102 three-second naturalistic video clips (1,000 training clips; 102 test clips repeated 10 times)", "10", "520", "61.9", "1.75"],
         ["LeBel et al. 2023 [@lebel2023]", "Listened to spoken autobiographical stories (podcasts); 82 stories for three subjects, 26–27 for the others", "8", "432", "85.8", "2.0"],
         ["Wen et al. 2018 [@wen2018]", "Watched natural movie clips in 8-minute segments; test segments repeated 10 times", "3", "258", "35.2", "2.0"],
-        ["Training total", "All 3T, passive viewing or listening", "25", "2 618", "451.6", "—"],
+        ["Training total", "All 3T, passive viewing or listening", "25", "2,618", "451.6", "—"],
     ], [1.5, 2.55, 0.6, 0.65, 0.6, 0.5]),
-    ("p", "The model was then evaluated, without further training, on four datasets it had never seen (Table 4.2), bringing the total to 720 subjects, 5 094 sessions and 1 117.7 hours of fMRI [@tribev2]."),
+    ("p", "The model was then evaluated, without further training, on four datasets it had never seen (Table 4.2), bringing the total to 720 subjects, 5,094 sessions and 1,117.7 hours of fMRI [@tribev2]."),
     ("tab", "TRIBE v2 evaluation data (never used for training)", ["Dataset", "Stimuli", "Scanner", "Subjects", "fMRI (h)"], [
         ["NNDb (Aliko et al., 2020)", "Full-length films (audio, video, text)", "3T", "86", "160.6"],
         ["Le Petit Prince (Li et al., 2022)", "Audiobook (audio, text)", "3T", "112", "180.2"],
@@ -125,12 +119,12 @@ BODY = [
         ["HCP (Van Essen et al., 2013)", "Movie clips (audio, video, text)", "7T", "176", "178.7"],
         ["Evaluation total", "", "", "695", "666.1"],
     ], [2.1, 2.2, 0.7, 0.7, 0.7]),
-    ("p", "Two consequences for this project follow. First, our real-data subject (UTS03) is one of the eight LeBel training subjects, but the story we test on, wheretheressmoke, is TRIBE v2's own held-out test split, so the encoder never saw the responses we invert. Second, because the release averages subjects, we invert the population model rather than a subject-specific one."),
-    ("h3", "4.1.3 Why fMRI and not EEG"),
-    ("p", "EEG is cheaper, portable and has millisecond resolution, so the choice of fMRI needs justification. It rests on five points (Table 4.3). (1) Spatial detail: fMRI resolves millimetre-scale cortical patterns at 20 484 vertices [@logothetis2008], while 32–128 scalp electrodes see a spatially blurred mixture because of volume conduction. (2) A foundation encoder to invert exists only for fMRI; no open whole-brain encoder of naturalistic EEG at comparable scale exists. (3) Decoding through EEG would add a second ill-posed inverse problem, source localisation [@michel2004], in front of the one this project studies. (4) Empirically, the same decoder reaches a 32% character error rate from MEG but 67% from EEG [@levy2025]. (5) Open naturalistic language data with fMRI is plentiful (LeBel: 85.8 h), whereas the open simultaneous EEG–fMRI dataset contains rest, an abstract animation and short movie clips but no sustained speech [@telesford2023]; this ruled out the EEG–fMRI fusion option considered in Report I."),
-    ("tab", "fMRI versus EEG for this project", ["Criterion", "fMRI (this work)", "EEG"], [
-        ["Spatial detail", "≈2–3 mm voxels; 20 484 cortical vertices", "32–128 scalp channels; centimetre-scale, blurred"],
-        ["Foundation encoder to invert", "TRIBE v2: 177 M parameters, 1 117.7 h, 720 subjects", "None at comparable scale"],
+    ("p", "Two consequences for this project follow. First, the real-data subject (UTS03) is one of the eight LeBel training subjects, but the test story, wheretheressmoke, was excluded from TRIBE v2's training (it is part of the test set of the original TRIBE v2 study), so the encoder never saw the responses that are inverted here; this report calls it the unseen test story. Second, because the release averages subjects, the population model is inverted rather than a subject-specific one."),
+    ("h3", "4.1.3 Choice of fMRI over EEG"),
+    ("p", "EEG is cheaper, portable and has millisecond resolution, so the choice of fMRI needs justification. It rests on five points (Table 4.3). (1) Spatial detail: fMRI resolves millimetre-scale cortical patterns at 20,484 vertices [@logothetis2008], while 32–128 scalp electrodes see a spatially blurred mixture because of volume conduction. (2) A foundation encoder to invert exists only for fMRI; no open whole-brain encoder of naturalistic EEG at comparable scale exists. (3) Decoding through EEG would add a second ill-posed inverse problem, source localisation [@michel2004], in front of the one this project studies. (4) Empirically, the same decoder reaches a 32% character error rate from MEG but 67% from EEG [@levy2025]. (5) Open naturalistic language data with fMRI is plentiful (LeBel: 85.8 h), whereas the open simultaneous EEG–fMRI dataset contains rest, an abstract animation and short movie clips but no sustained speech [@telesford2023]; this ruled out the EEG–fMRI fusion option considered in Report I."),
+    ("tab", "fMRI versus EEG for this project", ["Criterion", "fMRI (proposed work)", "EEG"], [
+        ["Spatial detail", "≈2–3 mm voxels; 20,484 cortical vertices", "32–128 scalp channels; centimetre-scale, blurred"],
+        ["Foundation encoder to invert", "TRIBE v2: 177 M parameters, 1,117.7 h, 720 subjects", "None at comparable scale"],
         ["Number of inverse problems", "One: response → representation", "Two: scalp → sources (ill-posed) → representation"],
         ["Measured language decoding", "Continuous language from fMRI [@tang2023]", "67% character error vs 32% with MEG [@levy2025]"],
         ["Open naturalistic language data", "LeBel 2023: 8 subjects, 85.8 h", "No open EEG–fMRI set with sustained speech [@telesford2023]"],
@@ -139,11 +133,11 @@ BODY = [
     ], [1.6, 2.3, 2.3]),
     ("p", "EEG's advantages matter for a deployed device, not for measuring how invertible an encoder is. The method developed here transfers to EEG once an EEG encoder of comparable scale exists."),
     ("h3", "4.1.4 Inversion method"),
-    ("p", "The public TRIBE v2 inference path is not differentiable end to end: stimuli pass through speech synthesis, transcription and frozen feature extractors, and prediction runs under PyTorch's inference mode. Inspection of the forward pass showed that the input batch is consumed at one point only, the aggregation of extractor features into x; everything after it is tensor arithmetic. We therefore take x as the free variable and re-enter the network at that boundary, f(x) = pool(predictor(head(encoder(x)))). Gradients reach every entry of x (‖∂y/∂x‖ = 7.97 × 10³, no zero entries), and re-entering at this boundary reproduces the released model's predictions exactly (r = 1.0000). The representation is recovered by"),
+    ("p", "The public TRIBE v2 inference path is not differentiable end to end: stimuli pass through speech synthesis, transcription and frozen feature extractors, and prediction runs under PyTorch's inference mode. Inspection of the forward pass showed that the input batch is consumed at one point only, the aggregation of extractor features into x; everything after it is tensor arithmetic. Therefore x is taken as the free variable and the network is re-entered at that boundary, f(x) = pool(predictor(head(encoder(x)))). Gradients reach every entry of x (‖∂y/∂x‖ = 7.97 × 10³, no zero entries), and re-entering at this boundary reproduces the released model's predictions exactly (r = 1.0000). The representation is recovered by"),
     ("eq", "x̂ = argmin_x ‖f(x) − y‖² + λ R(x)                                        (4.1)"),
     ("p", "using Adam [@kingma2015] with learning rate 5 × 10⁻² and cosine annealing over the step budget, initialisation 0.01·N(0, I), and R an ℓ₂ or temporal-smoothness penalty where tested (λ = 0 otherwise). On real fMRI, where the scale and offset of the measured response are arbitrary, the loss is one minus the Pearson correlation over time, averaged over observed vertices."),
     ("h2", "4.2 Codes and Standards"),
-    ("tab", "Standards and frameworks the project follows", ["Standard / framework", "Scope", "How this project aligns"], [
+    ("tab", "Standards and frameworks the project follows", ["Standard / framework", "Scope", "Alignment of this project"], [
         ["BIDS [@gorgolewski2016]", "Neuroimaging data organisation", "Real data from OpenNeuro ds003020, a BIDS dataset"],
         ["IEEE P2731 [@p2731]", "Unified BCI terminology (functional model)", "Pipeline described as acquisition → features → decoding → output"],
         ["IEEE P2794 (draft)", "Reporting standards for in-vivo neural interface research", "Report states model, data, preprocessing, metrics and failures"],
@@ -167,44 +161,50 @@ BODY = [
     ("h2", "5.1 Instrumentation of the encoder"),
     ("p", "TRIBE v2 was loaded directly from its configuration and checkpoint, bypassing the text-to-speech and transcription pipeline. The forward map was rebuilt from the aggregation boundary (encoder, low-rank head, predictor, pooler), gradient flow to x was verified, and the rebuilt map was checked against the released predictions on real stimuli (r = 1.0000)."),
     ("h2", "5.2 Synthetic evaluation with exact ground truth"),
-    ("p", "**Construction.** The ground truth must be a valid input of the operator we invert, so it lives in TRIBE v2's own representation space: x ∈ ℝ^(32 × 1152), 32 steps at 2 Hz (16 s) across the text, audio and video slots, exactly the tensor the feature extractors hand to the encoder. Eight unit directions b₁…b₈ are drawn at random in ℝ^1152 (random orientation, so no direction is privileged), and each carries its own cosine time course, x(t) = Σₖ cos(2π fₖ t) bₖ with fₖ = 2, 4, …, 16 cycles per window (0.125–1 Hz); the result is scaled to unit standard deviation, the scale of real features. Four seeds (0–3) give four independent ground truths, and white noise (i.i.d. Gaussian, full rank) serves as an off-manifold control. The target is y = f(x), so recovery is measured exactly: cosine to x per time step, relative error, encoding error and retrieval rank among time steps. Directional sensitivity along a unit direction v is a finite-difference probe of the Jacobian:"),
+    ("p", "**Construction.** The ground truth must be a valid input of the operator being inverted, so it lives in TRIBE v2's own representation space: x ∈ ℝ^(32 × 1,152), 32 steps at 2 Hz (16 s) across the text, audio and video slots, exactly the tensor the feature extractors hand to the encoder. Eight unit directions b₁…b₈ are drawn at random in ℝ^1,152 (random orientation, so no direction is privileged), and each carries its own cosine time course, x(t) = Σₖ cos(2π fₖ t) bₖ with fₖ = 2, 4, …, 16 cycles per window (0.125–1 Hz); the result is scaled to unit standard deviation, the scale of real features. Four seeds (0–3) give four independent ground truths, and white noise (i.i.d. Gaussian, full rank) serves as an off-manifold control. The target is y = f(x), so recovery is measured exactly: cosine to x per time step, relative error, encoding error and retrieval rank among time steps. Directional sensitivity along a unit direction v is a finite-difference probe of the Jacobian:"),
     ("eq", "s(v) = ‖f(x + εv) − f(x)‖ / ε                                                    (5.1)"),
-    ("h3", "5.2.1 Why this ground truth, and the evidence that it is valid"),
-    ("p", "**Correct by construction.** A known-answer test is the standard way to evaluate an inverse method [@hansen2010,mahendran2015]: because x is chosen and y = f(x) is produced by the frozen model itself (whose re-entry reproduces the released predictions, r = 1.0000), every recovery number is an exact measurement of the operator's inverse, with no modelling assumption about the brain. What needs justification is only whether the chosen x resembles real stimuli closely enough for the conclusions to transfer. Four pieces of evidence address that (Table 5.1)."),
+    ("h3", "5.2.1 Justification and validity of the ground truth"),
+    ("p", "**Correct by construction.** A known-answer test is the standard way to evaluate an inverse method [@hansen2010,mahendran2015]: because x is chosen and y = f(x) is produced by the frozen model itself (whose re-entry reproduces the released predictions, r = 1.0000), every recovery number is an exact measurement of the operator's inverse, with no modelling assumption about the brain. The only point needing justification is whether the chosen x resembles real stimuli closely enough for the conclusions to transfer. Four pieces of evidence address that (Table 5.1)."),
     ("p", "**(1) Real representations are low-dimensional, like the synthetic truth.** The aggregated representations of the six LeBel stories (audio slot, 246 windows of 16 s) have an effective dimensionality (participation ratio) of 4.9 ± 2.1, with 84 ± 6% of their variance in their top eight directions and a standard deviation of 1.10; the synthetic truth has 7.8, 100% and 1.00, and white noise 30.2 and 31% (Figure 5.1). An 8-D subspace is therefore the right order of magnitude, and slightly harder than real features, not easier. **(2) The conclusions do not depend on its shape.** White noise recovers as well as the structured truth (0.947 vs 0.942), and changing the rate of change 64-fold, which spans the real lag-1 autocorrelation of 0.15 ± 0.12, leaves recovery at 0.836–0.858 with no trend. **(3) They replicate across four independent ground truths** (agreement minimum 0.894 ± 0.003, barrier 4.8×, sensitivity 2.15 ± 0.17×)."),
-    ("p", "**(4) A real representation as ground truth gives the same picture.** The tests were repeated with a real 16-s window of the held-out story (wheretheressmoke, 16–32 s) as x, inverted from y = f(x) through the frozen model from three blind starts and one near-truth control (3 000 steps on CPU, scripts/real_x_groundtruth.py). Recovery was partial and start-dependent (cosine 0.43–0.60 in the filled audio slot, against about 0.56 for the synthetic truth at the same budget); the blind solutions disagreed (pairwise cosine 0.19–0.56) and were separated by barriers (the error rose 11–21× on the straight lines between them); and the near-truth control found a deeper minimum (2.9× lower error, recovery 0.95) 54× barrier away (Figure 5.2). The sensitivity probe was inconclusive at this budget because the blind fits had not yet converged (their errors still differed 2.2-fold), so it is reported only for the converged synthetic runs. Real stimulus representations thus show the same non-convex, start-dependent inverse, more strongly; the synthetic truth is the conservative case."),
+    ("p", "**(4) A real representation as ground truth gives the same picture.** The tests were repeated with a real 16-s window of the unseen test story (wheretheressmoke, 16–32 s) as x, inverted from y = f(x) through the frozen model from three blind starts and one near-truth control (3,000 steps on CPU, scripts/real_x_groundtruth.py). Recovery was partial and start-dependent (cosine 0.43–0.60 in the filled audio slot, against about 0.56 for the synthetic truth at the same budget); the blind solutions disagreed (pairwise cosine 0.19–0.56) and were separated by barriers (the error rose 11–21× on the straight lines between them); and the near-truth control found a deeper minimum (2.9× lower error, recovery 0.95) 54× barrier away (Figure 5.2). The sensitivity probe was inconclusive at this budget because the blind fits had not yet converged (their errors still differed 2.2-fold), so it is reported only for the converged synthetic runs. Real stimulus representations thus show the same non-convex, start-dependent inverse, more strongly; the synthetic truth is the conservative case."),
     ("fig", F + "fig_groundtruth.png", "Synthetic ground truth and a real stimulus representation along their top eight principal directions, and their effective dimensionality, variance in eight directions and lag-1 autocorrelation (real: 246 windows of the six LeBel stories)", 6.3),
     ("fig", F + "fig_realx_inversion.png", "Inversion with a real stimulus representation as ground truth: recovery per start (left) and prediction error along the straight lines between solutions (right)", 6.3),
-    ("tab", "Evidence that the synthetic ground truth is valid", ["Question", "Test", "Result"], [
-        ["Is the recovery error exact?", "Ground truth chosen; y = f(x) from the frozen model; re-entry reproduces the release", "Yes, by construction (r = 1.0000)"],
-        ["Is 8-D realistic?", "Effective dimensionality of real story representations", "Real 4.9 ± 2.1 (84% in 8 directions) vs synthetic 7.8; white noise 30.2"],
-        ["Is the scale realistic?", "Standard deviation of real features", "1.10 vs 1.00"],
-        ["Does the structure matter?", "White-noise (full-rank) ground truth", "0.947 vs 0.942: no"],
-        ["Does the speed of change matter?", "Rate of change varied 64-fold (spans real lag-1 0.15 ± 0.12)", "0.836–0.858, no trend: no"],
-        ["Is one ground truth special?", "Four independent seeds", "Agreement 0.894 ± 0.003; barrier 4.8×; sensitivity 2.15 ± 0.17×"],
-        ["Do real stimuli behave the same?", "Real 16-s window as ground truth, 3 blind starts + control", "Partial recovery 0.43–0.60; disagreement 0.19–0.56; barriers 11–21×; deeper minimum 54× away"],
+    ("tab", "Evidence that the synthetic ground truth is valid", ["Check", "Test", "Result"], [
+        ["Exactness of the recovery error", "Ground truth chosen; y = f(x) from the frozen model; re-entry reproduces the release", "Exact by construction (r = 1.0000)"],
+        ["Realism of the 8-D subspace", "Effective dimensionality of real story representations", "Real 4.9 ± 2.1 (84% in 8 directions) vs synthetic 7.8; white noise 30.2"],
+        ["Realism of the scale", "Standard deviation of real features", "1.10 vs 1.00"],
+        ["Effect of structure", "White-noise (full-rank) ground truth", "0.947 vs 0.942: no effect"],
+        ["Effect of the speed of change", "Rate of change varied 64-fold (spans real lag-1 0.15 ± 0.12)", "0.836–0.858, no trend: no effect"],
+        ["Dependence on a single ground truth", "Four independent seeds", "Agreement 0.894 ± 0.003; barrier 4.8×; sensitivity 2.15 ± 0.17×"],
+        ["Behaviour with a real stimulus", "Real 16-s window as ground truth, 3 blind starts + control", "Partial recovery 0.43–0.60; disagreement 0.19–0.56; barriers 11–21×; deeper minimum 54× away"],
     ], [1.6, 2.4, 2.2]),
     ("h2", "5.3 Discriminating the causes of incomplete recovery"),
     ("p", "Four explanations were tested, each with a signature that would appear if it were true. (H1) Information loss: fit-matched solutions differ along a null-space direction the operator ignores. (H2) Non-convexity: distinct minima at equal fit, separated by a barrier. (H3) Optimiser artefact: recovery keeps rising with budget. (H4) Unidentifiable gain: a rescaled x gives the same output. Inversions were started from eight initialisation distributions and compared only when within 2× of the best fit, so under-converged runs could not pose as alternative solutions; the analysis was replicated over four ground truths. For two fit-matched solutions, a null space predicts that the prediction error stays flat along the straight line between them, while separate minima predict a rise in between; this test and the sensitivity probe use forward passes only and do not depend on the optimiser. Two further starts placed near the truth serve as a control for whether a deeper minimum exists."),
     ("h2", "5.4 Regional analysis"),
-    ("p", "Six disjoint networks were defined on fsaverage5 from the Destrieux atlas [@destrieux2010] (Figure 8.10): left language network [@fedorenko2024] (1 282 vertices), its right-hemisphere homologue (1 368), auditory cortex (277), default-mode network [@buckner2008] (1 224), visual cortex (1 582) and somatomotor cortex (1 487) as a low-semantic control. For each network we measured forward sensitivity per input modality against 2 000 random vertex sets of equal size, recovery when only that network is observed (8 000 steps) against size-matched random vertex sets with a second random seed as the control spread, and the participation ratio [@gao2017] of its responses to 128 random input directions."),
+    ("p", "Six disjoint networks were defined on fsaverage5 from the Destrieux atlas [@destrieux2010] (Figure 8.10): left language network [@fedorenko2024] (1,282 vertices), its right-hemisphere homologue (1,368), auditory cortex (277), default-mode network [@buckner2008] (1,224), visual cortex (1,582) and somatomotor cortex (1,487) as a low-semantic control. For each network, the analysis measured forward sensitivity per input modality against 2,000 random vertex sets of equal size, recovery when only that network is observed (8,000 steps) against size-matched random vertex sets with a second random seed as the control spread, and the participation ratio [@gao2017] of its responses to 128 random input directions."),
     ("h2", "5.5 Real-fMRI validation"),
-    ("p", "**Data.** Subject UTS03 of the LeBel et al. corpus [@lebel2023] (OpenNeuro ds003020): six stories, 66.6 minutes of speech, 10 363 words, TR 2 s. The held-out story wheretheressmoke is the mean of ten repeats; the other five stories are used for every tuning choice."),
-    ("p", "**Surface projection.** The authors' preprocessed responses (95 556 cortical voxels) were mapped to fsaverage5 with TRIBE v2's own projector settings: a 3-mm ball of 20 points around each mid-cortical vertex, trilinear weights inside the cortical mask. Vertices were carried from MNI space to the subject's T1 by an ANTs SyN registration [@avants2008] and into functional voxels by the pycortex transform [@gao2015], giving a sparse 20 484 × 95 556 sampling matrix; the series were then detrended and z-scored. Validation: the left–right homotopic correlation was 0.635 against −0.017 for heterotopic pairs (above 97% of alternative pairings), and a scrambled-vertex control fell to chance."),
-    ("p", "**Features and alignment.** Stimulus features came from TRIBE v2's own pipeline with the dataset's word timings: w2v-BERT 2.0 for audio [@chung2021] and Llama-3.2-3B for text [@grattafiori2024], grouped into 100-s segments (45 across six stories). The offset between model time and BOLD was the lag maximising prediction–response correlation on the five training stories; the 2 000 analysis vertices were those best predicted on the training stories."),
-    ("p", "**Evaluation.** (i) Encoding accuracy per vertex on the held-out story, against a split-half noise ceiling from the ten repeats. (ii) Forward identification: each 20-s window of held-out BOLD matched to predictions for all 194 windows of the six stories. (iii) Inversion: each held-out 100-s segment inverted from measured BOLD, and x̂ ranked against the true representations of all 45 segments (chance 1/45). (iv) An oracle that inverts the model's own noise-free prediction under the same budget, separating the operator's conditioning from measurement noise."),
+    ("p", "**Data.** Subject UTS03 of the LeBel et al. corpus [@lebel2023] (OpenNeuro ds003020): six stories, 66.6 minutes of speech, 10,363 words, TR 2 s. The unseen test story, wheretheressmoke, is the mean of ten repeats; the other five stories are used for every tuning choice."),
+    ("p", "**Surface projection.** The authors' preprocessed responses (95,556 cortical voxels) were mapped to fsaverage5 with TRIBE v2's own projector settings: a 3-mm ball of 20 points around each mid-cortical vertex, trilinear weights inside the cortical mask. Vertices were carried from MNI space to the subject's T1 by an ANTs SyN registration [@avants2008] and into functional voxels by the pycortex transform [@gao2015], giving a sparse 20,484 × 95,556 sampling matrix; the series were then detrended and z-scored. Validation: the left–right homotopic correlation was 0.635 against −0.017 for heterotopic pairs (above 97% of alternative pairings), and a scrambled-vertex control fell to chance."),
+    ("p", "**Features and alignment.** Stimulus features came from TRIBE v2's own pipeline with the dataset's word timings: w2v-BERT 2.0 for audio [@chung2021] and Llama-3.2-3B for text [@grattafiori2024], grouped into 100-s segments (45 across six stories). The offset between model time and BOLD was the lag maximising prediction–response correlation on the five training stories; the 2,000 analysis vertices were those best predicted on the training stories."),
+    ("p", "**Evaluation.** (i) Encoding accuracy per vertex on the unseen test story, against a split-half noise ceiling from the ten repeats. (ii) Forward identification: each 20-s window of the test-story BOLD matched to predictions for all 194 windows of the six stories. (iii) Inversion: each 100-s test segment inverted from measured BOLD, and x̂ ranked against the true representations of all 45 segments (chance 1/45). (iv) An oracle that inverts the model's own noise-free prediction under the same budget, separating the operator's conditioning from measurement noise."),
     # ======================================================================= 6
     ("h1", "6. HARDWARE/SOFTWARE TOOLS USED"),
-    ("tab", "Hardware and software", ["Category", "Tool", "Use in this project"], [
-        ["Compute (GPU)", "Google Colab, NVIDIA T4 (15 GB), 12 GB RAM", "Synthetic characterisation; real-data text + audio features and inversion"],
-        ["Compute (CPU)", "Linux workstation / cloud CPU", "Regional analysis, surface projection, audio-only real-data run, figures"],
-        ["Deep learning", "PyTorch [@paszke2019], HuggingFace Transformers and Hub", "Autograd through the frozen encoder; Llama-3.2-3B and w2v-BERT"],
-        ["Encoder", "TRIBE v2 code and weights (Meta FAIR)", "Frozen forward operator"],
-        ["Neuroimaging", "nilearn [@abraham2014], nibabel, ANTsPy, pycortex transforms", "Atlas, surfaces, registration, surface projection"],
-        ["Scientific Python", "NumPy, SciPy, scikit-learn, h5py, pandas, Matplotlib", "Analysis, ridge baseline, data I/O, figures"],
-        ["Data", "OpenNeuro ds003020 (LeBel et al. 2023)", "Real naturalistic fMRI"],
-        ["Documentation", "GitHub, Colab notebooks, PowerPoint, Word", "Code release, reproducibility, reviews and reports"],
-    ], [1.3, 2.3, 2.6]),
+    ("tab", "Hardware and software tools, their use and their cost to the project", ["Category", "Tool", "Use in this project", "Cost (INR)"], [
+        ["Compute (GPU)", "Google Colab free tier, NVIDIA T4 (15 GB), 12 GB RAM", "Synthetic characterisation; real-data text and audio features and inversion", "0 (free tier)"],
+        ["Compute (CPU)", "Laptop and cloud CPU (Linux)", "Regional analysis, surface projection, audio-only real-data run, figures", "0 (existing)"],
+        ["Programming", "Python 3, Jupyter notebooks", "All analysis code and the Colab notebooks", "0 (open source)"],
+        ["Deep learning", "PyTorch [@paszke2019], Hugging Face Transformers and Hub", "Autograd through the frozen encoder; Llama-3.2-3B and w2v-BERT", "0 (open source)"],
+        ["Encoder", "TRIBE v2 code and weights (Meta FAIR)", "Frozen forward operator", "0 (open weights, CC BY-NC 4.0)"],
+        ["Neuroimaging", "nilearn [@abraham2014], nibabel, ANTsPy, pycortex", "Atlas, surfaces, registration, surface projection", "0 (open source)"],
+        ["Scientific Python", "NumPy, SciPy, scikit-learn, h5py, pandas, Matplotlib", "Analysis, ridge baseline, data I/O, figures", "0 (open source)"],
+        ["Data", "OpenNeuro ds003020 (LeBel et al. 2023)", "Real naturalistic fMRI", "0 (open data)"],
+        ["Version control and release", "Git, GitHub", "Code release, version history, public repository", "0 (free plan)"],
+        ["Storage", "Google Drive", "Model weights, features and results for Colab", "0 (free quota)"],
+        ["Documentation", "Microsoft Word, Microsoft PowerPoint (Microsoft 365 through the VIT student account)", "Report, review slides and A3 poster", "0 (institutional licence)"],
+        ["Document conversion", "LibreOffice", "PDF export and page checks", "0 (open source)"],
+        ["Total software cost", "", "", "0"],
+    ], [1.15, 2.0, 2.15, 0.9]),
+    ("p", "All software used is open source, free of charge at the tier used, or covered by the institutional licence, so the software cost of the project is zero; the only expense is printing (Chapter 11)."),
     ("p", "No hardware was built: the project is computational. All code, results and notebooks are public at github.com/Ivxn404/semantic-decoding-tribe-inversion (Appendix A)."),
     # ======================================================================= 7
     ("h1", "7. SCHEDULE AND MILESTONES"),
@@ -214,32 +214,32 @@ BODY = [
         ["S3", "Synthetic characterisation (budget, noise, extent, priors)", "Sep", "Dissociation and conditioning results"],
         ["S4", "Controls and hypothesis tests", "Sep – Oct", "Non-convexity shown; null space rejected (Review II)"],
         ["S5", "Regional analysis on six networks", "Oct", "Predictable-vs-recoverable dissociation"],
-        ["S6", "Real-fMRI validation (LeBel 2023)", "Oct", "Identification on a held-out story (Review III)"],
+        ["S6", "Real-fMRI validation (LeBel 2023)", "Oct", "Identification on an unseen test story (Review III)"],
         ["S7", "Manuscript, report, poster, code release", "Oct", "IEEE-format manuscript; public repository; final review"],
     ], [0.5, 2.6, 1.0, 2.1]),
     ("p", "Reviews: Review I (problem and plan), Review II on 14 October 2026 (40% milestone), Review III (60–70% milestone), and the final review with poster, viva and demonstration on 29 October 2026."),
     # ======================================================================= 8
     ("h1", "8. RESULT ANALYSIS"),
     ("h2", "8.1 Encoding accuracy does not certify decoding"),
-    ("p", "Independent inversions at budgets from 250 to 32 000 steps show encoding error falling 28.4-fold while recovery saturates (Figure 8.1, Table 8.1). The final halving of encoding error (5.65 × 10⁻³ → 2.66 × 10⁻³) buys only +0.015 in recovery cosine. Forward accuracy and decodability are separate quantities."),
+    ("p", "Independent inversions at budgets from 250 to 32,000 steps show encoding error falling 28.4-fold while recovery saturates (Figure 8.1, Table 8.1). The final halving of encoding error (5.65 × 10⁻³ → 2.66 × 10⁻³) buys only +0.015 in recovery cosine. Forward accuracy and decodability are separate quantities."),
     ("fig", F + "fig_dissociation.png", "Encoding error against recovery cosine across independent step budgets", 5.6),
     ("tab", "Encoding error and recovery across optimisation budgets", ["Steps", "Encoding relative error", "Recovery cosine"], [
-        ["250", "7.546 × 10⁻²", "0.0505"], ["500", "6.043 × 10⁻²", "0.1081"], ["1 000", "5.098 × 10⁻²", "0.2374"], ["2 000", "4.073 × 10⁻²", "0.4529"],
-        ["4 000", "2.733 × 10⁻²", "0.6708"], ["8 000", "1.380 × 10⁻²", "0.8362"], ["16 000", "5.649 × 10⁻³", "0.9282"], ["32 000", "2.658 × 10⁻³", "0.9436"],
+        ["250", "7.546 × 10⁻²", "0.0505"], ["500", "6.043 × 10⁻²", "0.1081"], ["1,000", "5.098 × 10⁻²", "0.2374"], ["2,000", "4.073 × 10⁻²", "0.4529"],
+        ["4,000", "2.733 × 10⁻²", "0.6708"], ["8,000", "1.380 × 10⁻²", "0.8362"], ["16,000", "5.649 × 10⁻³", "0.9282"], ["32,000", "2.658 × 10⁻³", "0.9436"],
     ], [1.5, 2.2, 2.0]),
     ("h2", "8.2 Equally good fits give different answers"),
-    ("p", "At 16 000 steps, seven of eight initialisations reached matched fit (2.52–2.96 × 10⁻⁷; one was excluded at 3.4× the best fit). Their mean pairwise cosine was 0.927, minimum 0.835, and mean cosine to the truth 0.914. The effect replicated across four ground truths with the same worst pair each time (Figure 8.2, Table 8.2); recovered norm ratios clustered by initialisation to within about 0.01, so distinct solutions are reached systematically, not by chance."),
+    ("p", "At 16,000 steps, seven of eight initialisations reached matched fit (2.52–2.96 × 10⁻⁷; one was excluded at 3.4× the best fit). Their mean pairwise cosine was 0.927, minimum 0.835, and mean cosine to the truth 0.914. The effect replicated across four ground truths with the same worst pair each time (Figure 8.2, Table 8.2); recovered norm ratios clustered by initialisation to within about 0.01, so distinct solutions are reached systematically, not by chance."),
     ("fig", F + "fig_nonconvex.png", "Agreement among fit-matched solutions across four ground truths (left) and fit versus recovery per initialisation (right)", 6.2),
-    ("tab", "Agreement among fit-matched solutions, four ground truths, 14 000 steps", ["Ground truth", "Best fit (MSE)", "Mean pairwise cosine", "Min pairwise cosine"], [
+    ("tab", "Agreement among fit-matched solutions, four ground truths, 14,000 steps", ["Ground truth", "Best fit (MSE)", "Mean pairwise cosine", "Min pairwise cosine"], [
         ["0", "3.51 × 10⁻⁷", "0.893", "0.807"], ["1", "3.65 × 10⁻⁷", "0.893", "0.815"], ["2", "3.11 × 10⁻⁷", "0.901", "0.826"], ["3", "3.13 × 10⁻⁷", "0.900", "0.819"],
         ["Mean ± SD", "", "0.897 ± 0.004", "0.817 ± 0.007"],
     ], [1.3, 1.6, 1.7, 1.7]),
     ("h2", "8.3 Barriers, not a null space"),
-    ("p", "The straight line between two fit-matched solutions distinguishes the hypotheses. If the solutions lay in one flat valley (a null space), the prediction error would stay at the endpoints' level all along the line; if they are separate minima, the error rises in between. The test uses forward passes only. It was run on 19–20 October 2026 with notebooks/Verification_Tests.ipynb (14 000 steps, four ground truths), comparing only the five starts that were blind to the truth and fit-matched (within 1.3× of the best blind fit in every case; agreement mean 0.955, minimum 0.894 ± 0.003 over the four truths)."),
+    ("p", "The straight line between two fit-matched solutions distinguishes the hypotheses. If the solutions lay in one flat valley (a null space), the prediction error would stay at the endpoints' level all along the line; if they are separate minima, the error rises in between. The test uses forward passes only. It was run on 19–20 October 2026 with notebooks/Verification_Tests.ipynb (14,000 steps, four ground truths), comparing only the five starts that were blind to the truth and fit-matched (within 1.3× of the best blind fit in every case; agreement mean 0.955, minimum 0.894 ± 0.003 over the four truths)."),
     ("p", "Over the 40 pairs, the error rose between every pair of distinct solutions (29 pairs with agreement below 0.99) to 2.4–8.2× the worse endpoint (median 4.8×); the 11 near-identical pairs (agreement ≥ 0.99, mostly the zero and small-Gaussian starts) lie in the same minimum and stay nearly flat (1.0–2.2×). The rise grows as the two solutions become less similar (correlation −0.70; Figure 8.3, Table 8.3). Two control starts placed near the truth reached a 4.2 ± 0.3× lower error and higher recovery (0.946–0.977, against 0.891–0.926 for the blind starts), and the straight path from the best blind solution to the near-truth one rose 8.1 ± 3.2× (4.7–12.4×) above the blind end. The blind solutions are therefore distinct local minima, separated by barriers from one another and from a deeper minimum near the truth: the inverse is non-convex, and the information-loss hypothesis is rejected."),
     ("p", "**Correction.** An earlier version of this test chose the least similar pair among all eight starts and compared the change along d with random directions. That rule paired an under-converged solution (Gaussian s.d. 5, error 1.15 × 10⁻⁶, recovery 0.62), so its numbers (2.6× falling to 0.6×) are withdrawn. With a fit-matched pair, the change along d stays far below random directions at every scale (2.6×, 6.0×, 13×, 258× at 0.1, 0.25, 0.5 and 1.0 of the gap), as it must when both ends fit the target; that comparison cannot detect a barrier, which is why the straight-path error is reported instead. The selection rule in scripts/synthetic_characterisation.py has been corrected."),
     ("fig", F + "fig_barrier_verified.png", "Left: prediction error along the straight line between fit-matched blind solutions (blue, ten pairs) and from the best blind solution to the near-truth solution (orange). Right: final error and recovery for each of the eight starts", 6.3),
-    ("tab", "Straight-path barrier between fit-matched blind solutions: all ten pairs for ground truth 0, and the summary over four ground truths (14 000 steps)", ["Solution pair", "Agreement (cosine)", "Peak error on the path", "Peak / worse end"], [
+    ("tab", "Straight-path barrier between fit-matched blind solutions: all ten pairs for ground truth 0, and the summary over four ground truths (14,000 steps)", ["Solution pair", "Agreement (cosine)", "Peak error on the path", "Peak / worse end"], [
         ["Gaussian 1.0 – zeros", "0.927", "2.36 × 10⁻⁶", "6.0×"], ["Gaussian 1.0 – uniform", "0.890", "1.79 × 10⁻⁶", "4.6×"], ["Gaussian 0.01 – Gaussian 1.0", "0.927", "1.71 × 10⁻⁶", "4.4×"],
         ["uniform – zeros", "0.958", "1.50 × 10⁻⁶", "4.1×"], ["Gaussian 0.1 – Gaussian 1.0", "0.940", "1.57 × 10⁻⁶", "4.0×"], ["Gaussian 0.01 – uniform", "0.957", "1.32 × 10⁻⁶", "3.6×"],
         ["Gaussian 0.1 – uniform", "0.956", "1.25 × 10⁻⁶", "3.4×"], ["Gaussian 0.01 – Gaussian 0.1", "0.992", "8.12 × 10⁻⁷", "2.2×"], ["Gaussian 0.1 – zeros", "0.993", "5.52 × 10⁻⁷", "1.6×"],
@@ -250,7 +250,7 @@ BODY = [
     ("p", "On the least similar fit-matched pair (Gaussian 1.0 and uniform), sensitivity along their difference d was 8.10 × 10⁻² for ground truth 0, against a median of 1.68 × 10⁻¹ over 200 random directions (range 1.22–2.39 × 10⁻¹): 2.1× below the median and below every random direction sampled. Over four ground truths the ratio was 2.15 ± 0.17× (1.99–2.40×), and along the actual error x̂ − x 1.68 ± 0.17×. Nine of the ten blind pairs lay below the median (1.1–2.1×); the exception is the pair of almost identical solutions from the zero and 0.01 starts (agreement 0.999), whose difference is too small to probe reliably. The original run (Figure 8.4) gave 1.9×. The inverse is anisotropically ill-conditioned: the operator responds about half as strongly to the components that inversion fails to recover."),
     ("fig", F + "fig_sensitivity.png", "Directional sensitivity of the operator in the original run: solution-difference directions against 200 random directions (the corrected pairs give 2.15 ± 0.17× over four truths)", 5.4),
     ("h2", "8.5 Further conditioning results"),
-    ("p", "Gain is identifiable: only the true scale lies within the optimiser's residual floor, and a 10% rescale already produces 7.5× the floor (Figure 8.5). The inverse degrades smoothly with measurement noise while retrieval stays near 0.99 (Figure 8.6), and about 10% of cortex (2 000 random vertices) carries most of the recoverable signal (Figure 8.7). Generic priors do not help: an ℓ₂ penalty gives at most +0.032 and temporal smoothness destroys recovery (Figure 8.8). A ridge decoder fitted on the same forward model reaches only 0.060, against 0.918 for gradient inversion (Figure 8.9). Table 8.4 collects these results."),
+    ("p", "Gain is identifiable: only the true scale lies within the optimiser's residual floor, and a 10% rescale already produces 7.5× the floor (Figure 8.5). The inverse degrades smoothly with measurement noise while retrieval stays near 0.99 (Figure 8.6), and about 10% of cortex (2,000 random vertices) carries most of the recoverable signal (Figure 8.7). Generic priors do not help: an ℓ₂ penalty gives at most +0.032 and temporal smoothness destroys recovery (Figure 8.8). A ridge decoder fitted on the same forward model reaches only 0.060, against 0.918 for gradient inversion (Figure 8.9). Table 8.4 collects these results."),
     ("fig", F + "fig_gain.png", "Output change under rescaling of the ground truth relative to the optimiser's noise floor", 4.8),
     ("fig", F + "fig_noise.png", "Recovery, relative error and retrieval against measurement noise", 6.2),
     ("fig", F + "fig_extent.png", "Recovery against the number of observed cortical vertices", 5.2),
@@ -259,7 +259,7 @@ BODY = [
     ("tab", "Further characterisation of the inverse (whole cortex unless stated)", ["Test", "Result"], [
         ["Gain (rescale x by α)", "Only α = 1 within the residual floor; a 10% rescale gives 7.5× the floor"],
         ["Measurement noise, 0 → 100% of BOLD SD", "Recovery 0.836 → 0.298, monotone; retrieval stays ≈0.99"],
-        ["Observed cortex, 50 → 20 484 vertices", "Recovery 0.100 → 0.836; 2 000 random vertices (10%) reach 0.777"],
+        ["Observed cortex, 50 → 20,484 vertices", "Recovery 0.100 → 0.836; 2,000 random vertices (10%) reach 0.777"],
         ["ℓ₂ prior (500 vertices)", "Best +0.032 at λ = 10⁻⁵, harmful above"],
         ["Temporal-smoothness prior (500 vertices)", "Recovery 0.527 → 0.0008; retrieval to chance"],
         ["Ridge decoder (240 train, 60 test pairs)", "Best test cosine 0.060 vs 0.918 for gradient inversion (time-averaged target: a lower bound)"],
@@ -274,20 +274,20 @@ BODY = [
     ("fig", F + "fig_roi_recovery.png", "Recovery from each network versus size-matched random vertex sets", 6.2),
     ("fig", F + "fig_roi_pred_vs_rec.png", "Forward sensitivity against recoverability across networks", 4.8),
     ("fig", F + "fig_roi_dim.png", "Participation ratio of each network's responses against size-matched controls", 6.2),
-    ("tab", "Network sensitivity and recoverability (synthetic, 8 000 steps)", ["Network", "Vertices", "Sensitivity (× cortex)", "Dominant slot (z)", "Recovery: network", "Recovery: random", "Difference", "PR (network / control)"], [
-        ["Somatomotor", "1 487", "0.73", "none", "0.851", "0.748", "+0.102", "18.6 / 15.2"],
-        ["Language (L)", "1 282", "1.21", "text +26.6", "0.752", "0.729", "+0.023", "9.7 / 15.0"],
+    ("tab", "Network sensitivity and recoverability (synthetic, 8,000 steps)", ["Network", "Vertices", "Sensitivity (× cortex)", "Dominant slot (z)", "Recovery: network", "Recovery: random", "Difference", "PR (network / control)"], [
+        ["Somatomotor", "1,487", "0.73", "none", "0.851", "0.748", "+0.102", "18.6 / 15.2"],
+        ["Language (L)", "1,282", "1.21", "text +26.6", "0.752", "0.729", "+0.023", "9.7 / 15.0"],
         ["Auditory", "277", "1.29", "audio +34.7", "0.386", "0.371", "+0.015", "10.1 / 15.5"],
-        ["Language (R)", "1 368", "1.22", "text +28.5", "0.750", "0.739", "+0.011", "13.5 / 15.1"],
-        ["Default mode", "1 224", "1.03", "text +26.9", "0.727", "0.723", "+0.004", "11.9 / 15.0"],
-        ["Visual", "1 582", "1.60", "video +40.7", "0.629", "0.754", "−0.125", "10.3 / 15.1"],
+        ["Language (R)", "1,368", "1.22", "text +28.5", "0.750", "0.739", "+0.011", "13.5 / 15.1"],
+        ["Default mode", "1,224", "1.03", "text +26.9", "0.727", "0.723", "+0.004", "11.9 / 15.0"],
+        ["Visual", "1,582", "1.60", "video +40.7", "0.629", "0.754", "−0.125", "10.3 / 15.1"],
     ], [1.05, 0.6, 0.75, 0.85, 0.75, 0.75, 0.7, 0.85]),
     ("h2", "8.7 Real fMRI"),
-    ("p", "The alignment offset fitted on the training stories was 4 s with text and audio features. On the held-out story the encoder reached r = 0.478 on the 2 000 vertices chosen from the other stories, 56% of the split-half noise ceiling (0.859), led by auditory (0.405), right-language (0.348) and default-mode (0.348) networks (Figure 8.15, Table 8.6). Adding language features more than doubled encoding accuracy compared with audio alone and nearly tripled forward identification of 20-s windows (58.6% against a chance level of 0.5%)."),
-    ("fig", F + "fig_realdata_audio_text.png", "Real fMRI, held-out story: alignment (A), encoding accuracy by network (B) and identification accuracy (C)", 6.3),
-    ("tab", "Real-fMRI validation, held-out story wheretheressmoke (UTS03)", ["Measure", "Text + audio", "Audio only", "Chance / ceiling"], [
+    ("p", "The alignment offset fitted on the training stories was 4 s with text and audio features. On the unseen test story the encoder reached r = 0.478 on the 2,000 vertices chosen from the other stories, 56% of the split-half noise ceiling (0.859), led by auditory (0.405), right-language (0.348) and default-mode (0.348) networks (Figure 8.15, Table 8.6). Adding language features more than doubled encoding accuracy compared with audio alone and nearly tripled forward identification of 20-s windows (58.6% against a chance level of 0.5%)."),
+    ("fig", F + "fig_realdata_audio_text.png", "Real fMRI, unseen test story: alignment (A), encoding accuracy by network (B) and identification accuracy (C)", 6.3),
+    ("tab", "Real-fMRI validation on the unseen test story wheretheressmoke (UTS03)", ["Measure", "Text + audio", "Audio only", "Chance / ceiling"], [
         ["Encoding r, whole cortex", "0.199", "0.062", "0"],
-        ["Encoding r, top 2 000 vertices", "0.478 (56% of ceiling)", "0.273 (32%)", "ceiling 0.859"],
+        ["Encoding r, top 2,000 vertices", "0.478 (56% of ceiling)", "0.273 (32%)", "ceiling 0.859"],
         ["Encoding r, auditory / language L / language R", "0.405 / 0.274 / 0.348", "0.263 / 0.193 / 0.200", "0"],
         ["Encoding r, default mode / somatomotor / visual", "0.348 / 0.164 / 0.176", "0.103 / 0.039 / −0.020", "0"],
         ["Forward identification, 20-s windows, top-1 (top-5)", "58.6% (86.2%)", "20.7% (41.4%)", "0.5% (194 windows)"],
@@ -295,12 +295,12 @@ BODY = [
         ["Cosine of x̂ to the true x", "0.024", "0.062", "—"],
         ["Oracle: inverting the model's own prediction", "5 / 5, cosine 0.224", "—", "—"],
     ], [2.4, 1.5, 1.3, 1.0]),
-    ("p", "Inverting measured BOLD ranked the true segment first in 4 of 5 held-out queries (the fifth ranked seventh of 45), including against the six other segments of the same story, while x̂ kept a cosine of only 0.02 to the truth. The oracle separates two limits: without noise, inversion identifies every segment yet recovers only 0.22 of the representation, so most of the loss is the operator's conditioning, not measurement noise; noise then lowers recovery further while leaving identification largely intact, as in the synthetic noise sweep. On real data, as in simulation, the inverse identifies which moment was heard but does not reconstruct its representation."),
+    ("p", "Inverting measured BOLD ranked the true segment first in 4 of 5 test queries (the fifth ranked seventh of 45), including against the six other segments of the same story, while x̂ kept a cosine of only 0.02 to the truth. The oracle separates two limits: without noise, inversion identifies every segment yet recovers only 0.22 of the representation, so most of the loss is the operator's conditioning, not measurement noise; noise then lowers recovery further while leaving identification largely intact, as in the synthetic noise sweep. On real data, as in simulation, the inverse identifies which moment was heard but does not reconstruct its representation."),
     ("h2", "8.8 Discussion"),
     ("p", "**Identification is robust; reconstruction is not.** Identification needs only the high-sensitivity components that separate one moment from another, and those are the components the operator transmits well; the components it transmits weakly are where recovery fails (Section 8.4). Decoding claims built on identification accuracy should therefore not be read as reconstruction of the underlying representation."),
-    ("p", "**Why better encoders need not decode better.** A better fit can come almost entirely from high-sensitivity directions, leaving low-sensitivity ones as ill-determined as before. This is the dissociation of Section 8.1, and it means scaling laws for encoding [@antonello2023] cannot be assumed to carry over to decoding."),
+    ("p", "**Better encoders need not decode better.** A better fit can come almost entirely from high-sensitivity directions, leaving low-sensitivity ones as ill-determined as before. This is the dissociation of Section 8.1, and it means scaling laws for encoding [@antonello2023] cannot be assumed to carry over to decoding."),
     ("p", "**The limit is geometry, not lost information.** Fit-matched solutions are separate minima, not points on a flat valley, and magnitude is identifiable. Recovery is limited by a non-convex, anisotropically conditioned landscape, which better optimisation, initialisation or priors matched to the operator's weak directions could improve; generic priors do not. For linear inverted encoding models the stimulus is recovered only up to an invertible transform [@gardner2019]; a deep encoder replaces that closed-form ambiguity with a non-convex, direction-dependent one that must be measured, as done here."),
-    ("p", "**Limitations.** Synthetic ground truth lies in a random low-dimensional subspace; inversion targets the aggregated representation; all solutions use Adam; the release has no explicit haemodynamic operator and only the averaged subject layer; regional z-scores use a random-vertex null that ignores spatial autocorrelation; and the real-data test covers one subject and five held-out inversion queries. A per-network test on real data needs held-out stories from more subjects, because the other five stories were in TRIBE v2's training set."),
+    ("p", "**Limitations.** Synthetic ground truth lies in a random low-dimensional subspace; inversion targets the aggregated representation; all solutions use Adam; the release has no explicit haemodynamic operator and only the averaged subject layer; regional z-scores use a random-vertex null that ignores spatial autocorrelation; and the real-data test covers one subject and five test inversion queries. A per-network test on real data needs unseen test stories from more subjects, because the other five stories were in TRIBE v2's training set."),
     # ======================================================================= 9
     ("h1", "9. CONCLUSION"),
     ("p", "A near-perfect deep brain encoder does not by itself make meaning recoverable from fMRI. Inverting TRIBE v2 is a non-convex, direction-dependently conditioned problem: it identifies which stimulus was presented, on synthetic and real data alike, but reconstructs only the components the operator transmits well. Recoverability has to be measured, not inferred from predictivity, and it differs across cortex in ways predictivity does not reveal."),
@@ -313,11 +313,11 @@ BODY = [
         "Solution differences lie 2.15 ± 0.17× below the median sensitivity of 200 random directions (1.9× in the original run): anisotropic ill-conditioning.",
         "Gain is identifiable; generic priors hurt; gradient inversion beats a linear decoder about 15-fold.",
         "Visual cortex, the most responsive network, is the worst to decode from (−0.125 vs random); somatomotor, the least responsive, the best (+0.102).",
-        "Real fMRI, held-out story: encoding r = 0.48 (56% of the noise ceiling); inversion identifies 4 of 5 segments among 45 (chance 2.2%) with cosine 0.02; the noise-free oracle recovers 0.22.",
+        "Real fMRI, unseen test story: encoding r = 0.48 (56% of the noise ceiling); inversion identifies 4 of 5 segments among 45 (chance 2.2%) with cosine 0.02; the noise-free oracle recovers 0.22.",
     ]),
     ("h2", "9.2 Future improvement/work"),
     ("bul", [
-        "Real-data inversion across all eight LeBel subjects and a per-network real-data test on genuinely held-out stories.",
+        "Real-data inversion across all eight LeBel subjects and a per-network real-data test on stories excluded from TRIBE v2's training.",
         "Optimisers and priors matched to the operator's weak directions; multiple restarts and ensembling over minima.",
         "Inversion of the raw extractor features (one stage earlier) and an explicit haemodynamic model.",
         "Transfer of the method to EEG and MEG encoders as they appear, and spin-permutation tests for the regional statistics.",
@@ -335,14 +335,15 @@ BODY = [
     ("h1", "11. COST ANALYSIS"),
     ("p", "The project is computational and required no hardware purchase. Table 11.1 gives the budget estimated in Report I and the cost actually incurred."),
     ("tab", "Estimated and incurred cost", ["Item", "Estimate in Report I (INR)", "Incurred (INR)", "Remark"], [
-        ["Hosted GPU compute (subscription)", "5 500", "0", "Free Colab T4 tier was sufficient"],
-        ["Additional on-demand GPU credits", "4 000", "0", "Memory-saving changes avoided paid tiers"],
-        ["Cloud storage (≈200 GB)", "1 500", "0", "Free Google Drive quota and local storage"],
+        ["Hosted GPU compute (subscription)", "5,500", "0", "Free Colab T4 tier was sufficient"],
+        ["Additional on-demand GPU credits", "4,000", "0", "Memory-saving changes avoided paid tiers"],
+        ["Cloud storage (≈200 GB)", "1,500", "0", "Free Google Drive quota and local storage"],
+        ["Software (Python stack, PyTorch, Colab, GitHub, Microsoft Word and PowerPoint, LibreOffice)", "0", "0", "Open source, free tiers and the VIT institutional licence (Table 6.1)"],
         ["Neuroimaging datasets", "0", "0", "Open licence (OpenNeuro)"],
         ["Pretrained encoder weights", "0", "0", "Open-weight, non-commercial licence"],
-        ["Documentation and reprographics", "1 500", "As per printing", "Report binding and A3 poster printing"],
-        ["Contingency (≈15%)", "2 000", "0", "Not required"],
-        ["Total", "14 500", "Printing only", ""],
+        ["Documentation and reprographics", "1,500", "As per printing", "Report binding and A3 poster printing"],
+        ["Contingency (≈15%)", "2,000", "0", "Not required"],
+        ["Total", "14,500", "Printing only", ""],
     ], [2.1, 1.4, 1.2, 1.5]),
     ("p", "Manpower: 580 planned person-hours (330 and 250 hours for the two members), as set out in Report I."),
     # ======================================================================= 12
