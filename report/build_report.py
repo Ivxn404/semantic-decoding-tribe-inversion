@@ -1,4 +1,4 @@
-import copy, os, re, sys
+import copy, re, sys
 import docx
 from docx.shared import Pt, Inches, RGBColor, Emu
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING, WD_BREAK
@@ -8,12 +8,12 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, "/home/claude/work/report_final")
 from content import TITLE, EXEC_SUMMARY, ACK, ABBR, SYMBOLS, BODY, APPENDIX
 from refs import REFS
 
-TPL = os.environ.get("REPORT_TEMPLATE", "Project-1_Report_Format-2026.docx")  # VIT template (not redistributed)
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Report_raw.docx")
+TPL = "/tmp/claude-0/tpl/report.docx"
+OUT = "/home/claude/work/report_final/Report_Sarkar_Choudhuri_Project1_raw.docx"
 FONT = "Times New Roman"
 PROG = "Electronics and Communication Engineering (specialisation in Biomedical Engineering)"
 GUIDE = "Dr. Sharmila Nageswaran"
@@ -424,6 +424,11 @@ def footer_pagenum(sec, fmt, start):
     sec.footer_distance = Inches(0.4)
     sec.top_margin = Inches(0.95)
 
+
+# centre the text block: the template's 1.17in/0.76in margins pushed everything right; keep the same text width
+for _s in d.sections:
+    _w = _s.left_margin + _s.right_margin
+    _s.left_margin = _s.right_margin = int(_w / 2)
 
 footer_pagenum(pre, "lowerRoman", 1)
 footer_pagenum(main, "decimal", 1)
