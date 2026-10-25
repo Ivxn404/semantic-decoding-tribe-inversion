@@ -425,11 +425,6 @@ def footer_pagenum(sec, fmt, start):
     sec.top_margin = Inches(0.95)
 
 
-# centre the text block: the template's 1.17in/0.76in margins pushed everything right; keep the same text width
-for _s in d.sections:
-    _w = _s.left_margin + _s.right_margin
-    _s.left_margin = _s.right_margin = int(_w / 2)
-
 footer_pagenum(pre, "lowerRoman", 1)
 footer_pagenum(main, "decimal", 1)
 # the first front sections must not inherit the new footer: give the exec-summary section an empty footer
