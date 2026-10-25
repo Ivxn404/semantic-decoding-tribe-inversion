@@ -119,6 +119,35 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
 .netlist button { display: grid; grid-template-columns: 12px 1fr auto; gap: 10px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 8px 12px }
 .netlist button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink) }
 .status { font: 500 0.8rem/1.3 var(--mono); color: var(--muted) }
+
+/* hover explanations */
+[data-tip]:not(button):not(input):not(a):not(.netlist) { cursor: help }
+.hovertip { position: fixed; left: 0; top: 0; z-index: 60; max-width: min(320px, calc(100vw - 16px)); padding: 9px 12px; border-radius: 8px; background: var(--ink); color: var(--bg); font: 400 0.84rem/1.45 var(--body); box-shadow: 0 6px 24px rgb(0 0 0 / 0.18); pointer-events: none; opacity: 0; transition: opacity .12s }
+.hovertip.on { opacity: 1 }
+/* project assistant */
+.chatbox { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 50; font-size: 0.92rem }
+.chatfab { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 11px 18px 11px 12px; background: var(--accent); color: var(--accent-ink); font-weight: 600; box-shadow: 0 6px 20px rgb(0 0 0 / 0.2) }
+.chatfab span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent-ink); color: var(--accent); font-weight: 800 }
+.chatfab.hidden { display: none }
+.chatpanel { width: min(390px, calc(100vw - 32px)); height: min(560px, calc(100vh - 100px)); display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 12px 40px rgb(0 0 0 / 0.22); overflow: hidden }
+.chatpanel[hidden] { display: none }
+.chatpanel header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line) }
+.chatpanel header b { font-family: var(--display); font-stretch: 108% }
+.chatmode { flex: 1; font: 500 0.72rem/1.2 var(--mono); color: var(--muted) }
+.chatx { border: 0; background: transparent; font-size: 1.4rem; line-height: 1; padding: 0 4px; color: var(--muted) }
+.chatlog { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; overscroll-behavior: contain }
+.msg { max-width: 92%; padding: 9px 12px; border-radius: 12px; line-height: 1.5; overflow-wrap: anywhere }
+.msg.bot { background: var(--chip); align-self: flex-start; border-bottom-left-radius: 4px }
+.msg.me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px }
+.msg ul { margin: 4px 0; padding-left: 18px }
+.msgnote { margin-top: 6px; font: 500 0.72rem/1.3 var(--mono); color: var(--muted) }
+.chatsugg { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 14px 10px }
+.chatsugg[hidden] { display: none }
+.chatsugg button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 5px 10px; font-size: 0.8rem; text-align: left }
+.chatform { display: flex; gap: 8px; padding: 10px; border-top: 1px solid var(--line) }
+.chatform textarea { flex: 1; resize: none; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); font: inherit; color: inherit; max-height: 120px }
+@media (max-width: 600px) { .chatbox { right: 8px; bottom: 8px } .chatpanel { width: calc(100vw - 16px); height: calc(100vh - 90px) } }
+@media print { .chatbox, .hovertip { display: none } }
 </style>
 
 <header class="rail">
@@ -234,7 +263,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
       <p class="lede">A small frozen encoder (tanh layer, ill-conditioned weights, haemodynamic smoothing) with the same maths as our TRIBE v2 runs: Adam on x, cosine schedule, exact ground truth. Several starts run at once. Watch the fit improve by orders of magnitude while recovery stalls, and watch equally good fits disagree.</p></div>
     <div class="card stack">
       <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
-        <div class="btnrow"><button class="btn primary" id="labRun">Run inversion</button><button class="btn" id="labReset">New target</button><button class="btn" id="labProbe" disabled>Probe sensitivity</button></div>
+        <div class="btnrow"><button class="btn primary" id="labRun">Run inversion</button><button class="btn" id="labReset">New target</button></div>
         <span class="status" id="labStatus">ready · 0 / 2 400 steps</span>
       </div>
       <div class="ctls">
@@ -252,9 +281,9 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
     <div class="grid3">
       <div class="card stack"><h3>True x and recovered x̂</h3><canvas class="heat" id="hTrue" width="32" height="12" aria-label="true representation"></canvas><canvas class="heat" id="hRec" width="32" height="12" aria-label="recovered representation, start 1"></canvas><p class="muted" style="font-size:.82rem">rows = time steps, columns = input dimensions; start 1 shown</p></div>
       <div class="card stack"><h3>Do the starts agree?</h3><canvas id="agree" style="width:100%;aspect-ratio:1"></canvas><p class="muted" style="font-size:.82rem" id="agreeTxt">pairwise cosine between solutions</p></div>
-      <div class="card stack"><h3>Where the error hides</h3><canvas class="chart" id="chSens" style="height:180px"></canvas><p class="muted" style="font-size:.82rem" id="sensTxt">After a run, probe how strongly the encoder responds along the disagreement between two starts, against 200 random directions.</p></div>
+      <div class="card stack"><h3>Where the error hides</h3><canvas class="chart" id="chSens" style="height:180px"></canvas><p class="muted" style="font-size:.82rem" id="sensTxt">Fills in by itself when a run finishes: how strongly the encoder reacts along the direction where two starts disagree, against 200 random directions.</p></div>
     </div>
-    <div class="notes"><b>Demo (90 s)</b>Press Run. Left: error falls by about a million. Right: recovery stops near 0.93. That is the dissociation. Agreement matrix: fits are equally good, answers differ. Turn Start spread up and run again: starts land further apart, so the problem is non-convex. Press Probe: the encoder is about two times less sensitive along the disagreement than along random directions, so the error hides where the operator barely responds. Noise slider: recovery drops gracefully. Observed cortex: fewer vertices, less recovery. ℓ₂ prior: a generic prior does not rescue it.</div>
+    <div class="notes"><b>Demo (90 s)</b>Press Run. Left: error falls by about a million. Right: recovery stops near 0.93. That is the dissociation. Agreement matrix: fits are equally good, answers differ. Turn Start spread up and run again: starts land further apart, so the problem is non-convex. When the run ends, the right panel fills in by itself: the encoder is about two times less sensitive along the disagreement than along random directions, so the error hides where the operator barely responds. Noise slider: recovery drops gracefully. Observed cortex: fewer vertices, less recovery. ℓ₂ prior: a generic prior does not rescue it.</div>
   </div>
 </section>
 
@@ -317,12 +346,12 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
     <div class="card stack">
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center">
         <h3>Inverting measured BOLD: rank of the true segment among 45</h3>
-        <div class="btnrow"><div class="seg" id="idSeg" role="group" aria-label="Target"><button data-k="real_bold" aria-pressed="true">Measured BOLD</button><button data-k="oracle_prediction">Noise-free oracle</button></div><button class="btn" id="idPlay">Rank again</button></div>
+        <div class="seg" id="idSeg" role="group" aria-label="Target"><button data-k="real_bold" aria-pressed="true">Measured BOLD</button><button data-k="oracle_prediction">Noise-free oracle</button></div>
       </div>
       <div class="ranks" id="ranks"></div>
       <div class="kpis" id="idKpis"></div>
     </div>
-    <div class="notes"><b>Say (60 s)</b>Real data, held-out story. Encoding reaches 56 percent of the noise ceiling, led by auditory and language networks. Forward identification picks the right 20-second window 59 percent of the time against 0.5 percent chance. Now press Rank again: inverting the measured BOLD puts the true 100-second segment first in 4 of 5 queries out of 45, yet the recovered x has cosine 0.02 with the truth. The noise-free oracle gets 5 of 5 and still only 0.22: most of the loss is the operator, not the noise.</div>
+    <div class="notes"><b>Say (60 s)</b>Real data, held-out story. Encoding reaches 56 percent of the noise ceiling, led by auditory and language networks. Forward identification picks the right 20-second window 59 percent of the time against 0.5 percent chance. Watch the ranks fill in: inverting the measured BOLD puts the true 100-second segment first in 4 of 5 queries out of 45, yet the recovered x has cosine 0.02 with the truth. Switch to the noise-free oracle: it gets 5 of 5 and still only 0.22: most of the loss is the operator, not the noise.</div>
   </div>
 </section>
 

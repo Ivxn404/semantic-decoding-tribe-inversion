@@ -25,10 +25,12 @@ barrier={'s':VB['path']['s'],'pairs':pairs,'toTruth':[VA['path_blind_to_truth'][
 GT=json.load(open(R+'/results/real_x_groundtruth.json'))
 for _v in GT['inversion']['pairs'].values(): _v.pop('errors',None)
 GT['inversion']['blind_to_truth'].pop('errors',None)
-DATA={'gt':GT,'barrier':barrier,'mesh':mesh,'figs':figs,'real':real,'run':run,'qr':b64(R+'/poster/repo_qr_plain.png')}
+_scr=open(R+'/demo/DEMO_SCRIPT.md').read(); _qa=_scr[_scr.find('## Likely questions'):_scr.find('## If something fails')]
+KB=open(W+'/'+'kb_facts.md').read()+'\n\n# Detailed methods and results\n\n'+open(R+'/docs/Methods_and_Results.md').read()+'\n\n'+_qa
+DATA={'kb':KB,'gt':GT,'barrier':barrier,'mesh':mesh,'figs':figs,'real':real,'run':run,'qr':b64(R+'/poster/repo_qr_plain.png')}
 toy=open(W+'/toy.js').read().replace('if (typeof module !== "undefined") module.exports =','window.Toy =')
 page=open(W+'/page.html').read()
-html=page+'\n<script>window.DATA='+json.dumps(DATA,separators=(',',':'))+';</script>\n<script>'+toy+'</script>\n<script>'+open(W+'/brain.js').read()+'</script>\n<script>'+open(W+'/app.js').read()+'</script>\n'
+html=page+'\n<script>window.DATA='+json.dumps(DATA,separators=(',',':')).replace('</','<\\/')+';</script>\n<script>'+toy+'</script>\n<script>'+open(W+'/brain.js').read()+'</script>\n<script>'+open(W+'/app.js').read()+'</script>\n<script>'+open(W+'/extras.js').read()+'</script>\n'
 pass  # the hosted variant (no document skeleton) is not kept in the repo
 # standalone offline copy with a full document skeleton
 std='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'+html.replace('</style>','</style>\n</head><body>',1)+'</body></html>'

@@ -83,8 +83,8 @@ Gardner & Liu proved that *linear* inverted encoding models recover the stimulus
 |---|---|---|
 | Encoding accuracy does not certify decoding | Encoding error falls **28.4×** while recovery saturates at cosine 0.944; the final halving of error buys **+0.015** | `fig_dissociation.png` |
 | Fit-matched solutions disagree, reproducibly | 7 of 8 initialisations reach matched fit; min pairwise cosine **0.817 ± 0.007** over 4 ground truths | `fig_nonconvex.png` |
-| Non-convexity, not a null space | Along the difference `d`, prediction change is 2.6× smaller than random at 0.1 of the gap but **larger** (0.6×) at the full gap: a barrier | `fig_nullspace_test.png` |
-| Error lies in the weakest directions | Sensitivity along `d` is **1.9× below** the median of 200 random directions and below every one of them | `fig_sensitivity.png` |
+| Separate minima, not a null space | On the straight path between two distinct, equally good blind fits the error rises a median **4.8×** in the middle (29 of 40 pairs, 4 ground truths); **8.1 ± 3.2×** towards a deeper minimum near the truth (forward passes only) | `fig_barrier_path.png` |
+| Error lies in the weakest directions | Sensitivity along `d` is **2.15 ± 0.17× below** the median of 200 random directions (4 ground truths; 1.9× on the first) | `fig_sensitivity.png` |
 | Gain is identifiable | A 10 % rescale gives 7.5× the residual floor | `fig_gain.png` |
 | Robust to noise, sparse observation | Noise 0 → 100 % of BOLD SD: 0.836 → 0.298, retrieval ≈ 0.99; 2 000 random vertices (10 %) reach 0.777 | `fig_noise.png`, `fig_extent.png` |
 | Generic priors hurt | ℓ₂: +0.032 at best; temporal smoothness: 0.527 → 0.0008 | `fig_priors.png` |

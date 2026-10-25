@@ -229,7 +229,7 @@ function resetLab() {
   const mask = new Uint8Array(E.V); const idx = [...Array(E.V).keys()].sort(() => r() - 0.5).slice(0, Math.max(4, Math.round(p.obs * E.V))); idx.forEach(i => mask[i] = 1);
   const xs = [], As = []; for (let k = 0; k < p.K; k++) { const rr = T.mulberry(100 + k + labSeed * 17); const x = Float64Array.from({ length: xt.length }, () => (p.spread || 1e-4) * T.gauss(rr)); xs.push(x); As.push(T.makeAdam(x.length)); }
   lab = { p, target, mask, xs, As, step: 0, hist: xs.map(() => ({ s: [], L: [], c: [] })) };
-  labRunning = false; $("#labRun").textContent = "Run inversion"; $("#labProbe").disabled = true; $("#sensTxt").textContent = "After a run, probe how strongly the encoder responds along the disagreement between two starts, against 200 random directions.";
+  labRunning = false; $("#labRun").textContent = "Run inversion"; $("#sensTxt").textContent = "Fills in by itself when a run finishes: how strongly the encoder reacts along the direction where two starts disagree, against 200 random directions.";
   drawLab(); clearSens();
 }
 function labTick() {
@@ -241,7 +241,7 @@ function labTick() {
     lab.step++;
   }
   drawLab();
-  if (lab.step >= STEPS) { labRunning = false; $("#labRun").textContent = "Run again"; $("#labProbe").disabled = lab.xs.length < 2; return; }
+  if (lab.step >= STEPS) { labRunning = false; $("#labRun").textContent = "Run again"; if (lab.xs.length > 1) setTimeout(probeSens, 60); else $("#sensTxt").textContent = "Needs at least two starts: raise Starts and run again."; return; }
   requestAnimationFrame(labTick);
 }
 $("#labRun").onclick = () => { if (labRunning) { labRunning = false; $("#labRun").textContent = "Resume"; return; } if (!lab || lab.step >= STEPS) resetLab(); labRunning = true; $("#labRun").textContent = "Pause"; requestAnimationFrame(labTick); };
@@ -271,7 +271,7 @@ function heat(cv, x) { const { T: TT, D: DD } = E; const g = cv.getContext("2d")
     const bg = isDark() ? 0.12 : 0.96; for (let k = 0; k < 3; k++) im.data[i * 4 + k] = 255 * (bg * (1 - a) + c[k] * a); im.data[i * 4 + 3] = 255; }
   g.putImageData(im, 0, 0); cv.style.aspectRatio = `${DD} / ${TT}`; }
 function clearSens() { chart($("#chSens"), { series: [], xmin: 0, xmax: 1, ymin: 0, ymax: 1 }); }
-$("#labProbe").onclick = () => {
+function probeSens() {
   const x0 = lab.xs[0], x1 = lab.xs[1], n = x0.length, y0 = T.forward(E, x0).y, r = T.mulberry(77);
   const unit = v => { const s = Math.hypot(...v); return v.map(a => a / s); };
   const sens = v => { const eps = 1e-3; const xp = x0.map((a, i) => a + eps * v[i]); const y = T.forward(E, xp).y; let s = 0; for (let i = 0; i < y.length; i++) s += (y[i] - y0[i]) ** 2; return Math.sqrt(s) / eps; };
@@ -283,8 +283,8 @@ $("#labProbe").onclick = () => {
   const cv = $("#chSens"); const ax = chart(cv, { xmin: lo, xmax: hi, ymin: 0, series: [{ x: xs, y: bins, bars: true, color: css("--muted") }], xlabel: "sensitivity ‖Δf‖/ε", xfmt: v => v.toFixed(2) });
   const g = cv.getContext("2d"); const mark = (v, c, t, dy) => { g.strokeStyle = c; g.fillStyle = c; g.lineWidth = 2.5; g.beginPath(); g.moveTo(ax.X(v), 10); g.lineTo(ax.X(v), cv.clientHeight - 30); g.stroke(); g.font = `600 11px ${css("--body")}`; g.textAlign = v > (lo + hi) / 2 ? "right" : "left"; g.fillText(t, ax.X(v) + (v > (lo + hi) / 2 ? -5 : 5), 20 + dy); };
   mark(sd, startColors()[1], "start 1 − start 2", 0); mark(se, css("--hot"), "error x̂ − x", 14);
-  $("#sensTxt").innerHTML = `Along the disagreement the encoder responds <b>${(med / sd).toFixed(1)}×</b> less than the random median; along the actual error, <b>${(med / se).toFixed(1)}×</b> less. On TRIBE v2 we measured 1.9×.`;
-};
+  $("#sensTxt").innerHTML = `Along the disagreement the encoder responds <b>${(med / sd).toFixed(1)}×</b> less than the random median; along the actual error, <b>${(med / se).toFixed(1)}×</b> less. ` + (med / sd > 1.2 ? "The starts differ in directions the encoder barely notices, so the data cannot tell them apart. " : "") + "This toy encoder is built badly conditioned on purpose, so the effect is exaggerated; on TRIBE v2 it is 2.15×.";
+}
 syncOut(); resetLab();
 
 // ---------------------------------------------------------------- real-run replay
@@ -410,7 +410,6 @@ function drawRanks(animate) {
   $("#idKpis").innerHTML = `<div class="kpi"><b>${Math.round(r.top1 * 5)} / 5</b><span>true segment ranked first</span></div><div class="kpi"><b>${(r.chance_top1 * 100).toFixed(1)}%</b><span>chance (1 in ${N})</span></div><div class="kpi"><b>${r.cos_to_true_x.toFixed(3)}</b><span>cosine of x̂ to the true x</span></div><div class="kpi"><b>${(r.rank_percentile * 100).toFixed(1)}%</b><span>mean rank percentile</span></div>`;
 }
 $$("#idSeg button").forEach(b => b.onclick = () => { idKey = b.dataset.k; $$("#idSeg button").forEach(x => x.setAttribute("aria-pressed", x === b)); drawRanks(true); });
-$("#idPlay").onclick = () => drawRanks(true);
 drawRanks(false);
 new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); if (!window.__prewarmed.has("fmri")) { window.__prewarmed.add("fmri"); drawReal(); } drawRanks(true); } }, { threshold: 0.2 }).observe($("#fmri")); WARM.push(["fmri", drawReal]);
 
