@@ -244,7 +244,7 @@ mx, my = L, 22.4
 fill(box["Design Methodology and Novelty"], "Design Methodology and Novelty", [
     [("1  Forward operator. ", True), ("TRIBE v2 (trained on 451.6 h of fMRI from 25 people watching films and video clips and listening to stories), frozen.", False)],
     [("2  Inversion. ", True), ("x̂ = argmin ‖f(x) − y‖², Adam (lr 0.05, cosine schedule), weights frozen.", False)],
-    [("3  Exact evaluation. ", True), ("Known synthetic x → y = f(x) → recover x; budget, noise, extent, priors, 8 initialisations × 4 truths.", False)],
+    [("3  Exact evaluation. ", True), ("Known x in TRIBE v2's input space (8-D, unit scale; real stimuli: 4.9-D) → y = f(x) → recover x; budget, noise, extent, priors, 8 inits × 4 truths; re-checked with a real stimulus as truth.", False)],
     [("4  Mechanism tests. ", True), ("Agreement of fit-matched solutions; forward-only straight-path barrier test; Jacobian sensitivity vs 200 random directions.", False)],
     [("5  Regions. ", True), ("6 Destrieux networks vs size-matched random vertex sets, with a second random seed as the control spread.", False)],
     [("6  Real fMRI. ", True), ("LeBel 2023 subject UTS03 projected to fsaverage5; lag and vertices chosen on five training stories; held-out story inverted and ranked among 45 segments.", False)],

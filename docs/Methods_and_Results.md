@@ -407,3 +407,21 @@ The oracle separates the two limits: without noise, inversion still recovers onl
 **Remaining.** The text + audio run with LLaMA-3.2-3B on GPU (`colab/Project1_RealData_Final.ipynb`), with 2 000 inversion steps and the oracle ceiling.
 
 All numbers: `results.json` (Colab stages) and `results/roi_*.json` (regional, CPU). Figures regenerate from these files with `make_figures.py`, `make_brain_figs.py`, `make_topo_grid.py`, `make_roi_figs.py`.
+
+
+## Validity of the synthetic ground truth
+
+**Construction.** x ∈ ℝ^(32 × 1152), TRIBE v2's own input space (text | audio | video slots): eight random unit directions b₁…b₈, each with its own cosine time course, x(t) = Σₖ cos(2π fₖ t) bₖ, fₖ = 2, 4, …, 16 cycles per 16-s window, scaled to unit s.d.; seeds 0–3; white noise as an off-manifold control. y = f(x) through the frozen model, so the recovery error is exact by construction.
+
+**Is it representative?** (`scripts/real_x_groundtruth.py`, `results/real_x_groundtruth.json`, figure `figures/fig_groundtruth.png`)
+
+| Property | Real LeBel representations (audio slot, 246 windows) | Synthetic | White noise |
+|---|---:|---:|---:|
+| Effective dimensionality (participation ratio) | 4.9 ± 2.1 | 7.8 | 30.2 |
+| Variance in top 8 directions | 0.84 ± 0.06 | 1.00 | 0.31 |
+| Lag-1 autocorrelation | 0.15 ± 0.12 | −0.16 (sweep 0.25–16 cycles: −0.16 to 0.97) | −0.04 |
+| Standard deviation | 1.10 | 1.00 | 1.00 |
+
+Recovery does not depend on the structure (white 0.947 vs smooth 0.942) or the speed of change (0.836–0.858 over a 64× range), and replicates over four seeds.
+
+**Real stimulus as ground truth** (held-out story wheretheressmoke, 16–32 s; 3 blind starts + near-truth control; 3 000 steps, CPU; figure `figures/fig_realx_inversion.png`): recovery 0.43–0.60 (audio slot); agreement between blind starts 0.19–0.56; straight-path barriers 11–21×; near-truth minimum 2.9× lower error, 54× barrier away. The sensitivity probe was inconclusive at this budget (blind fits not converged, 2.2-fold spread in error). Same picture as the synthetic truth, more strongly: the synthetic truth is the conservative case.

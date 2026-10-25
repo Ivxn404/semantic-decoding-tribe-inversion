@@ -12,3 +12,4 @@
 | `synth_*.json` | `synthetic_characterisation.py` | Written when you run the synthetic experiments; the original Colab numbers are tabulated in `docs/Methods_and_Results.md`. |
 | `demo_brain_run.json`, `demo_brain_maps.npz` | `demo_brain_run.py` | Real multi-start TRIBE v2 inversion replayed in the interactive demo (scene 6). |
 | `verification/` | `notebooks/Verification_Tests.ipynb` (Colab T4, 19 Oct 2026) | Corrected barrier test (straight-path profiles between fit-matched blind solutions) and sensitivity probe; plotted by `scripts/make_verification_fig.py`. |
+| `real_x_groundtruth.json` | `real_x_groundtruth.py` | Statistics of real vs synthetic ground truth and the inversion with a real stimulus representation as ground truth. |

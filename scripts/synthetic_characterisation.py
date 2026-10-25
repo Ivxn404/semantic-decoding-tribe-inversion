@@ -12,7 +12,7 @@ so recovery error is exact. One sub-command per experiment; each writes results/
 
 GPU strongly recommended (the original runs used a Colab T4). `--quick` shrinks every budget for a smoke test.
 Protocol (as in the paper): T = 32 time steps, H = 1 152; ground truth = smooth trajectory in a random
-8-D subspace (two cosine cycles) unless stated; Adam lr 5e-2 with cosine annealing; init 0.01*N(0, I), seed 999.
+8-D subspace (eight random directions, each with a cosine time course of 2, 4, ..., 16 cycles per 32-step window) unless stated; Adam lr 5e-2 with cosine annealing; init 0.01*N(0, I), seed 999.
 """
 import argparse, json, math, os, sys, time
 import numpy as np, torch

@@ -4,7 +4,7 @@ Final Project-I report in the revised VIT report format (2026).
 
 | File | What it is |
 |---|---|
-| `Report_Sarkar_Choudhuri_Project1.pdf` | Final report (43 pages) |
+| `Report_Sarkar_Choudhuri_Project1.pdf` | Final report (46 pages) |
 | `Report_Sarkar_Choudhuri_Project1.docx` | Editable Word version |
 | `content.py` | Chapter text, tables and figure list |
 | `refs.py` | IEEE references (numbered in order of first citation) |

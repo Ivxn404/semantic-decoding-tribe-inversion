@@ -16,7 +16,7 @@ STEPS = int(_os.environ.get("STEPS", "3000")); H = 1152
 def stats(x):
     xc = x - x.mean(0); ev = np.linalg.svd(xc, compute_uv=False) ** 2
     lag = [np.corrcoef(xc[:-1, j], xc[1:, j])[0, 1] for j in range(x.shape[1]) if xc[:-1, j].std() > 1e-6 and xc[1:, j].std() > 1e-6]
-    return {"participation_ratio": float(ev.sum() ** 2 / (ev ** 2).sum()), "var_top8": float(ev[:8].sum() / ev.sum()), "lag1": float(np.mean(lag))}
+    return {"participation_ratio": float(ev.sum() ** 2 / (ev ** 2).sum()), "var_top8": float(ev[:8].sum() / ev.sum()), "lag1": float(np.mean(lag)) if lag else float("nan")}
 
 
 files = sorted(glob.glob(FEATS + "/*.npz")); X = np.concatenate([np.load(f)["x"] for f in files])
@@ -25,7 +25,7 @@ wins = [s[k:k + 32] for s in X for k in range(0, 169, 32)]
 real_stats = [stats(w[:, slot]) for w in wins]
 synth_stats = [stats(make_truth(seed=g)[0].cpu().numpy()) for g in range(4)]
 out = {"real_windows": len(wins),
-       "real": {k: [float(np.mean([r[k] for r in real_stats])), float(np.std([r[k] for r in real_stats]))] for k in real_stats[0]},
+       "real": {k: [float(np.nanmean([r[k] for r in real_stats])), float(np.nanstd([r[k] for r in real_stats]))] for k in real_stats[0]},
        "synthetic_default": {k: float(np.mean([r[k] for r in synth_stats])) for k in synth_stats[0]},
        "synthetic_white": {k: float(np.mean([stats(make_truth(seed=g, kind="white")[0].cpu().numpy())[k] for g in range(4)])) for k in synth_stats[0]},
        "synthetic_by_cycles": {str(c): stats(make_truth(cycles=c, seed=0)[0].cpu().numpy()) for c in [0.25, 0.5, 1, 2, 4, 8, 16]}}

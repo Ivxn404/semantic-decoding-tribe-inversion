@@ -12,3 +12,5 @@
 Stories: wheretheressmoke (held out; mean of 10 repeats), adollshouse, avatar, legacy, souls, undertheinfluence. 66.6 min of speech, 10 363 words.
 
 Source: A. LeBel *et al.*, "A natural language fMRI dataset for voxelwise encoding models," *Sci. Data* 10, 555 (2023). OpenNeuro [ds003020](https://openneuro.org/datasets/ds003020).
+
+`real_x/`: TRIBE v2's aggregated representations (x, 45 segments × 200 steps × 1 152, audio slot from w2v-BERT) of the six LeBel stories, used to check the synthetic ground truth (`scripts/real_x_groundtruth.py`).

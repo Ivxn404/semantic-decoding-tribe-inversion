@@ -212,12 +212,36 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
   table(s, ["Setting", "Value"], [
     ["Optimiser", "Adam [17], lr 5 × 10⁻², cosine annealing over the budget; θ frozen, gradients by autograd"],
     ["Initialisation", "0.01·N(0, I), seed 999 (default); eight distributions for the uniqueness study"],
-    ["Ground truth", "smooth trajectory in a random 8-D subspace of ℝ^1152, two cosine cycles, T = 32; white noise as off-manifold control"],
+    ["Ground truth", "8 random directions in ℝ^1152, each with its own cosine time course (2–16 cycles per 16 s), T = 32, unit s.d.; seeds 0–3; white noise as off-manifold control"],
     ["Target", "y = f(x), so recovery error is exact; real data: 1 − Pearson r over time (scale-free)"],
     ["Metrics", "mean per-step cosine to x, relative error, encoding error, retrieval rank among time steps"],
     ["Priors tested", "ℓ₂ and temporal smoothness, λ swept; none by default"],
   ], { x: 0.5, y: 2.6, w: 12.3, colW: [2.6, 9.7], fontSize: 13.5, rowH: 0.6 });
   s.addNotes("s(v) is a finite-difference probe of the Jacobian along a unit direction v, used for the sensitivity analysis.");
+
+  s = S("Method and validation");
+  s.addText("The synthetic ground truth: how it is built and why it is valid", { placeholder: "title" });
+  figure(s, "fig_groundtruth.png", 0.4, 1.25, 12.5, 3.6);
+  card(s, 0.5, 4.95, 6.05, 1.9, HEX.tint);
+  txt(s, [{ text: "Construction. ", options: { bold: true, color: HEX.navy } },
+    { text: "x lives in TRIBE v2's own input space (32 steps × 1 152, text | audio | video): 8 random directions, each with its own cosine time course (2–16 cycles per 16 s), scaled to unit s.d.; four seeds. y = f(x) through the frozen model, so the recovery error is exact by construction (re-entry r = 1.0000)." }],
+    { x: 0.7, y: 5.0, w: 5.7, h: 1.8, fontSize: 12.5, valign: "middle" });
+  card(s, 6.75, 4.95, 6.05, 1.9, HEX.paleAqua);
+  txt(s, [{ text: "Representative of real stimuli. ", options: { bold: true, color: HEX.navy } },
+    { text: "Real LeBel representations: 4.9 ± 2.1 effective dimensions, 84% of variance in 8 directions, s.d. 1.10 (synthetic 7.8, 100%, 1.00). White noise recovers the same (0.947 vs 0.942); a 64× change in speed, spanning real smoothness, changes nothing (0.836–0.858)." }],
+    { x: 6.95, y: 5.0, w: 5.7, h: 1.8, fontSize: 12.5, valign: "middle" });
+  s.addNotes("Asked at a review: how was the synthetic ground truth framed and why is it correct? Answer in three steps. (1) It is the standard known-answer test for an inverse problem: we choose x, compute y = f(x) with the real frozen model, recover x from y alone, and measure the error exactly; nothing about the brain is assumed. (2) It is built in the exact space we invert, with random orientation, unit scale and four seeds. (3) It is representative: real stimulus representations are low-dimensional (4.9 effective dimensions vs our 8), the result does not depend on the structure (white noise gives the same recovery) or on the speed of change (64x sweep), and it replicates across four seeds. The next slide repeats the tests with a real stimulus as ground truth.");
+
+  s = S("Method and validation");
+  s.addText("Check: a real stimulus representation as ground truth", { placeholder: "title" });
+  figure(s, "fig_realx_inversion.png", 0.4, 1.25, 12.5, 3.9);
+  table(s, ["Property", "Synthetic ground truth", "Real ground truth (wheretheressmoke, 16 s)"], [
+    ["Recovery from blind starts", "≈ 0.56 at 3 000 steps (0.94 at 32 000)", "0.43–0.60 at 3 000 steps (audio slot)"],
+    ["Agreement between blind starts", "0.89–1.00", "0.19–0.56"],
+    ["Barrier between blind solutions", "median 4.8× (2.4–8.2×)", "11–21×"],
+    ["Deeper minimum near the truth", "4.2× lower error, 8.1× barrier", "2.9× lower error, 54× barrier"],
+  ], { x: 0.5, y: 5.25, w: 12.3, colW: [3.4, 4.2, 4.7], fontSize: 12.5, rowH: 0.36 });
+  s.addNotes("scripts/real_x_groundtruth.py, results/real_x_groundtruth.json: a real 16-s window of the held-out story's TRIBE v2 representation (audio slot from w2v-BERT) is the ground truth; three blind starts and one near-truth control, 3 000 Adam steps on CPU. Same qualitative picture, stronger: partial start-dependent recovery, disagreement, barriers, a deeper minimum. So the synthetic truth is the conservative case. The sensitivity probe was inconclusive at this budget because the blind fits had not converged (errors 5.1-11.1e-6, a 2.2-fold spread), so we report sensitivity only for the converged synthetic runs.");
 
   s = S("Method and validation");
   s.addText("What TRIBE v2 learned from: its fMRI training data", { placeholder: "title" });
@@ -896,6 +920,12 @@ const INTERP = JSON.parse(fs.readFileSync(`${__dirname}/roi_interpretation.json`
     ["What did the re-run do?", "Eight starts for 14 000 steps on a T4, four ground truths; only the five blind starts within 2× were compared; the error was measured at 21 points on each straight line. Every distinct pair rises (29 of 40: 2.4–8.2×, median 4.8×); near-identical pairs share one minimum."],
     ["Does it change the conclusion?", "No, it strengthens it: equal fits are separate minima, and near-truth starts reveal a deeper minimum 8.1 ± 3.2× barrier away. The selection rule is fixed in the code and the results are in the repository."],
   ], "Say it plainly: we found and fixed our own error before submission, and the corrected test is cleaner.");
+
+  qa("Q: Is the synthetic ground truth valid?", [
+    ["How was it built?", "In TRIBE v2's own input space (32 × 1 152): 8 random directions with their own cosine time courses, unit s.d., four seeds; white noise as a control. We push it through the frozen model, y = f(x), and recover x from y alone."],
+    ["Why is it 'correct'?", "By construction: we chose x, so the recovery error is exact. It is the standard known-answer test for inverse problems and assumes nothing about the brain; the forward model is the real released one (r = 1.0000)."],
+    ["Is it realistic?", "Real story representations have 4.9 effective dimensions (84% of variance in 8), s.d. 1.10; results do not change with white noise or a 64× change in speed; and a real 16-s representation as ground truth gives the same picture, more strongly (disagreement 0.19–0.56, barriers 11–21×)."],
+  ], "Point to the two ground-truth slides in the Method section if the panel wants the figures.");
 
   pres.addSection({ title: "References" });
   s = S("References");
