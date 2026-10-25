@@ -205,7 +205,7 @@ fill(box["Justification of Complex Engineering Problem"], "Justification of Comp
     [("Engineering obstacle. ", True), ("The released pipeline is not differentiable (speech synthesis, transcription, frozen extractors); the one differentiable boundary was located and re-entered.", False)],
     [("Conflicting requirements. ", True), ("Decoding fidelity vs non-invasive, low-cost acquisition vs mental privacy cannot all be maximised.", False)],
     [("Interdisciplinary. ", True), ("Inverse-problem theory, deep learning, neuroimaging (surface registration, atlases) and neuroanatomy must work together.", False)],
-    [("Scale on free hardware. ", True), ("20,484 × 100 outputs per pass, tens of thousands of passes per experiment, one 15 GB GPU.", False)],
+    [("Scale on modest hardware. ", True), ("20,484 × 100 outputs per pass, tens of thousands of passes per experiment, one 15 GB GPU.", False)],
 ], size=27, bullets=True, space=9)
 
 # ---------------------------------------------------------------- block diagram (native shapes)
@@ -296,7 +296,7 @@ fill(box["WP mapping with justification"], "WP mapping", [
 ], size=25, space=12)
 fill(box["SDG mapping with justification"], "SDG mapping", [
     [("SDG 3 (Target 3.4): ", True), ("well-being for people with ALS, stroke or locked-in syndrome who keep comprehension but lose speech: the project measures the limits of non-invasive decoding.", False)],
-    [("SDG 9 (Target 9.5): ", True), ("open, reproducible research capability in neural-interface engineering on free compute.", False)],
+    [("SDG 9 (Target 9.5): ", True), ("open, reproducible research capability in neural-interface engineering on low-cost cloud compute.", False)],
     [("SDG 10 (Target 10.2): ", True), ("communication access is a precondition for inclusion of people with severe motor disability.", False)],
     [("Scope: ", True), ("enabling research, not a deployed device; the contribution is evidence on the achievable limits of non-invasive decoding.", False)],
     [("Responsible use: ", True), ("the inverse identifies which known moment was heard but does not reconstruct thought, evidence for mental-privacy policy (OECD 2019, UNESCO 2025). No new human data collected.", False)],
@@ -307,8 +307,8 @@ fill(box["References"], "References", [
     "[1] S. d'Ascoli et al., TRIBE v2, arXiv:2605.04326, 2026.  [2] J. L. Gardner, T. Liu, eNeuro 6(2), 2019.  [3] J. Tang et al., Nat. Neurosci. 26, 858–866, 2023.  [4] A. LeBel et al., Sci. Data 10, 555, 2023.  [5] K. N. Kay et al., Nature 452, 352–355, 2008.  [6] P. C. Hansen, Discrete Inverse Problems, SIAM, 2010.  [7] J. Lévy et al., arXiv:2502.17480, 2025.  [8] C. Destrieux et al., NeuroImage 53, 1–15, 2010.  [9] T. Naselaris et al., NeuroImage 56, 400–410, 2011.  [10] A. G. Huth et al., Nature 532, 453–458, 2016.  [11] R. Antonello et al., NeurIPS 36, 2023.  [12] A. T. Gifford et al., arXiv:2501.00504, 2025.  [13] B. Lahner et al., Nat. Commun. 15, 6241, 2024.  [14] Q. K. Telesford et al., Sci. Data 10, 554, 2023.  [15] C. M. Michel et al., Clin. Neurophysiol. 115, 2195–2222, 2004.",
 ], size=18.5, head_size=28, space=0)
 fill(box["Project outcome"], "Project outcome", [
-    [("Manuscript: ", True), ("IEEE-format paper, A. Sarkar*, T. Choudhuri*, S. Nageswaran; ready for submission.  ", False), ("Report: ", True), ("final Project-I report in the 2026 VIT format.", False)],
-    [("Open release: ", True), ("GitHub repository (QR code above): code, logged results, interactive demo, four Colab notebooks.  ", False), ("Tools and cost: ", True), ("Python, PyTorch, nilearn, Colab (free T4), GitHub, Google Drive, MS Word and PowerPoint (VIT licence), LibreOffice: ₹0; printing only.", False)],
+    [("Manuscript: ", True), ("IEEE-format paper, A. Sarkar*, T. Choudhuri*, S. Nageswaran; ready for submission.", False)],
+    [("Open release: ", True), ("GitHub repository (QR code above): code, logged results, interactive demo, four Colab notebooks.  ", False), ("Tools and cost: ", True), ("Colab Pro ₹950/mo (US$9.99), Google One 200 GB ₹210/mo, Microsoft 365 ₹689/mo, GitHub Pro ₹380/mo (US$4): ₹2,229/mo, ₹6,687 for Aug–Oct 2026 + printing; Python, PyTorch, nilearn, LibreOffice: no licence fee.", False)],
     [("Finding: ", True), ("encoding accuracy does not certify decoding; recoverability must be measured, region by region.", False)],
 ], size=20, head_size=28, space=5)
 
