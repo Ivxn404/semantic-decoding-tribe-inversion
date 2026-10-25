@@ -8,6 +8,7 @@ const sci = v => { const e = Math.floor(Math.log10(Math.abs(v))); const m = v / 
 const sup = e => String(e).split("").map(c => "⁰¹²³⁴⁵⁶⁷⁸⁹"["0123456789".indexOf(c)] || (c === "-" ? "⁻" : c)).join("");
 const startColors = () => [1, 2, 3, 4, 5, 6].map(i => css(`--s${i}`));
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const WARM = []; window.__prewarmed = new Set();
 
 // ---------------------------------------------------------------- nav, keys, notes
 const scenes = $$(".scene");
@@ -15,7 +16,11 @@ const nav = $("#nav");
 scenes.forEach((s, i) => { const a = document.createElement("a"); a.href = "#" + s.id; a.textContent = `${i + 1} ${s.dataset.name}`; nav.append(a); });
 const links = $$("#nav a");
 let current = 0;
-const spy = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { current = scenes.indexOf(e.target); links.forEach((l, i) => l.classList.toggle("on", i === current)); links[current].scrollIntoView({ block: "nearest", inline: "nearest" }); } }); }, { rootMargin: "-45% 0px -50% 0px" });
+// keep the active tab visible by scrolling the tab strip only (scrollIntoView would also nudge the page mid-scroll)
+const showTab = l => { const nl = nav.scrollLeft, a = l.offsetLeft - nav.offsetLeft, w = nav.clientWidth;
+  if (a < nl) nav.scrollTo({ left: a - 8 }); else if (a + l.offsetWidth > nl + w) nav.scrollTo({ left: a + l.offsetWidth - w + 8 }); };
+const spy = new IntersectionObserver(es => { es.forEach(e => { if (!e.isIntersecting) return; const i = scenes.indexOf(e.target); if (i === current && links[i].classList.contains("on")) return;
+  current = i; links.forEach((l, k) => l.classList.toggle("on", k === i)); showTab(links[i]); }); }, { rootMargin: "-45% 0px -50% 0px" });
 scenes.forEach(s => spy.observe(s));
 const go = i => { i = Math.max(0, Math.min(scenes.length - 1, i)); scenes[i].scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); };
 const notesBtn = $("#notesBtn");
@@ -67,7 +72,7 @@ function niceTicks(a, b, n) { const span = b - a, step0 = span / n, mag = Math.p
 const brains = {};
 const visible = new Set();
 const vis = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? visible.add(e.target.id) : visible.delete(e.target.id)));
-function mkBrain(id) { const cv = document.getElementById(id); const b = Brain.create(cv); if (b) { brains[id] = b; vis.observe(cv); } return b; }
+function mkBrain(id, opts) { const cv = document.getElementById(id); const b = Brain.create(cv, opts); if (b) { brains[id] = b; vis.observe(cv); } return b; }
 let shareSm = null;
 const shareColors = () => { const m = Brain.mesh(), c = Brain.base(isDark());
   if (!shareSm) shareSm = [m.share.text, m.share.audio, m.share.video].map(a => Brain.smooth(Float32Array.from(a), 3));
@@ -80,11 +85,12 @@ const shareColors = () => { const m = Brain.mesh(), c = Brain.base(isDark());
 function pct(a, p) { const s = Float32Array.from(a).sort(); return s[Math.floor(s.length * p / 100)]; }
 
 // hero
-const hero = mkBrain("heroBrain");
+const hero = mkBrain("heroBrain", { direct: true });
 function paintHero() { if (hero) hero.setPanels([{ colors: shareColors(), x: 0, y: 0, w: 1, h: 1, layout: "orbit" }]); }
 paintHero();
 let lastT = 0;
-function heroLoop(t) { if (hero && visible.has("heroBrain") && !reduced && !document.hidden) { hero.rot.yaw += (t - lastT) * 0.00025; hero.draw(); } lastT = t; requestAnimationFrame(heroLoop); }
+let scrolling = 0; addEventListener("scroll", () => { scrolling = performance.now(); }, { passive: true });
+function heroLoop(t) { if (hero && visible.has("heroBrain") && !reduced && !document.hidden && t - scrolling > 600) { hero.rot.yaw += (t - lastT) * 0.00025; hero.draw(); } lastT = t; requestAnimationFrame(heroLoop); }
 requestAnimationFrame(heroLoop);
 if (hero) { let drag = null; const cv = $("#heroBrain");
   cv.addEventListener("pointerdown", e => { drag = [e.clientX, e.clientY]; cv.setPointerCapture(e.pointerId); });
@@ -163,7 +169,7 @@ const REASONS = [
 ];
 $("#eegReasons").innerHTML = REASONS.map((r, i) => `<div class="card stack" style="gap:6px"><span class="eyebrow" style="color:${i === 5 ? "var(--warn)" : "var(--accent)"}">${i === 5 ? "Trade-off" : "Reason " + (i + 1)}</span><h3>${r[0]}</h3><p style="font-size:.92rem">${r[1]}</p></div>`).join("");
 // paint lazily when first seen (smoothing takes a moment)
-new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); setTimeout(paintEEG, 30); } }, { rootMargin: "300px" }).observe($("#eegBrain"));
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); if (!window.__prewarmed.has("eegBrain")) { window.__prewarmed.add("eegBrain"); setTimeout(paintEEG, 30); } } }, { rootMargin: "300px" }).observe($("#eegBrain")); WARM.push(["eegBrain", paintEEG]);
 
 // ---------------------------------------------------------------- pipeline svg
 (function pipe() {
@@ -208,7 +214,7 @@ function drawGT() {
     ["Deeper minimum near the truth", "4.2× lower error, 8.1× barrier", `${(bb / P.truth_perturbed.mse).toFixed(1)}× lower error, ${I.blind_to_truth.peak.toFixed(0)}× barrier`]];
   $("#gtTable").innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td class="num">${r[2]}</td></tr>`).join("");
 }
-new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); drawGT(); } }, { rootMargin: "300px" }).observe($("#truth"));
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); if (!window.__prewarmed.has("truth")) { window.__prewarmed.add("truth"); drawGT(); } } }, { rootMargin: "300px" }).observe($("#truth")); WARM.push(["truth", drawGT]);
 // ---------------------------------------------------------------- live lab (toy encoder in the browser)
 const T = Toy; const STEPS = 2400;
 let E = T.makeEncoder({ seed: 1 }), xt = T.makeTruth(E, 5), yClean = T.forward(E, xt).y, lab = null, labRunning = false, labSeed = 5;
@@ -314,7 +320,7 @@ if (rp) {
   $("#rpPlay").onclick = () => { if (rpTimer) { clearInterval(rpTimer); rpTimer = null; $("#rpPlay").textContent = "Play"; return; }
     if (rpI >= rp.steps.length - 1) rpI = 0; $("#rpPlay").textContent = "Pause";
     rpTimer = setInterval(() => { rpI++; $("#rpStep").value = rpI; paintReplay(); if (rpI >= rp.steps.length - 1) { clearInterval(rpTimer); rpTimer = null; $("#rpPlay").textContent = "Replay"; } }, 450); };
-  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); paintReplay(); } }, { rootMargin: "300px" }).observe($("#replayBrain"));
+  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); if (!window.__prewarmed.has("replayBrain")) { window.__prewarmed.add("replayBrain"); paintReplay(); } } }, { rootMargin: "300px" }).observe($("#replayBrain")); WARM.push(["replayBrain", paintReplay]);
   rpKpis();
 } else { $("#replay").hidden = true; }
 
@@ -383,7 +389,7 @@ function scatter() {
   NETS.forEach((n, i) => { const on = i === netSel; s += `<g style="cursor:pointer" data-i="${i}"><circle cx="${X(n.sens)}" cy="${Y(n.diff)}" r="${on ? 11 : 8}" fill="${hex(n.rgb)}" stroke="var(--ink)" stroke-width="${on ? 2 : 0}"/><text x="${X(n.sens) + 14}" y="${Y(n.diff) + 4}" style="font-size:12px;font-weight:${on ? 700 : 400}">${n.n}</text></g>`; });
   svg.innerHTML = s; svg.querySelectorAll("g[data-i]").forEach(g => g.onclick = () => { netSel = +g.dataset.i; paintROI(); });
 }
-new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); paintROI(); } }, { rootMargin: "300px" }).observe($("#roiBrain"));
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); if (!window.__prewarmed.has("roiBrain")) { window.__prewarmed.add("roiBrain"); paintROI(); } } }, { rootMargin: "300px" }).observe($("#roiBrain")); WARM.push(["roiBrain", paintROI]);
 paintROI();
 
 // ---------------------------------------------------------------- real fMRI
@@ -406,7 +412,7 @@ function drawRanks(animate) {
 $$("#idSeg button").forEach(b => b.onclick = () => { idKey = b.dataset.k; $$("#idSeg button").forEach(x => x.setAttribute("aria-pressed", x === b)); drawRanks(true); });
 $("#idPlay").onclick = () => drawRanks(true);
 drawRanks(false);
-new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); drawReal(); drawRanks(true); } }, { threshold: 0.2 }).observe($("#fmri"));
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); if (!window.__prewarmed.has("fmri")) { window.__prewarmed.add("fmri"); drawReal(); } drawRanks(true); } }, { threshold: 0.2 }).observe($("#fmri")); WARM.push(["fmri", drawReal]);
 
 // ---------------------------------------------------------------- close
 $("#qr").src = "data:image/png;base64," + D.qr;
@@ -416,4 +422,10 @@ function repaintAll() { drawGT(); paintHero(); if (eegCache[eegN]) paintEEG(); p
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", repaintAll);
 new MutationObserver(repaintAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { drawGT(); drawLab(); drawF(); drawReal(); if (rp) paintReplay(); }, 150); });
+// ---------------------------------------------------------------- prepare every scene before it is scrolled to
+(() => { const done = window.__prewarmed; let k = 0;
+  const next = ms => setTimeout(run, ms);
+  const run = () => { if (performance.now() - scrolling < 400) return next(250); // never during a scroll
+    const j = WARM[k++]; if (!j) return; if (!done.has(j[0])) { try { j[1](); done.add(j[0]); } catch (e) { console.error("prewarm", j[0], e.message); } } next(120); };
+  if (document.readyState === "complete") next(300); else addEventListener("load", () => next(300)); })();
 })();

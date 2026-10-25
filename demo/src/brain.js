@@ -61,9 +61,25 @@ const Brain = (() => {
       vec3 L=normalize(vec3(-0.35,0.45,0.82)); float d=abs(dot(normalize(n),L)); lit=0.42+0.62*d; vc=c; }`;
   const FS = `precision mediump float; varying vec3 vc; varying float lit; void main(){ gl_FragColor=vec4(vc*lit,1.0); }`;
 
-  function create(canvas) {
-    const gl = canvas.getContext("webgl", { antialias: true, premultipliedAlpha: false, alpha: true, preserveDrawingBuffer: true });
-    if (!gl) { canvas.replaceWith(Object.assign(document.createElement("p"), { className: "fallback", textContent: "This browser has WebGL turned off, so the 3-D cortex cannot be drawn here." })); return null; }
+  function create(canvas, opts = {}) {
+    // render off-page, then copy into a plain 2-D canvas: the page scrolls a static picture, not a live GL surface
+    // animated brains (opts.direct) draw straight to their canvas; still ones render off-page and copy
+    const direct = !!opts.direct, glc = direct ? canvas : document.createElement("canvas");
+    const gl = glc.getContext("webgl", { antialias: true, premultipliedAlpha: true, alpha: true, preserveDrawingBuffer: direct, powerPreference: "high-performance" });
+    const out = gl && !direct ? canvas.getContext("2d") : null;
+    if (!gl || (!direct && !out)) { canvas.replaceWith(Object.assign(document.createElement("p"), { className: "fallback", textContent: "This browser has WebGL turned off, so the 3-D cortex cannot be drawn here." })); return null; }
+    // a still snapshot replaces the live canvas once drawing settles, so scrolling moves a plain image
+    const wrap = document.createElement("span"); wrap.style.cssText = "display:block;position:relative;min-width:0";
+    canvas.before(wrap); wrap.append(canvas);
+    const snap = new Image(); snap.alt = ""; snap.setAttribute("aria-hidden", "true"); snap.draggable = false;
+    snap.style.cssText = "position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;display:none";
+    wrap.append(snap);
+    let snapTimer = null, snapUrl = null, gen = 0;
+    const live = () => { if (snap.style.display !== "none") { canvas.style.opacity = ""; snap.style.display = "none"; } };
+    const scheduleSnap = () => { clearTimeout(snapTimer); const g = ++gen;
+      snapTimer = setTimeout(() => canvas.toBlob(bl => { if (!bl || g !== gen) return; const u = URL.createObjectURL(bl);
+        snap.onload = () => { if (g !== gen) return; snap.style.display = "block"; canvas.style.opacity = "0"; if (snapUrl) URL.revokeObjectURL(snapUrl); snapUrl = u; };
+        snap.src = u; }), 300); };
     const m = mesh();
     const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; };
     const prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog); gl.useProgram(prog);
@@ -87,8 +103,10 @@ const Brain = (() => {
       draw() {
         const dpr = Math.min(2, window.devicePixelRatio || 1), W = canvas.clientWidth, H = canvas.clientHeight;
         if (!W || !H) return;
-        if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) { canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); }
-        gl.viewport(0, 0, canvas.width, canvas.height); gl.clearColor(0, 0, 0, 0); gl.enable(gl.DEPTH_TEST); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        const PW = Math.round(W * dpr), PH = Math.round(H * dpr);
+        if (!direct && (canvas.width !== PW || canvas.height !== PH)) { canvas.width = PW; canvas.height = PH; }
+        if (glc.width !== PW || glc.height !== PH) { glc.width = PW; glc.height = PH; }
+        gl.viewport(0, 0, PW, PH); gl.clearColor(0, 0, 0, 0); gl.enable(gl.DEPTH_TEST); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         api.panels.forEach((p, i) => {
           const passes = p.layout === "four" ? ["fourA", "fourB"] : [p.layout];
           gl.bindBuffer(gl.ARRAY_BUFFER, cbufs[i]); if (p._dirty) { gl.bufferData(gl.ARRAY_BUFFER, p.colors, gl.DYNAMIC_DRAW); p._dirty = false; }
@@ -106,6 +124,7 @@ const Brain = (() => {
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.drawElements(gl.TRIANGLES, m.faces.length, gl.UNSIGNED_SHORT, 0);
           }
         });
+        live(); if (out) { out.clearRect(0, 0, PW, PH); out.drawImage(glc, 0, 0); } scheduleSnap();
       },
     };
     new ResizeObserver(() => api.draw()).observe(canvas);
