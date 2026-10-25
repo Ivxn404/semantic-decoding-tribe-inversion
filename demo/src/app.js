@@ -189,6 +189,26 @@ new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect()
   $("#pipeSvg").innerHTML = s;
 })();
 
+
+// ---------------------------------------------------------------- ground truth validity
+function drawGT() {
+  const G = D.gt; if (!G) { $("#truth").hidden = true; return; }
+  const raw = (d, k) => Array.isArray(d[k]) ? d[k][0] : d[k];
+  const f = (d, k, n) => { const v = raw(d, k) ?? 1, sd = Array.isArray(d[k]) ? d[k][1] : null; return v.toFixed(n) + (sd != null && k === "participation_ratio" ? " ± " + sd.toFixed(1) : ""); };
+  const S = G.synthetic_default, R = G.real, W = G.synthetic_white;
+  $("#gtStats").innerHTML = [["Effective dimensions (participation ratio)", "participation_ratio", 1], ["Variance in top 8 directions", "var_top8", 2], ["Scale (s.d.)", "sd", 2]]
+    .map(([l, k, n]) => `<tr><td>${l}</td><td class="num">${f(S, k, n)}</td><td class="num"><b>${f(R, k, n)}</b></td><td class="num">${f(W, k, n)}</td></tr>`).join("");
+  $("#gtLegend").textContent = "Real story representations occupy a few directions, like the synthetic truth and unlike white noise; the scale matches.";
+  const I = G.inversion, P = I.per_start, blind = ["gauss_0.01", "gauss_1.0", "uniform"];
+  const rec = blind.map(n => P[n].cosine_audio_slot), pc = Object.values(I.pairs).map(v => v.cos), pk = Object.values(I.pairs).map(v => v.peak);
+  const bb = Math.min(...blind.map(n => P[n].mse));
+  const rows = [["Recovery from blind starts", "0.89–0.93 (converged)", `${Math.min(...rec).toFixed(2)}–${Math.max(...rec).toFixed(2)} (${I.steps} steps, CPU)`],
+    ["Agreement between blind starts", "0.89–1.00", `${Math.min(...pc).toFixed(2)}–${Math.max(...pc).toFixed(2)}`],
+    ["Barrier between blind solutions", "median 4.8×", `${Math.min(...pk).toFixed(0)}–${Math.max(...pk).toFixed(0)}×`],
+    ["Deeper minimum near the truth", "4.2× lower error, 8.1× barrier", `${(bb / P.truth_perturbed.mse).toFixed(1)}× lower error, ${I.blind_to_truth.peak.toFixed(0)}× barrier`]];
+  $("#gtTable").innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td class="num">${r[2]}</td></tr>`).join("");
+}
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); drawGT(); } }, { rootMargin: "300px" }).observe($("#truth"));
 // ---------------------------------------------------------------- live lab (toy encoder in the browser)
 const T = Toy; const STEPS = 2400;
 let E = T.makeEncoder({ seed: 1 }), xt = T.makeTruth(E, 5), yClean = T.forward(E, xt).y, lab = null, labRunning = false, labSeed = 5;
@@ -392,8 +412,8 @@ new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect()
 $("#qr").src = "data:image/png;base64," + D.qr;
 
 // ---------------------------------------------------------------- theme changes and resizes
-function repaintAll() { paintHero(); if (eegCache[eegN]) paintEEG(); paintReplay(); paintROI(); drawLab(); drawF(); drawReal(); drawData(); }
+function repaintAll() { drawGT(); paintHero(); if (eegCache[eegN]) paintEEG(); paintReplay(); paintROI(); drawLab(); drawF(); drawReal(); drawData(); }
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", repaintAll);
 new MutationObserver(repaintAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { drawLab(); drawF(); drawReal(); if (rp) paintReplay(); }, 150); });
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { drawGT(); drawLab(); drawF(); drawReal(); if (rp) paintReplay(); }, 150); });
 })();

@@ -207,6 +207,26 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
   </div>
 </section>
 
+<!-- 4b -->
+<section class="scene" id="truth" data-name="Ground truth">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Asked at review · is the synthetic ground truth valid?</span><h2>A known answer, checked against real stimuli</h2>
+      <p class="lede">We choose x in TRIBE v2's own input space, push it through the frozen model, y = f(x), and recover x from y alone. Because we chose x, the error is exact. The question is whether that x looks like real stimuli.</p></div>
+    <div class="grid3">
+      <div class="card stack"><span class="eyebrow">Construction</span><h3>8 random directions, cosine time courses</h3><p style="font-size:.92rem">32 steps × 1 152 dimensions (text | audio | video slots, 16 s). Each of eight random unit directions carries its own cosine time course (2–16 cycles per window); the whole is scaled to unit s.d. Four seeds; white noise as an off-manifold control.</p></div>
+      <div class="card stack"><span class="eyebrow">Correct by construction</span><h3>Exact error, real operator</h3><p style="font-size:.92rem">The standard known-answer test for inverse problems. The forward model is the released TRIBE v2 (re-entry r = 1.0000); nothing about the brain is assumed, so every recovery number is a measurement of the real inverse.</p></div>
+      <div class="card stack"><span class="eyebrow">Shape does not matter</span><h3>White noise · 64× speed · 4 seeds</h3><p style="font-size:.92rem">White noise recovers like the structured truth (0.947 vs 0.942); a 64-fold change in speed of change leaves 0.836–0.858; results replicate across four seeds (agreement 0.894 ± 0.003).</p></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>Real stimuli are low-dimensional too</h3><div class="tablewrap"><table><thead><tr><th></th><th>Synthetic (ours)</th><th>Real stimuli · 270 windows</th><th>White noise</th></tr></thead><tbody id="gtStats"></tbody></table></div><p class="muted" style="font-size:.84rem" id="gtLegend"></p></div>
+      <div class="card stack"><h3>Same tests with a real stimulus as ground truth</h3>
+        <div class="tablewrap"><table><thead><tr><th></th><th>Synthetic truth</th><th>Real truth (16 s of the held-out story)</th></tr></thead><tbody id="gtTable"></tbody></table></div>
+        <p class="muted" style="font-size:.84rem">The real stimulus shows the same non-convex, start-dependent inverse, more strongly: the synthetic truth is the conservative case.</p></div>
+    </div>
+    <div class="notes"><b>Say (45 s)</b>Asked at the review: how was the ground truth framed, and why is it right? It is a known-answer test: we pick x in the model's own input space, compute y = f(x) with the real frozen model, and recover x from y alone, so the error is exact. Is x realistic? Real story representations have about 5 effective dimensions, 84 percent of variance in 8 directions, the same scale; white noise and a 64-fold speed change do not change the result; and with a real 16-second stimulus as ground truth we see the same picture, stronger: agreement 0.19 to 0.56 and barriers of 11 to 21 times.</div>
+  </div>
+</section>
+
 <!-- 5 -->
 <section class="scene" id="lab" data-name="Live lab">
   <div class="wrap">

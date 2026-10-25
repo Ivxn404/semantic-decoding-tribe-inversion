@@ -22,7 +22,10 @@ VD=json.load(open(R+'/results/verification/testD.json'))
 pairs=[{'e':v['errors'],'c':float(_M[_I.index(k.split('|')[0]),_I.index(k.split('|')[1])])} for k,v in VB['path']['pairs'].items()]
 for g in VD.values(): pairs+=[{'e':x['errors'],'c':x['cos']} for x in g['pairs'].values()]
 barrier={'s':VB['path']['s'],'pairs':pairs,'toTruth':[VA['path_blind_to_truth']['errors']]+[g['path_blind_to_truth']['errors'] for g in VD.values()]}
-DATA={'barrier':barrier,'mesh':mesh,'figs':figs,'real':real,'run':run,'qr':b64(R+'/poster/repo_qr_plain.png')}
+GT=json.load(open(R+'/results/real_x_groundtruth.json'))
+for _v in GT['inversion']['pairs'].values(): _v.pop('errors',None)
+GT['inversion']['blind_to_truth'].pop('errors',None)
+DATA={'gt':GT,'barrier':barrier,'mesh':mesh,'figs':figs,'real':real,'run':run,'qr':b64(R+'/poster/repo_qr_plain.png')}
 toy=open(W+'/toy.js').read().replace('if (typeof module !== "undefined") module.exports =','window.Toy =')
 page=open(W+'/page.html').read()
 html=page+'\n<script>window.DATA='+json.dumps(DATA,separators=(',',':'))+';</script>\n<script>'+toy+'</script>\n<script>'+open(W+'/brain.js').read()+'</script>\n<script>'+open(W+'/app.js').read()+'</script>\n'
