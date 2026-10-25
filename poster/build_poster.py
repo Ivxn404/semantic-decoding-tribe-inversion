@@ -8,13 +8,11 @@ from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE, MSO_CONNECTOR
 from PIL import Image
 
-import os
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TPL = os.environ.get("POSTER_TEMPLATE", "Poster_-_Capstone_-_Design.pptx")  # VIT template (not redistributed)
-OUT = os.path.join(ROOT, "poster", "Poster_Sarkar_Choudhuri_Project1.pptx")
-FIG = os.path.join(ROOT, "figures")
-LOGO = os.environ.get("VIT_LOGO", "vit_logo.jpeg")  # taken from the VIT report template
-QR = os.path.join(ROOT, "poster", "repo_qr_plain.png")
+TPL = "/tmp/claude-0/tpl/poster.pptx"
+OUT = "/home/claude/work/poster_final/Poster_Sarkar_Choudhuri_Project1.pptx"
+FIG = "/home/claude/work/figs"
+LOGO = "/tmp/claude-0/tpl/du/word/media/image1.jpeg"
+QR = "/home/claude/repo/poster/repo_qr_plain.png"
 
 NAVY = RGBColor(0x13, 0x24, 0x3B); TEAL = RGBColor(0x0B, 0x5E, 0x66); INK = RGBColor(0x1A, 0x1A, 0x1A)
 GREY = RGBColor(0x55, 0x55, 0x55); ORANGE = RGBColor(0xC2, 0x4E, 0x14); TINT = RGBColor(0xE8, 0xF3, 0xF1)
@@ -201,13 +199,13 @@ fill(box["Project Overview"], "Project Overview", [
 
 # ---------------------------------------------------------------- complex engineering problem
 fill(box["Justification of Complex Engineering Problem"], "Justification of Complex Engineering Problem", [
-    [("No closed-form answer. ", True), ("The forward model is a 177 M-parameter nonlinear transformer mapping a 32 × 1 152 representation to 20 484 cortical vertices; its inverse cannot be written down and must be measured.", False)],
+    [("No closed-form answer. ", True), ("The forward model is a 177 M-parameter nonlinear transformer mapping a 32 × 1,152 representation to 20,484 cortical vertices; its inverse cannot be written down and must be measured.", False)],
     [("Ill-posed by nature. ", True), ("Existence, uniqueness and stability of the inverse (Hadamard) are all open: fMRI is slow, blurred and noisy.", False)],
     [("No ground truth in real data. ", True), ("The true meaning behind a brain recording is unknown, so we built a synthetic framework with exact error, then a real-fMRI test with identification at a known chance level.", False)],
     [("Engineering obstacle. ", True), ("The released pipeline is not differentiable (speech synthesis, transcription, frozen extractors); we found and re-entered the one differentiable boundary.", False)],
     [("Conflicting requirements. ", True), ("Decoding fidelity vs non-invasive, low-cost acquisition vs mental privacy cannot all be maximised.", False)],
     [("Interdisciplinary. ", True), ("Inverse-problem theory, deep learning, neuroimaging (surface registration, atlases) and neuroanatomy must work together.", False)],
-    [("Scale on free hardware. ", True), ("20 484 × 100 outputs per pass, tens of thousands of passes per experiment, one 15 GB GPU.", False)],
+    [("Scale on free hardware. ", True), ("20,484 × 100 outputs per pass, tens of thousands of passes per experiment, one 15 GB GPU.", False)],
 ], size=27, bullets=True, space=9)
 
 # ---------------------------------------------------------------- block diagram (native shapes)
@@ -218,11 +216,11 @@ bw, bh, gx = 3.45, 1.85, 0.55
 xs = [bx + 0.35 + k * (bw + gx) for k in range(4)]
 rect(xs[0], Y1, bw, bh, TINT, TEAL, ["Stimulus", "story audio + words"], 22, True)
 rect(xs[1], Y1, bw, bh, WHITE, GREY, ["Feature extractors", "w2v-BERT, Llama-3.2-3B"], 22, True)
-rect(xs[2], Y1, bw, bh, GOLD, ORANGE, ["Representation x", "32 × 1 152 (free)"], 22, True)
+rect(xs[2], Y1, bw, bh, GOLD, ORANGE, ["Representation x", "32 × 1,152 (free)"], 22, True)
 rect(xs[3], Y1, bw, bh, NAVY, None, ["TRIBE v2, frozen", "177 M parameters"], 22, True, WHITE)
 for k in range(3):
     arrow(xs[k] + bw, Y1 + bh / 2, xs[k + 1], Y1 + bh / 2)
-rect(xs[3], Y2, bw, bh, TINT, TEAL, ["Predicted fMRI f(x)", "20 484 vertices"], 22, True)
+rect(xs[3], Y2, bw, bh, TINT, TEAL, ["Predicted fMRI f(x)", "20,484 vertices"], 22, True)
 arrow(xs[3] + bw / 2, Y1 + bh, xs[3] + bw / 2, Y2)
 rect(xs[2], Y2, bw, bh, WHITE, GREY, ["Loss", "‖f(x) − y‖² or 1 − r"], 22, True)
 arrow(xs[3], Y2 + bh / 2, xs[2] + bw, Y2 + bh / 2)
@@ -248,7 +246,7 @@ fill(box["Design Methodology and Novelty"], "Design Methodology and Novelty", [
     [("4  Mechanism tests. ", True), ("Agreement of fit-matched solutions; forward-only straight-path barrier test; Jacobian sensitivity vs 200 random directions.", False)],
     [("5  Regions. ", True), ("6 Destrieux networks vs size-matched random vertex sets, with a second random seed as the control spread.", False)],
     [("6  Real fMRI. ", True), ("LeBel 2023 subject UTS03 projected to fsaverage5; lag and vertices chosen on five training stories; held-out story inverted and ranked among 45 segments.", False)],
-    [("Why fMRI, not EEG: ", True), ("millimetre detail on 20 484 vertices, the only deep encoder large enough to invert, and one inverse problem instead of two (EEG adds source localisation). EEG is faster and cheaper, which matters for a device, not for this measurement.", False)],
+    [("Why fMRI, not EEG: ", True), ("millimetre detail on 20,484 vertices, the only deep encoder large enough to invert, and one inverse problem instead of two (EEG adds source localisation). EEG is faster and cheaper, which matters for a device, not for this measurement.", False)],
 ], size=26, space=8)
 table(mx + 0.3, my + 8.25, W - 0.6, [
     ["Novelty: closest prior work", "Deep encoder", "Optimises input", "Tests uniqueness", "Per region"],

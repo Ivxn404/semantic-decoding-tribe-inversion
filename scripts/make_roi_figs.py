@@ -37,7 +37,7 @@ anchor = rows["Whole cortex"]["cosine"]
 ax.axhline(anchor, color=S2, ls="--", lw=1.4)
 ax.text(-0.45, anchor + 0.015, f"whole cortex, same budget: {anchor:.3f}", color=S2, ha="left", fontsize=11)
 ax.set_xticks(xs)
-ax.set_xticklabels([f"{n}\n({rows[n]['n_vertices']} v)" for n in order], fontsize=11)
+ax.set_xticklabels([f"{n}\n({rows[n]['n_vertices']:,} v)" for n in order], fontsize=11)
 ax.set_ylabel("Recovery cosine"); ax.set_ylim(0, 1.12)
 ax.legend(loc="upper center", ncol=3, fontsize=11, bbox_to_anchor=(0.5, 1.13))
 fig.tight_layout(); fig.savefig(f"{OUT}/fig_roi_recovery.png", dpi=200, facecolor="white"); plt.close(fig)
