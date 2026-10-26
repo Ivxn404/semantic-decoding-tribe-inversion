@@ -1,0 +1,179 @@
+{
+ "xf": 0.6,
+ "scenes": [
+  {
+   "id": "title",
+   "lead": 0.9,
+   "vo": 11.59,
+   "D": 13.29,
+   "start": 0,
+   "starts": [
+    0.08,
+    5.22,
+    7.34
+   ],
+   "ends": [
+    4.82,
+    6.77,
+    11.37
+   ],
+   "caps": [
+    "Can a brain model that predicts fMRI almost perfectly be run backwards,",
+    "to read meaning out of the brain?",
+    "Project SBT_SW15 tests this on Meta's TRIBE v2."
+   ]
+  },
+  {
+   "id": "problem",
+   "lead": 0.5,
+   "vo": 9.9,
+   "D": 11.2,
+   "start": 12.69,
+   "starts": [
+    0.08,
+    4.75,
+    6.6
+   ],
+   "ends": [
+    4.21,
+    6.3,
+    9.68
+   ],
+   "caps": [
+    "Encoding models predict brain activity from what a person hears and sees.",
+    "Decoding is assumed to follow,",
+    "but for a deep foundation encoder, this has never been tested."
+   ]
+  },
+  {
+   "id": "method",
+   "lead": 0.5,
+   "vo": 10.75,
+   "D": 12.05,
+   "start": 23.29,
+   "starts": [
+    0.08,
+    3.89,
+    6.61,
+    9.1
+   ],
+   "ends": [
+    3.58,
+    6.07,
+    8.98,
+    10.53
+   ],
+   "caps": [
+    "The frozen network, 177 million parameters,",
+    "is re-entered after feature aggregation,",
+    "and the stimulus is recovered by gradient descent,",
+    "against the known ground truth."
+   ]
+  },
+  {
+   "id": "lab",
+   "lead": 0.5,
+   "vo": 9.5,
+   "D": 10.8,
+   "start": 34.74,
+   "starts": [
+    0.08,
+    4.94,
+    6.56
+   ],
+   "ends": [
+    4.4,
+    6.23,
+    9.28
+   ],
+   "caps": [
+    "In the working model, the prediction error falls more than 300,000-fold.",
+    "Yet recovery stalls,",
+    "and equally good fits from different starts disagree."
+   ]
+  },
+  {
+   "id": "real",
+   "lead": 0.5,
+   "vo": 7.44,
+   "D": 8.74,
+   "start": 44.94,
+   "starts": [
+    0.08,
+    5.23
+   ],
+   "ends": [
+    3.27,
+    7.22
+   ],
+   "caps": [
+    "On the real model, the brain-wide fit reaches an R\u00b2 of 0.99,",
+    "while recovery stops near one half."
+   ]
+  },
+  {
+   "id": "results1",
+   "lead": 0.5,
+   "vo": 11.35,
+   "D": 12.65,
+   "start": 53.08,
+   "starts": [
+    0.08,
+    5.35,
+    9.41
+   ],
+   "ends": [
+    4.83,
+    8.97,
+    11.13
+   ],
+   "caps": [
+    "Across four ground truths, error falls 28-fold while recovery saturates.",
+    "Between equal solutions, the error rises almost 5-fold:",
+    "the inverse is non-convex."
+   ]
+  },
+  {
+   "id": "results2",
+   "lead": 0.5,
+   "vo": 14.62,
+   "D": 15.92,
+   "start": 65.13,
+   "starts": [
+    0.08,
+    5.02,
+    10.57
+   ],
+   "ends": [
+    4.43,
+    10.07,
+    14.4
+   ],
+   "caps": [
+    "The most responsive network, visual cortex, is the hardest to decode from.",
+    "On real fMRI, 4 of 5 story segments are identified amongst 45,",
+    "yet reconstruction reaches a cosine of only 0.02."
+   ]
+  },
+  {
+   "id": "close",
+   "lead": 0.5,
+   "vo": 5.09,
+   "D": 7.99,
+   "start": 80.45,
+   "starts": [
+    0.08,
+    2.96
+   ],
+   "ends": [
+    2.55,
+    4.87
+   ],
+   "caps": [
+    "Encoding accuracy does not certify decoding.",
+    "Recoverability has to be measured."
+   ]
+  }
+ ],
+ "total": 88.44
+}
