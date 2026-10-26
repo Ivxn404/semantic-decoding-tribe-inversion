@@ -8,7 +8,7 @@ const P = JSON.parse(fs.readFileSync('/home/claude/work/vid2/plan.json')); const
   for (const id of ids) {
     const sc = P.scenes.find(s => s.id === id), N = Math.ceil(sc.D * 25), dir = `/home/claude/work/vid2/frames/${id}`;
     fs.mkdirSync(dir, { recursive: true }); const t0 = Date.now();
-    for (let k = 0; k < N; k++) { await p.evaluate(([id, t, D]) => render(id, t, D), [id, k / 25, sc.D]); await p.screenshot({ path: `${dir}/${String(k).padStart(5, '0')}.jpg`, type: 'jpeg', quality: 93 }); }
+    for (let k = 0; k < N; k++) { await p.evaluate(([id, t, D, C]) => render(id, t, D, C), [id, k / 25, sc.D, { lead: sc.lead, starts: sc.starts }]); await p.screenshot({ path: `${dir}/${String(k).padStart(5, '0')}.jpg`, type: 'jpeg', quality: 93 }); }
     console.log(id, N, 'frames', ((Date.now() - t0) / 1000).toFixed(0) + 's');
   }
   await b.close(); })();

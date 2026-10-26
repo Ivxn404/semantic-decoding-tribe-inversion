@@ -1,143 +1,201 @@
 <!doctype html>
 <html><head><meta charset="utf-8">
 <style>
-:root { --bg: #f4f6fa; --ink: #13213c; --ink2: #4a5873; --muted: #7a869c; --line: #dde3ee; --card: #ffffff;
-  --accent: #d9501f; --accent2: #f2a36b; --teal: #12807a; --blue: #2f5fd0; --good: #1f8f4e; }
+:root { --bg: #f4f6fa; --ink: #101c35; --ink2: #3c4a66; --muted: #6b7890; --line: #d8dfeb; --card: #ffffff;
+  --accent: #d9501f; --accent2: #f5a66d; --blue: #2456c9; --violet: #6b4fbb; }
 * { box-sizing: border-box; margin: 0 }
-html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); font-family: Inter, "Inter Display", system-ui, sans-serif; color: var(--ink) }
-.scene { position: absolute; inset: 0; display: none; background: radial-gradient(1200px 700px at 85% 10%, #e9eefa 0%, transparent 60%), radial-gradient(900px 600px at 0% 100%, #fbeee6 0%, transparent 55%), var(--bg) }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); font-family: "Inter Display", Inter, sans-serif; color: var(--ink) }
+.scene { position: absolute; inset: 0; display: none; background: radial-gradient(1200px 700px at 85% 8%, #e6ecfa 0%, transparent 60%), radial-gradient(900px 600px at 0% 100%, #fbece2 0%, transparent 55%), var(--bg) }
 .scene.on { display: block }
 .a { will-change: transform, opacity }
-.tag { position: absolute; left: 120px; top: 92px; font: 600 22px/1 Inter; letter-spacing: .14em; text-transform: uppercase; color: var(--accent) }
-.h { position: absolute; left: 120px; top: 132px; font: 800 64px/1.08 "Inter Display", Inter; letter-spacing: -.015em; max-width: 1680px }
-.brand { position: absolute; right: 120px; top: 92px; font: 600 20px/1 Inter; color: var(--muted); letter-spacing: .08em }
-.card { position: absolute; background: var(--card); border: 1px solid var(--line); border-radius: 26px; box-shadow: 0 18px 50px rgba(19,33,60,.08) }
-.big { font: 800 84px/1 "Inter Display", Inter; letter-spacing: -.02em; color: var(--accent); font-variant-numeric: tabular-nums }
-.lbl { font: 500 27px/1.3 Inter; color: var(--ink2) }
-.chip { position: absolute; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 28px; box-shadow: 0 10px 30px rgba(19,33,60,.07); font: 600 30px/1.25 Inter; color: var(--ink) }
-.chip b { color: var(--accent) }
-.node { position: absolute; background: var(--card); border: 2px solid var(--line); border-radius: 24px; display: grid; place-content: center; text-align: center; gap: 8px; box-shadow: 0 14px 40px rgba(19,33,60,.08) }
-.node .t { font: 700 36px/1.1 "Inter Display", Inter } .node .s { font: 500 24px/1.2 Inter; color: var(--muted) }
+.tag { position: absolute; left: 120px; top: 70px; font: 800 22px/1 Inter; letter-spacing: .16em; text-transform: uppercase; color: var(--accent) }
+.h { position: absolute; left: 120px; top: 106px; font: 900 62px/1.08 "Inter Display"; letter-spacing: -.02em; max-width: 1680px }
+.card { position: absolute; background: var(--card); border: 1px solid var(--line); border-radius: 26px; box-shadow: 0 18px 50px rgba(16,28,53,.09) }
+.big { font: 900 88px/1 "Inter Display"; letter-spacing: -.02em; color: var(--accent); font-variant-numeric: tabular-nums }
+.lbl { font: 600 27px/1.3 Inter; color: var(--ink2) }
+.chip { position: absolute; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px 26px; box-shadow: 0 10px 30px rgba(16,28,53,.08); font: 700 29px/1.25 "Inter Display"; color: var(--ink) }
+.chip b { color: var(--accent); font-weight: 900 }
+.node { position: absolute; background: var(--card); border: 3px solid var(--line); border-radius: 24px; display: grid; place-content: center; text-align: center; gap: 8px; box-shadow: 0 14px 40px rgba(16,28,53,.09) }
+.node .t { font: 900 38px/1.1 "Inter Display" } .node .s { font: 600 25px/1.2 Inter; color: var(--muted) }
 img { display: block }
-svg text { font-family: Inter }
+svg text { font-family: "Inter Display", Inter }
+.glow { box-shadow: 0 0 0 6px rgba(217,80,31,.22), 0 18px 50px rgba(16,28,53,.09) !important }
 </style></head><body>
 
 <!-- 1 TITLE -->
 <section class="scene" id="title">
-  <div class="tag a" data-in="0.2" data-fx="up">Project ID SBT_SW15 · BECE497J Project-I · VIT Vellore</div>
-  <div class="a" data-in="0.5" data-fx="up" style="position:absolute;left:120px;top:190px;width:980px;font:800 70px/1.08 'Inter Display',Inter;letter-spacing:-.02em">Conditioning and Non-Convexity of Semantic Decoding by Inversion of Deep Brain Encoding Models</div>
-  <div class="a" data-in="1.4" data-fx="up" style="position:absolute;left:120px;top:560px;font:500 32px/1.5 Inter;color:var(--ink2)">Abhranil Sarkar (23BML0077)<br>Tanisha Choudhuri (23BML0081)<br>Guide: Dr. Sharmila Nageswaran, SENSE</div>
-  <div class="a" data-in="6.6" data-fx="up" style="position:absolute;left:120px;top:800px;width:980px;padding:26px 34px;border-left:8px solid var(--accent);background:#fff;border-radius:0 20px 20px 0;font:700 40px/1.25 'Inter Display',Inter;box-shadow:0 14px 40px rgba(19,33,60,.08)">Can a near-perfect brain encoder be run backwards to read meaning out?</div>
-  <div class="card a" data-in="0.3" data-fx="scale" data-kb="1" style="left:1150px;top:170px;width:650px;height:740px;overflow:hidden;display:grid;place-items:center">
-    <img src="assets/hero_brain.png" style="width:600px">
-    <div style="position:absolute;bottom:30px;left:0;right:0;display:flex;justify-content:center;gap:30px;font:500 22px Inter;color:var(--ink2)">
+  <div class="tag a" data-in="0.2" data-pulse="2">Project ID SBT_SW15 · BECE497J Project-I · VIT Vellore</div>
+  <div class="a" data-in="0.45" style="position:absolute;left:120px;top:150px;width:990px;font:900 72px/1.06 'Inter Display';letter-spacing:-.025em">Conditioning and Non-Convexity of Semantic Decoding by Inversion of Deep Brain Encoding Models</div>
+  <div class="a" data-in="1.0" style="position:absolute;left:120px;top:500px;font:600 31px/1.5 Inter;color:var(--ink2)">Abhranil Sarkar (23BML0077) · Tanisha Choudhuri (23BML0081)<br>Guide: Dr. Sharmila Nageswaran, SENSE</div>
+  <div class="a" data-cue="0" style="position:absolute;left:120px;top:660px;width:990px;padding:26px 34px;border-left:9px solid var(--accent);background:#fff;border-radius:0 20px 20px 0;font:800 40px/1.25 'Inter Display';box-shadow:0 14px 40px rgba(16,28,53,.09)">Can a near-perfect brain encoder be run backwards to read meaning out?</div>
+  <div class="card a" data-in="0.3" data-fx="scale" data-kb="1" style="left:1170px;top:150px;width:630px;height:720px;overflow:hidden;display:grid;place-items:center">
+    <img src="assets/hero_brain.png" style="width:580px">
+    <div style="position:absolute;bottom:28px;left:0;right:0;display:flex;justify-content:center;gap:30px;font:700 23px Inter;color:var(--ink2)">
       <span><b style="color:#e03131">●</b> text</span><span><b style="color:#2f9e44">●</b> audio</span><span><b style="color:#1c7ed6">●</b> video</span></div>
-    <div style="position:absolute;top:26px;left:0;right:0;text-align:center;font:600 20px Inter;color:var(--muted);letter-spacing:.06em">TRIBE v2 SENSITIVITY ON 20,484 CORTICAL POINTS</div>
+    <div style="position:absolute;top:26px;left:0;right:0;text-align:center;font:800 19px Inter;color:var(--muted);letter-spacing:.08em">TRIBE v2 SENSITIVITY · 20,484 CORTICAL POINTS</div>
   </div>
 </section>
 
 <!-- 2 PROBLEM -->
 <section class="scene" id="problem">
-  <div class="tag a" data-in="0.1" data-fx="up">01 · The problem</div>
-  <div class="h a" data-in="0.25" data-fx="up">Encoding is accurate. Decoding is assumed.</div>
-  <div class="node a" data-in="0.8" data-fx="scale" style="left:120px;top:440px;width:420px;height:240px"><div class="t">Stimulus</div><div class="s">story audio + words</div></div>
-  <div class="node a" data-in="1.2" data-fx="scale" style="left:750px;top:440px;width:420px;height:240px;border-color:var(--blue)"><div class="t">TRIBE v2 encoder</div><div class="s">177 M parameters, frozen</div></div>
-  <div class="node a" data-in="1.6" data-fx="scale" style="left:1380px;top:400px;width:420px;height:320px;overflow:hidden"><img src="assets/hero_brain.png" style="width:270px;margin:0 auto"><div class="s" style="margin-top:-4px">fMRI · 20,484 points</div></div>
+  <div class="tag a" data-in="0.1">01 · The problem</div>
+  <div class="h a" data-in="0.25">Encoding is accurate. Decoding is assumed.</div>
+  <div class="node a" data-cue="0" data-off="0.0" data-fx="scale" style="left:120px;top:400px;width:430px;height:230px"><div class="t">Stimulus</div><div class="s">story audio + words</div></div>
+  <div class="node a" data-cue="0" data-off="0.5" data-fx="scale" style="left:745px;top:400px;width:430px;height:230px;border-color:var(--blue)"><div class="t">TRIBE v2 encoder</div><div class="s">177 M parameters, frozen</div></div>
+  <div class="node a" data-cue="0" data-off="1.0" data-fx="scale" style="left:1370px;top:370px;width:430px;height:290px"><img src="assets/hero_brain.png" style="width:260px;margin:0 auto"><div class="s" style="margin-top:-4px">fMRI · 20,484 points</div></div>
   <svg class="a" data-in="0" data-fx="none" style="position:absolute;left:0;top:0" width="1920" height="1080">
-    <defs><marker id="ab" markerUnits="userSpaceOnUse" markerWidth="30" markerHeight="30" refX="22" refY="15" orient="auto"><path d="M0,0 L30,15 L0,30 z" fill="#2f5fd0"/></marker>
+    <defs><marker id="ab" markerUnits="userSpaceOnUse" markerWidth="30" markerHeight="30" refX="22" refY="15" orient="auto"><path d="M0,0 L30,15 L0,30 z" fill="#2456c9"/></marker>
       <marker id="ao" markerUnits="userSpaceOnUse" markerWidth="30" markerHeight="30" refX="22" refY="15" orient="auto"><path d="M0,0 L30,15 L0,30 z" fill="#d9501f"/></marker></defs>
-    <path class="draw" data-in="2.2" data-dur="1.2" d="M 330 425 C 330 330, 1590 330, 1590 390" fill="none" stroke="#2f5fd0" stroke-width="6" marker-end="url(#ab)"/>
-    <path class="draw" data-in="5.0" data-dur="1.4" d="M 1590 735 C 1590 860, 330 860, 330 695" fill="none" stroke="#d9501f" stroke-width="6" stroke-dasharray="18 14" marker-end="url(#ao)"/>
+    <path class="draw" data-cue="0" data-off="1.6" data-dur="1.3" d="M 335 385 C 335 290, 1585 290, 1585 355" fill="none" stroke="#2456c9" stroke-width="7" marker-end="url(#ab)"/>
+    <path class="draw" data-cue="1" data-off="0.0" data-dur="1.3" d="M 1585 675 C 1585 790, 335 790, 335 645" fill="none" stroke="#d9501f" stroke-width="7" stroke-dasharray="20 14" marker-end="url(#ao)"/>
   </svg>
-  <div class="a" data-in="2.9" data-fx="up" style="position:absolute;left:0;right:0;top:300px;text-align:center;font:700 32px Inter;color:var(--blue)">Encoding: predicts brain activity accurately</div>
-  <div class="a" data-in="6.0" data-fx="up" style="position:absolute;left:0;right:0;top:880px;text-align:center;font:700 32px Inter;color:var(--accent)">Decoding by inversion: never tested on a deep foundation encoder</div>
+  <div class="a" data-cue="0" data-off="2.2" style="position:absolute;left:0;right:0;top:262px;text-align:center;font:800 33px 'Inter Display';color:var(--blue)">Encoding: predicts brain activity accurately</div>
+  <div class="a" data-cue="2" style="position:absolute;left:0;right:0;top:812px;text-align:center;font:800 33px 'Inter Display';color:var(--accent)">Decoding by inversion: never tested on a deep foundation encoder</div>
 </section>
 
 <!-- 3 METHOD -->
 <section class="scene" id="method">
-  <div class="tag a" data-in="0.1" data-fx="up">02 · The method</div>
-  <div class="h a" data-in="0.25" data-fx="up">Invert the frozen network, against a known answer</div>
-  <div class="card a" data-in="0.8" data-fx="up" style="left:120px;top:300px;width:1680px;padding:34px 40px"><img src="assets/pipe.png" style="width:1600px"></div>
-  <div class="chip a" data-in="3.0" data-fx="up" style="left:120px;top:780px;width:390px">177.21 M parameters<br><b>frozen</b></div>
-  <div class="chip a" data-in="4.6" data-fx="up" style="left:550px;top:780px;width:390px">x: 32 × 1,152<br><b>optimised by Adam</b></div>
-  <div class="chip a" data-in="6.2" data-fx="up" style="left:980px;top:780px;width:390px">Matches the release<br><b>r = 1.0000</b></div>
-  <div class="chip a" data-in="8.4" data-fx="up" style="left:1410px;top:780px;width:390px">Known ground truth:<br><b>exact error</b></div>
+  <div class="tag a" data-in="0.1">02 · The method</div>
+  <div class="h a" data-in="0.25">Invert the frozen network, against a known answer</div>
+  <div class="card a" data-in="0.6" style="left:120px;top:250px;width:1680px;height:500px">
+    <svg width="1680" height="500" viewBox="0 0 1680 500">
+      <defs><marker id="m1" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="14" refY="9" orient="auto"><path d="M0,0 L18,9 L0,18 z" fill="#3c4a66"/></marker>
+        <marker id="m2" markerUnits="userSpaceOnUse" markerWidth="24" markerHeight="24" refX="18" refY="12" orient="auto"><path d="M0,0 L24,12 L0,24 z" fill="#d9501f"/></marker></defs>
+      <!-- not differentiable column -->
+      <text x="161" y="52" text-anchor="middle" font-size="19" font-weight="800" fill="#6b7890" letter-spacing="2">NOT DIFFERENTIABLE</text>
+      <rect x="30" y="76" width="262" height="112" rx="18" fill="#eef1f6" stroke="#c9d1df" stroke-width="2" stroke-dasharray="8 6"/>
+      <text x="161" y="124" text-anchor="middle" font-size="29" font-weight="900" fill="#101c35">Stimulus</text>
+      <text x="161" y="160" text-anchor="middle" font-size="20" font-weight="600" fill="#6b7890">story audio + words</text>
+      <line x1="161" y1="190" x2="161" y2="226" stroke="#3c4a66" stroke-width="3" marker-end="url(#m1)"/>
+      <rect x="30" y="232" width="262" height="150" rx="18" fill="#eef1f6" stroke="#c9d1df" stroke-width="2" stroke-dasharray="8 6"/>
+      <text x="161" y="274" text-anchor="middle" font-size="29" font-weight="900" fill="#101c35">Feature</text>
+      <text x="161" y="306" text-anchor="middle" font-size="29" font-weight="900" fill="#101c35">extractors</text>
+      <text x="161" y="342" text-anchor="middle" font-size="18" font-weight="700" fill="#6b7890">Llama 3.2 · w2v-BERT</text>
+      <text x="161" y="366" text-anchor="middle" font-size="18" font-weight="700" fill="#6b7890">V-JEPA 2</text>
+      <line x1="294" y1="300" x2="372" y2="245" stroke="#3c4a66" stroke-width="3" marker-end="url(#m1)"/>
+      <!-- re-entry line -->
+      <g class="cuefx" data-cue="1" data-fx="pop">
+        <line x1="326" y1="70" x2="326" y2="410" stroke="#d9501f" stroke-width="4" stroke-dasharray="10 8"/>
+        <text x="326" y="440" text-anchor="middle" font-size="22" font-weight="900" fill="#d9501f">re-entry point</text>
+      </g>
+      <!-- x -->
+      <rect class="cuefx" data-cue="2" data-fx="glowrect" x="372" y="138" width="230" height="190" rx="20" fill="#d9501f"/>
+      <text x="487" y="210" text-anchor="middle" font-size="58" font-weight="900" fill="#fff" font-style="italic">x</text>
+      <text x="487" y="258" text-anchor="middle" font-size="26" font-weight="800" fill="#fff">32 × 1,152</text>
+      <text x="487" y="296" text-anchor="middle" font-size="21" font-weight="700" fill="#ffe2d1">optimised</text>
+      <line x1="604" y1="233" x2="668" y2="233" stroke="#3c4a66" stroke-width="3" marker-end="url(#m1)"/>
+      <!-- frozen block -->
+      <rect x="672" y="76" width="770" height="306" rx="24" fill="#f3f6fd" stroke="#2456c9" stroke-width="3"/>
+      <text x="1057" y="52" text-anchor="middle" font-size="19" font-weight="800" fill="#2456c9" letter-spacing="2">FROZEN TRIBE v2 · 177.21 M PARAMETERS</text>
+      <g font-weight="900" fill="#101c35" text-anchor="middle">
+        <rect x="698" y="150" width="166" height="166" rx="16" fill="#fff" stroke="#2456c9" stroke-width="2.5"/>
+        <text x="781" y="226" font-size="28">Encoder</text><text x="781" y="262" font-size="19" font-weight="700" fill="#6b7890">127.47 M</text>
+        <rect x="886" y="150" width="166" height="166" rx="16" fill="#fff" stroke="#2456c9" stroke-width="2.5"/>
+        <text x="969" y="226" font-size="28">Head</text><text x="969" y="262" font-size="19" font-weight="700" fill="#6b7890">1,152 → 2,048</text>
+        <rect x="1074" y="150" width="166" height="166" rx="16" fill="#fff" stroke="#2456c9" stroke-width="2.5"/>
+        <text x="1157" y="212" font-size="28">Subject</text><text x="1157" y="244" font-size="28">layer</text><text x="1157" y="278" font-size="19" font-weight="700" fill="#6b7890">41.97 M</text>
+        <rect x="1262" y="150" width="152" height="166" rx="16" fill="#fff" stroke="#2456c9" stroke-width="2.5"/>
+        <text x="1338" y="226" font-size="28">Pool</text><text x="1338" y="262" font-size="19" font-weight="700" fill="#6b7890">1 Hz</text>
+      </g>
+      <g stroke="#2456c9" stroke-width="3"><line x1="864" y1="233" x2="884" y2="233"/><line x1="1052" y1="233" x2="1072" y2="233"/><line x1="1240" y1="233" x2="1260" y2="233"/></g>
+      <line x1="1444" y1="233" x2="1470" y2="233" stroke="#3c4a66" stroke-width="3" marker-end="url(#m1)"/>
+      <!-- output -->
+      <rect x="1474" y="138" width="180" height="190" rx="20" fill="#101c35"/>
+      <text x="1564" y="212" text-anchor="middle" font-size="38" font-weight="900" fill="#fff">f(x)</text>
+      <text x="1564" y="252" text-anchor="middle" font-size="19" font-weight="700" fill="#c9d2e3">predicted fMRI</text>
+      <text x="1564" y="284" text-anchor="middle" font-size="19" font-weight="700" fill="#c9d2e3">20,484 × 100</text>
+      <!-- gradient path -->
+      <path class="draw" data-cue="2" data-off="0.2" data-dur="1.4" d="M 1564 330 C 1564 468, 487 468, 487 336" fill="none" stroke="#d9501f" stroke-width="5" stroke-dasharray="14 10" marker-end="url(#m2)"/>
+      <text class="cuefx" data-cue="2" data-off="0.9" data-fx="fade" x="1030" y="485" text-anchor="middle" font-size="24" font-weight="800" fill="#d9501f">gradient of ‖f(x) − y‖² flows back to x only</text>
+    </svg>
+  </div>
+  <div class="chip a" data-cue="0" data-off="0.8" style="left:120px;top:780px;width:390px">177.21 M parameters<br><b>frozen</b></div>
+  <div class="chip a" data-cue="1" data-off="0.5" style="left:550px;top:780px;width:390px">Re-entry matches<br>the release: <b>r = 1.0000</b></div>
+  <div class="chip a" data-cue="2" data-off="0.6" style="left:980px;top:780px;width:390px">x: 32 × 1,152<br><b>optimised by Adam</b></div>
+  <div class="chip a" data-cue="3" style="left:1410px;top:780px;width:390px">Known ground truth:<br><b>exact error</b></div>
 </section>
 
 <!-- 6 RESULTS 1 -->
 <section class="scene" id="results1">
-  <div class="tag a" data-in="0.1" data-fx="up">04 · Key results · exact ground truth, 4 seeds</div>
-  <div class="h a" data-in="0.25" data-fx="up">A better fit is not a better answer</div>
-  <div class="card a" data-in="0.7" data-fx="up" style="left:120px;top:290px;width:820px;height:700px;padding:34px">
-    <div style="display:flex;align-items:baseline;gap:22px"><span class="big" data-count="28.4" data-cin="1.0" data-fmt="1">28.4</span><span class="big" style="font-size:60px">×</span></div>
+  <div class="tag a" data-in="0.1">04 · Key results · exact ground truth, 4 seeds</div>
+  <div class="h a" data-in="0.25">A better fit is not a better answer</div>
+  <div class="card a" data-cue="0" style="left:120px;top:250px;width:820px;height:640px;padding:30px 34px">
+    <div style="display:flex;align-items:baseline;gap:14px"><span class="big" data-count="28.4" data-ccue="0" data-coff="0.9" data-fmt="1">28.4</span><span class="big" style="font-size:62px">×</span></div>
     <div class="lbl" style="margin-top:8px">lower encoding error, while recovery saturates at <b style="color:var(--ink)">0.944</b></div>
-    <img src="assets/fig_dissociation.png" style="width:750px;margin-top:26px;border-radius:12px">
+    <img src="assets/fig_dissociation.png" style="width:700px;margin:18px auto 0;border-radius:12px">
   </div>
-  <div class="card a" data-in="5.2" data-fx="up" style="left:980px;top:290px;width:820px;height:700px;padding:34px">
-    <div style="display:flex;align-items:baseline;gap:22px"><span class="big" data-count="4.8" data-cin="5.5" data-fmt="1">4.8</span><span class="big" style="font-size:60px">×</span></div>
-    <div class="lbl" style="margin-top:8px">error barrier between equally good fits: <b style="color:var(--ink)">non-convex</b>, separate minima</div>
-    <img src="assets/fig_barrier_path.png" style="width:750px;margin-top:26px;border-radius:12px">
+  <div class="card a" data-cue="1" style="left:980px;top:250px;width:820px;height:640px;padding:30px 34px">
+    <div style="display:flex;align-items:baseline;gap:14px"><span class="big" data-count="4.8" data-ccue="1" data-coff="0.6" data-fmt="1">4.8</span><span class="big" style="font-size:62px">×</span></div>
+    <div class="lbl" style="margin-top:8px">error barrier between equally good fits: <span class="cuefx" data-cue="2" data-fx="hl" style="font-weight:900;color:var(--ink);padding:0 6px;border-radius:6px">non-convex</span></div>
+    <img src="assets/fig_barrier_path.png" style="width:700px;margin:18px auto 0;border-radius:12px">
   </div>
 </section>
 
 <!-- 7 RESULTS 2 -->
 <section class="scene" id="results2">
-  <div class="tag a" data-in="0.1" data-fx="up">05 · Regions and real fMRI</div>
-  <div class="h a" data-in="0.25" data-fx="up">Predictable is not recoverable</div>
-  <div class="card a" data-in="0.7" data-fx="up" style="left:120px;top:290px;width:820px;height:700px;padding:34px">
-    <div class="lbl" style="font-weight:700;color:var(--ink)">Recovery vs random vertices of the same size</div>
-    <img src="assets/roi_brain.png" style="width:520px;margin:18px auto 0">
-    <div style="position:absolute;left:34px;right:34px;bottom:40px;display:grid;gap:18px">
-      <div style="display:grid;grid-template-columns:230px 1fr 130px;align-items:center;gap:16px;font:600 28px Inter"><span>Visual</span><div style="height:30px;background:#eef1f6;border-radius:8px;position:relative"><div class="bar" data-w="0.62" data-cin="1.8" style="position:absolute;right:50%;top:0;bottom:0;background:#2f6fd6;border-radius:8px 0 0 8px"></div><div style="position:absolute;left:50%;top:-6px;bottom:-6px;width:2px;background:var(--ink2)"></div></div><span style="color:#2f6fd6">−0.125</span></div>
-      <div style="display:grid;grid-template-columns:230px 1fr 130px;align-items:center;gap:16px;font:600 28px Inter"><span>Somatomotor</span><div style="height:30px;background:#eef1f6;border-radius:8px;position:relative"><div class="bar" data-w="0.51" data-cin="2.6" data-side="r" style="position:absolute;left:50%;top:0;bottom:0;background:#6b4fbb;border-radius:0 8px 8px 0"></div><div style="position:absolute;left:50%;top:-6px;bottom:-6px;width:2px;background:var(--ink2)"></div></div><span style="color:#6b4fbb">+0.102</span></div>
-      <div class="lbl" style="font-size:22px">most responsive network decodes worst; least responsive decodes best</div>
+  <div class="tag a" data-in="0.1">05 · Regions and real fMRI</div>
+  <div class="h a" data-in="0.25">Predictable is not recoverable</div>
+  <div class="card a" data-cue="0" style="left:120px;top:250px;width:820px;height:640px;padding:30px 34px">
+    <div class="lbl" style="font-weight:800;color:var(--ink)">Recovery vs random vertices of the same size</div>
+    <img src="assets/roi_brain.png" style="width:470px;margin:14px auto 0">
+    <div style="position:absolute;left:34px;right:34px;bottom:34px;display:grid;gap:16px">
+      <div style="display:grid;grid-template-columns:230px 1fr 140px;align-items:center;gap:16px;font:800 29px 'Inter Display'"><span>Visual</span><div style="height:30px;background:#eef1f6;border-radius:8px;position:relative"><div class="bar" data-w="0.62" data-ccue="0" data-coff="1.2" style="position:absolute;right:50%;top:0;bottom:0;background:#2f6fd6;border-radius:8px 0 0 8px"></div><div style="position:absolute;left:50%;top:-6px;bottom:-6px;width:3px;background:var(--ink2)"></div></div><span style="color:#2f6fd6">−0.125</span></div>
+      <div style="display:grid;grid-template-columns:230px 1fr 140px;align-items:center;gap:16px;font:800 29px 'Inter Display'"><span>Somatomotor</span><div style="height:30px;background:#eef1f6;border-radius:8px;position:relative"><div class="bar" data-w="0.51" data-ccue="0" data-coff="2.4" style="position:absolute;left:50%;top:0;bottom:0;background:var(--violet);border-radius:0 8px 8px 0"></div><div style="position:absolute;left:50%;top:-6px;bottom:-6px;width:3px;background:var(--ink2)"></div></div><span style="color:var(--violet)">+0.102</span></div>
     </div>
   </div>
-  <div class="card a" data-in="5.6" data-fx="up" style="left:980px;top:290px;width:820px;height:700px;padding:34px">
-    <div class="lbl" style="font-weight:700;color:var(--ink)">Real fMRI · a story TRIBE v2 never saw (LeBel 2023)</div>
-    <div style="display:flex;gap:60px;margin-top:30px">
-      <div><div class="big"><span data-count="4" data-cin="6.4" data-fmt="0">4</span> / 5</div><div class="lbl">segments identified among 45<br>(chance 2.2%)</div></div>
-      <div><div class="big" style="color:var(--ink)"><span data-count="0.02" data-cin="10.5" data-fmt="2">0.02</span></div><div class="lbl">cosine of the<br>reconstruction to the truth</div></div>
+  <div class="card a" data-cue="1" style="left:980px;top:250px;width:820px;height:640px;padding:30px 34px">
+    <div class="lbl" style="font-weight:800;color:var(--ink)">Real fMRI · a story TRIBE v2 never saw (LeBel 2023)</div>
+    <div style="display:flex;gap:70px;margin-top:28px">
+      <div><div class="big"><span data-count="4" data-ccue="1" data-coff="1.6" data-fmt="0">4</span> / 5</div><div class="lbl">segments identified<br>among 45 (chance 2.2%)</div></div>
+      <div class="cuefx" data-cue="2" data-off="1.8" data-fx="fadein"><div class="big" style="color:var(--ink)">0.02</div><div class="lbl">cosine of the<br>reconstruction to the truth</div></div>
     </div>
-    <img class="a" data-in="7.2" data-fx="fade" src="assets/ranks.png" style="width:750px;margin-top:44px">
-    <div class="a lbl" data-in="11.5" data-fx="up" style="margin-top:26px;font-weight:700;color:var(--accent)">Identification works. Reconstruction does not.</div>
+    <img class="cuefx" data-cue="1" data-off="2.2" data-fx="fadein" src="assets/ranks.png" style="width:750px;margin-top:40px">
+    <div class="cuefx lbl" data-cue="2" data-off="2.6" data-fx="fadein" style="margin-top:24px;font-weight:900;color:var(--accent)">Identification works. Reconstruction does not.</div>
   </div>
 </section>
 
 <!-- 8 CLOSE -->
 <section class="scene" id="close" style="background:var(--ink)">
-  <div class="a" data-in="0.3" data-fx="up" style="position:absolute;left:120px;top:250px;font:800 84px/1.1 'Inter Display',Inter;color:#fff;letter-spacing:-.02em;max-width:1500px">Encoding accuracy does not certify decoding.</div>
-  <div class="a" data-in="2.4" data-fx="up" style="position:absolute;left:120px;top:470px;font:800 84px/1.1 'Inter Display',Inter;color:var(--accent2);letter-spacing:-.02em">Recoverability has to be measured.</div>
-  <div class="a" data-in="3.6" data-fx="up" style="position:absolute;left:120px;top:760px;font:500 30px/1.6 Inter;color:#c9d2e3">Project ID SBT_SW15 · BECE497J Project-I<br>Abhranil Sarkar · Tanisha Choudhuri · Guide: Dr. Sharmila Nageswaran</div>
-  <div class="a" data-in="3.8" data-fx="scale" style="position:absolute;right:120px;top:700px;background:#fff;padding:18px;border-radius:18px;text-align:center"><img src="assets/qr.png" style="width:190px;image-rendering:pixelated"><div style="font:600 16px Inter;color:var(--ink2);margin-top:8px">code · data · notebooks</div></div>
+  <div class="a" data-cue="0" style="position:absolute;left:120px;top:190px;font:900 88px/1.1 'Inter Display';color:#fff;letter-spacing:-.025em;max-width:1500px">Encoding accuracy does not certify decoding.</div>
+  <div class="a" data-cue="1" style="position:absolute;left:120px;top:420px;font:900 88px/1.1 'Inter Display';color:var(--accent2);letter-spacing:-.025em">Recoverability has to be measured.</div>
+  <div class="a" data-cue="1" data-off="1.2" style="position:absolute;left:120px;top:640px;font:600 30px/1.6 Inter;color:#c9d2e3">Project ID SBT_SW15 · BECE497J Project-I<br>Abhranil Sarkar · Tanisha Choudhuri · Guide: Dr. Sharmila Nageswaran</div>
+  <div class="a" data-cue="1" data-off="1.4" data-fx="scale" style="position:absolute;right:120px;top:600px;background:#fff;padding:16px;border-radius:18px;text-align:center"><img src="assets/qr.png" style="width:180px;image-rendering:pixelated"><div style="font:800 16px Inter;color:var(--ink2);margin-top:8px">code · data · notebooks</div></div>
 </section>
 
 <script>
 const ease = p => p < 0 ? 0 : p > 1 ? 1 : 1 - Math.pow(1 - p, 3);
-window.render = (id, t, D) => {
+// time at which an element enters: absolute data-in, or a phrase cue (lead + phrase start + offset)
+const tin = (el, C) => el.dataset.cue != null ? C.lead + C.starts[+el.dataset.cue] + (+el.dataset.off || 0) : (+el.dataset.in || 0);
+window.render = (id, t, D, C) => {
   document.querySelectorAll('.scene').forEach(s => s.classList.toggle('on', s.id === id));
   const sc = document.getElementById(id);
   sc.querySelectorAll('.a').forEach(el => {
-    const t0 = +el.dataset.in || 0, p = ease((t - t0) / 0.7), fx = el.dataset.fx || 'up';
-    if (fx === 'none') return;
-    let tr = '';
-    if (fx === 'up') tr = `translateY(${(1 - p) * 34}px)`;
+    const fx = el.dataset.fx || 'up'; if (fx === 'none') return;
+    const p = ease((t - tin(el, C)) / 0.65); let tr = '';
+    if (fx === 'up') tr = `translateY(${(1 - p) * 36}px)`;
     if (fx === 'scale') tr = `scale(${0.94 + 0.06 * p})`;
     if (el.dataset.kb) tr += ` scale(${1 + 0.035 * Math.min(1, t / D)})`;
+    if (el.dataset.pulse != null) { const tp = C.lead + C.starts[+el.dataset.pulse], q = (t - tp) / 0.9; if (q > 0 && q < 1) tr += ` scale(${1 + 0.05 * Math.sin(Math.PI * q)})`; }
     el.style.opacity = p; el.style.transform = tr;
   });
+  sc.querySelectorAll('.cuefx').forEach(el => {
+    const p = ease((t - tin(el, C)) / 0.6), fx = el.dataset.fx;
+    if (fx === 'fade' || fx === 'fadein') el.style.opacity = p;
+    if (fx === 'pop') { el.style.opacity = 0.15 + 0.85 * p; }
+    if (fx === 'glowrect') el.style.filter = p > 0 ? `drop-shadow(0 0 ${14 * p}px rgba(217,80,31,.85))` : 'none';
+    if (fx === 'hl') el.style.background = `rgba(245,166,109,${0.55 * p})`;
+  });
   sc.querySelectorAll('path.draw').forEach(pa => {
-    const L = pa.getTotalLength(), p = ease((t - +pa.dataset.in) / (+pa.dataset.dur));
-    if (!pa.dataset.dashed) pa.dataset.dashed = pa.getAttribute('stroke-dasharray') || '';
-    if (pa.dataset.dashed) { pa.style.opacity = p; }
+    const L = pa.getTotalLength(), p = ease((t - tin(pa, C)) / (+pa.dataset.dur));
+    if (pa.getAttribute('stroke-dasharray')) pa.style.opacity = p;
     else { pa.style.strokeDasharray = L; pa.style.strokeDashoffset = L * (1 - p); }
-    pa.style.markerEnd = p > 0.97 ? pa.getAttribute('marker-end') : 'none';
+    if (!pa.dataset.me) pa.dataset.me = pa.getAttribute('marker-end'); pa.setAttribute('marker-end', p > 0.97 ? pa.dataset.me : '');
   });
   sc.querySelectorAll('[data-count]').forEach(el => {
-    const v = +el.dataset.count, p = ease((t - +el.dataset.cin) / 1.1), f = +el.dataset.fmt;
-    el.textContent = (v * p).toFixed(f);
+    const t0 = C.lead + C.starts[+el.dataset.ccue] + (+el.dataset.coff || 0), p = ease((t - t0) / 1.1);
+    el.textContent = (+el.dataset.count * p).toFixed(+el.dataset.fmt);
   });
-  sc.querySelectorAll('.bar').forEach(el => { const p = ease((t - +el.dataset.cin) / 0.9); el.style.width = (+el.dataset.w * 50 * p) + '%'; });
+  sc.querySelectorAll('.bar').forEach(el => { const t0 = C.lead + C.starts[+el.dataset.ccue] + (+el.dataset.coff || 0), p = ease((t - t0) / 0.9); el.style.width = (+el.dataset.w * 50 * p) + '%'; });
 };
 </script>
 </body></html>

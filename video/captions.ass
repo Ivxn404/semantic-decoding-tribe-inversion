@@ -1,0 +1,60 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Box,Inter Display,52,&HFF000000,&HFF000000,&H2E351C10,&H00000000,-1,0,0,0,100,100,0,0,3,16,0,2,240,240,58,1
+Style: Cap,Inter Display,52,&H00FFFFFF,&H00B59C8B,&HFF000000,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,2,240,240,58,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.90,0:00:05.64,Box,,0,0,0,,{\fad(120,100)}Can a brain model that predicts fMRI almost perfectly be run backwards,
+Dialogue: 1,0:00:00.90,0:00:05.64,Cap,,0,0,0,,{\fad(120,100)}{\kf25}Can {\kf20}a {\kf34}brain {\kf38}model {\kf25}that {\kf47}predicts {\kf74}fMRI {\kf47}almost {\kf52}perfectly {\kf25}be {\kf25}run {\kf47}backwards,
+Dialogue: 0,0:00:05.66,0:00:07.50,Box,,0,0,0,,{\fad(120,100)}to read meaning out of the brain?
+Dialogue: 1,0:00:05.66,0:00:07.50,Cap,,0,0,0,,{\fad(120,100)}{\kf17}to {\kf25}read {\kf33}meaning {\kf21}out {\kf14}of {\kf14}the {\kf29}brain?
+Dialogue: 0,0:00:07.52,0:00:12.55,Box,,0,0,0,,{\fad(120,100)}Project SBT_SW15 tests this on Meta's TRIBE v2.
+Dialogue: 1,0:00:07.52,0:00:12.55,Cap,,0,0,0,,{\fad(120,100)}{\kf57}Project {\kf175}{\1c&H5C9AFF&}SBT_SW15{\1c&HFFFFFF&} {\kf37}tests {\kf27}this {\kf22}on {\kf37}Meta's {\kf37}TRIBE {\kf57}{\1c&H5C9AFF&}v2.{\1c&HFFFFFF&}
+Dialogue: 0,0:00:12.70,0:00:17.11,Box,,0,0,0,,{\fad(120,100)}Encoding models predict brain activity from what a person hears and sees.
+Dialogue: 1,0:00:12.70,0:00:17.11,Cap,,0,0,0,,{\fad(120,100)}{\kf48}Encoding {\kf43}models {\kf43}predict {\kf34}brain {\kf48}activity {\kf25}from {\kf25}what {\kf20}a {\kf39}person {\kf30}hears {\kf20}and {\kf34}sees.
+Dialogue: 0,0:00:17.13,0:00:18.91,Box,,0,0,0,,{\fad(120,100)}Decoding is assumed to follow,
+Dialogue: 1,0:00:17.13,0:00:18.91,Cap,,0,0,0,,{\fad(120,100)}{\kf47}Decoding {\kf16}is {\kf38}assumed {\kf20}to {\kf43}follow,
+Dialogue: 0,0:00:18.93,0:00:22.66,Box,,0,0,0,,{\fad(120,100)}but for a deep foundation encoder, this had never been tested.
+Dialogue: 1,0:00:18.93,0:00:22.66,Cap,,0,0,0,,{\fad(120,100)}{\kf23}but {\kf23}for {\kf18}a {\kf27}deep {\kf51}foundation {\kf43}encoder, {\kf23}this {\kf23}had {\kf27}never {\kf23}been {\kf39}tested.
+Dialogue: 0,0:00:22.80,0:00:26.62,Box,,0,0,0,,{\fad(120,100)}The frozen network, 177 million parameters,
+Dialogue: 1,0:00:22.80,0:00:26.62,Cap,,0,0,0,,{\fad(120,100)}{\kf17}The {\kf47}frozen {\kf52}network, {\kf147}{\1c&H5C9AFF&}177{\1c&HFFFFFF&} {\kf42}million {\kf62}parameters,
+Dialogue: 0,0:00:26.64,0:00:29.08,Box,,0,0,0,,{\fad(120,100)}is re-entered after feature aggregation,
+Dialogue: 1,0:00:26.64,0:00:29.08,Cap,,0,0,0,,{\fad(120,100)}{\kf18}is {\kf59}re-entered {\kf34}after {\kf44}feature {\kf75}aggregation,
+Dialogue: 0,0:00:29.10,0:00:32.02,Box,,0,0,0,,{\fad(120,100)}and the stimulus is recovered by gradient descent,
+Dialogue: 1,0:00:29.10,0:00:32.02,Cap,,0,0,0,,{\fad(120,100)}{\kf21}and {\kf16}the {\kf54}stimulus {\kf16}is {\kf45}recovered {\kf26}by {\kf54}gradient {\kf45}descent,
+Dialogue: 0,0:00:32.04,0:00:34.04,Box,,0,0,0,,{\fad(120,100)}against a known ground truth.
+Dialogue: 1,0:00:32.04,0:00:34.04,Cap,,0,0,0,,{\fad(120,100)}{\kf34}against {\kf18}a {\kf26}known {\kf34}ground {\kf34}truth.
+Dialogue: 0,0:00:34.19,0:00:38.74,Box,,0,0,0,,{\fad(120,100)}In the working model, the prediction error falls more than 300,000-fold.
+Dialogue: 1,0:00:34.19,0:00:38.74,Cap,,0,0,0,,{\fad(120,100)}{\kf20}In {\kf16}the {\kf38}working {\kf42}model, {\kf16}the {\kf51}prediction {\kf24}error {\kf33}falls {\kf29}more {\kf20}than {\kf135}{\1c&H5C9AFF&}300,000-fold.{\1c&HFFFFFF&}
+Dialogue: 0,0:00:38.76,0:00:40.12,Box,,0,0,0,,{\fad(120,100)}Yet recovery stalls,
+Dialogue: 1,0:00:38.76,0:00:40.12,Cap,,0,0,0,,{\fad(120,100)}{\kf26}Yet {\kf50}recovery {\kf46}stalls,
+Dialogue: 0,0:00:40.14,0:00:43.34,Box,,0,0,0,,{\fad(120,100)}and equally good fits from different starts disagree.
+Dialogue: 1,0:00:40.14,0:00:43.34,Cap,,0,0,0,,{\fad(120,100)}{\kf19}and {\kf40}equally {\kf23}good {\kf27}fits {\kf23}from {\kf40}different {\kf40}starts {\kf53}disagree.
+Dialogue: 0,0:00:43.49,0:00:48.64,Box,,0,0,0,,{\fad(120,100)}On the real model, the brain-wide fit reaches R² ≈ 0.99,
+Dialogue: 1,0:00:43.49,0:00:48.64,Cap,,0,0,0,,{\fad(120,100)}{\kf21}On {\kf16}the {\kf34}real {\kf44}model, {\kf16}the {\kf57}brain-wide {\kf25}fit {\kf44}reaches {\kf48}R² {\kf71}≈ {\kf126}{\1c&H5C9AFF&}0.99,{\1c&HFFFFFF&}
+Dialogue: 0,0:00:48.66,0:00:51.01,Box,,0,0,0,,{\fad(120,100)}while recovery stops near one half.
+Dialogue: 1,0:00:48.66,0:00:51.01,Cap,,0,0,0,,{\fad(120,100)}{\kf27}while {\kf44}recovery {\kf36}stops {\kf23}near {\kf23}one {\kf27}half.
+Dialogue: 0,0:00:51.16,0:00:55.96,Box,,0,0,0,,{\fad(120,100)}Across four ground truths, error falls 28-fold while recovery saturates.
+Dialogue: 1,0:00:51.16,0:00:55.96,Cap,,0,0,0,,{\fad(120,100)}{\kf39}Across {\kf30}four {\kf39}ground {\kf44}truths, {\kf25}error {\kf35}falls {\kf90}{\1c&H5C9AFF&}28-fold{\1c&HFFFFFF&} {\kf30}while {\kf48}recovery {\kf67}saturates.
+Dialogue: 0,0:00:55.98,0:00:59.75,Box,,0,0,0,,{\fad(120,100)}Between equal solutions, the error rises almost 5-fold:
+Dialogue: 1,0:00:55.98,0:00:59.75,Cap,,0,0,0,,{\fad(120,100)}{\kf46}Between {\kf41}equal {\kf61}solutions, {\kf17}the {\kf27}error {\kf41}rises {\kf51}almost {\kf61}{\1c&H5C9AFF&}5-fold:{\1c&HFFFFFF&}
+Dialogue: 0,0:00:59.77,0:01:01.97,Box,,0,0,0,,{\fad(120,100)}the inverse is non-convex.
+Dialogue: 1,0:00:59.77,0:01:01.97,Cap,,0,0,0,,{\fad(120,100)}{\kf18}the {\kf44}inverse {\kf18}is {\kf85}{\1c&H5C9AFF&}non-convex.{\1c&HFFFFFF&}
+Dialogue: 0,0:01:02.12,0:01:06.84,Box,,0,0,0,,{\fad(120,100)}The most responsive network, visual cortex, is the hardest to decode from.
+Dialogue: 1,0:01:02.12,0:01:06.84,Cap,,0,0,0,,{\fad(120,100)}{\kf17}The {\kf36}most {\kf60}responsive {\kf50}network, {\kf45}visual {\kf55}cortex, {\kf17}is {\kf17}the {\kf50}hardest {\kf22}to {\kf41}decode {\kf31}from.
+Dialogue: 0,0:01:06.86,0:01:12.15,Box,,0,0,0,,{\fad(120,100)}On real fMRI, 4 of 5 story segments are identified among 45,
+Dialogue: 1,0:01:06.86,0:01:12.15,Cap,,0,0,0,,{\fad(120,100)}{\kf22}On {\kf36}real {\kf85}fMRI, {\kf32}{\1c&H5C9AFF&}4{\1c&HFFFFFF&} {\kf17}of {\kf32}{\1c&H5C9AFF&}5{\1c&HFFFFFF&} {\kf41}story {\kf51}segments {\kf22}are {\kf70}identified {\kf32}among {\kf75}{\1c&H5C9AFF&}45,{\1c&HFFFFFF&}
+Dialogue: 0,0:01:12.17,0:01:16.83,Box,,0,0,0,,{\fad(120,100)}yet reconstruction reaches a cosine of only 0.02.
+Dialogue: 1,0:01:12.17,0:01:16.83,Cap,,0,0,0,,{\fad(120,100)}{\kf28}yet {\kf90}reconstruction {\kf49}reaches {\kf23}a {\kf49}cosine {\kf18}of {\kf38}only {\kf115}{\1c&H5C9AFF&}0.02.{\1c&HFFFFFF&}
+Dialogue: 0,0:01:16.97,0:01:20.11,Box,,0,0,0,,{\fad(120,100)}Encoding accuracy does not certify decoding.
+Dialogue: 1,0:01:16.97,0:01:20.11,Cap,,0,0,0,,{\fad(120,100)}{\kf53}Encoding {\kf53}accuracy {\kf28}does {\kf33}not {\kf58}certify {\kf58}decoding.
+Dialogue: 0,0:01:20.13,0:01:22.62,Box,,0,0,0,,{\fad(120,100)}Recoverability has to be measured.
+Dialogue: 1,0:01:20.13,0:01:22.62,Cap,,0,0,0,,{\fad(120,100)}{\kf80}Recoverability {\kf25}has {\kf20}to {\kf25}be {\kf39}measured.
