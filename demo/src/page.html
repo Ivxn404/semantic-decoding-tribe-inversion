@@ -180,7 +180,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
         <canvas class="brain" id="heroBrain" style="aspect-ratio: 1.2" aria-label="Rotating cortex coloured by which input TRIBE v2 is most sensitive to"></canvas>
         <div class="legend" style="padding:4px 8px 6px">
           <span><i class="dot" style="background:#e03131"></i> most sensitive to text</span><span><i class="dot" style="background:#2f9e44"></i> to audio</span><span><i class="dot" style="background:#1c7ed6"></i> to video</span>
-          <span class="mono">20 484 vertices · measured on TRIBE v2 · drag to turn</span>
+          <span class="mono">20,484 vertices · measured on TRIBE v2 · drag to turn</span>
         </div>
       </div>
     </div>
@@ -194,11 +194,11 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
     <div class="shead"><span class="eyebrow">Review II question 1</span><h2>What TRIBE v2 learned from</h2>
       <p class="lede">Four public 3T datasets, recorded while healthy adults watched or listened with no task. Click a dataset to see what the participants did in the scanner.</p></div>
     <div class="kpis">
-      <div class="kpi"><b>25</b><span>training subjects</span></div><div class="kpi"><b>451.6 h</b><span>training fMRI, 2 618 sessions</span></div>
-      <div class="kpi"><b>695</b><span>further subjects, test only</span></div><div class="kpi"><b>1 117.7 h</b><span>fMRI in all, 720 subjects</span></div>
+      <div class="kpi"><b>25</b><span>training subjects</span></div><div class="kpi"><b>451.6 h</b><span>training fMRI, 2,618 sessions</span></div>
+      <div class="kpi"><b>695</b><span>further subjects, test only</span></div><div class="kpi"><b>1,117.7 h</b><span>fMRI in all, 720 subjects</span></div>
     </div>
     <div class="split">
-      <div class="card"><svg id="dataBars" class="pipe" viewBox="0 0 640 330" role="img" aria-label="Hours of fMRI per dataset"></svg></div>
+      <div class="card"><svg id="dataBars" class="pipe" viewBox="0 0,640,330" role="img" aria-label="Hours of fMRI per dataset"></svg></div>
       <div class="card stack" id="dataCard" aria-live="polite"></div>
     </div>
     <div class="notes"><b>Say (45 s)</b>This answers the panel's first question. Training: CNeuroMod and Algonauts, 4 people watching Friends and films, 269 hours; BOLD Moments, 10 people, 3-second clips; LeBel, 8 people listening to podcasts; Wen, 3 people watching movie clips. 25 people, 452 hours. Then tested, without retraining, on 695 new people. Our real-data subject UTS03 is one of the LeBel 8, but the story we invert is TRIBE v2's own held-out test story.</div>
@@ -209,11 +209,11 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
 <section class="scene" id="eeg" data-name="Why fMRI">
   <div class="wrap">
     <div class="shead"><span class="eyebrow">Review II question 2</span><h2>Why fMRI and not EEG</h2>
-      <p class="lede">Left: TRIBE v2's real predicted response to a stimulus at all 20 484 cortical points. Right: the same pattern as EEG would see it, blurred by the skull and sampled at a few scalp electrodes. Change the electrode count.</p></div>
+      <p class="lede">Left: TRIBE v2's real predicted response to a stimulus at all 20,484 cortical points. Right: the same pattern as EEG would see it, blurred by the skull and sampled at a few scalp electrodes. Change the electrode count.</p></div>
     <div class="card" style="padding:10px">
       <canvas class="brain" id="eegBrain" style="aspect-ratio: 2.9" aria-label="fMRI resolution versus simulated EEG resolution"></canvas>
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:4px 8px">
-        <div class="legend"><span class="mono">fMRI · 20 484 vertices</span><span class="mono" id="eegLabel">EEG · 64 electrodes</span></div>
+        <div class="legend"><span class="mono">fMRI · 20,484 vertices</span><span class="mono" id="eegLabel">EEG · 64 electrodes</span></div>
         <div class="seg" id="eegSeg" role="group" aria-label="Electrodes"><button data-n="32">32</button><button data-n="64" aria-pressed="true">64</button><button data-n="128">128</button></div>
       </div>
     </div>
@@ -229,7 +229,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
       <p class="lede">The public pipeline is not differentiable end to end. The input enters at one point only, after the feature extractors. We re-enter there, freeze every weight and optimise only the stimulus representation x.</p></div>
     <div class="card"><div class="tablewrap"><svg id="pipeSvg" class="pipe" viewBox="0 0 1180 300" role="img" aria-label="Inversion pipeline" style="min-width:760px"></svg></div></div>
     <div class="kpis">
-      <div class="kpi"><b>177.21 M</b><span>frozen parameters</span></div><div class="kpi"><b>1 152</b><span>dimensions of x per time step</span></div>
+      <div class="kpi"><b>177.21 M</b><span>frozen parameters</span></div><div class="kpi"><b>1,152</b><span>dimensions of x per time step</span></div>
       <div class="kpi"><b>r = 1.0000</b><span>our re-entry reproduces the release</span></div><div class="kpi"><b>Adam</b><span>lr 5×10⁻², cosine schedule</span></div>
     </div>
     <div class="notes"><b>Say (35 s)</b>Speech synthesis, transcription and three big extractors are not differentiable. We found the single place the input batch is consumed, the aggregation into x, and rebuilt the forward map from there. It reproduces the released predictions exactly. Then x̂ = argmin of the squared error between f(x) and the target.</div>
@@ -242,7 +242,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
     <div class="shead"><span class="eyebrow">Asked at review · is the synthetic ground truth valid?</span><h2>A known answer, checked against real stimuli</h2>
       <p class="lede">We choose x in TRIBE v2's own input space, push it through the frozen model, y = f(x), and recover x from y alone. Because we chose x, the error is exact. The question is whether that x looks like real stimuli.</p></div>
     <div class="grid3">
-      <div class="card stack"><span class="eyebrow">Construction</span><h3>8 random directions, cosine time courses</h3><p style="font-size:.92rem">32 steps × 1 152 dimensions (text | audio | video slots, 16 s). Each of eight random unit directions carries its own cosine time course (2–16 cycles per window); the whole is scaled to unit s.d. Four seeds; white noise as an off-manifold control.</p></div>
+      <div class="card stack"><span class="eyebrow">Construction</span><h3>8 random directions, cosine time courses</h3><p style="font-size:.92rem">32 steps × 1,152 dimensions (text | audio | video slots, 16 s). Each of eight random unit directions carries its own cosine time course (2–16 cycles per window); the whole is scaled to unit s.d. Four seeds; white noise as an off-manifold control.</p></div>
       <div class="card stack"><span class="eyebrow">Correct by construction</span><h3>Exact error, real operator</h3><p style="font-size:.92rem">The standard known-answer test for inverse problems. The forward model is the released TRIBE v2 (re-entry r = 1.0000); nothing about the brain is assumed, so every recovery number is a measurement of the real inverse.</p></div>
       <div class="card stack"><span class="eyebrow">Shape does not matter</span><h3>White noise · 64× speed · 4 seeds</h3><p style="font-size:.92rem">White noise recovers like the structured truth (0.947 vs 0.942); a 64-fold change in speed of change leaves 0.836–0.858; results replicate across four seeds (agreement 0.894 ± 0.003).</p></div>
     </div>
@@ -264,7 +264,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
     <div class="card stack">
       <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
         <div class="btnrow"><button class="btn primary" id="labRun">Run inversion</button><button class="btn" id="labReset">New target</button></div>
-        <span class="status" id="labStatus">ready · 0 / 2 400 steps</span>
+        <span class="status" id="labStatus">ready · 0 / 2,400 steps</span>
       </div>
       <div class="ctls">
         <div class="ctl"><label for="cK">Starts</label><output id="oK">4</output><input type="range" id="cK" min="1" max="6" value="4"></div>
@@ -306,7 +306,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
       <div class="card"><h3>Recovery and agreement <span class="muted" style="font-weight:400">· dashed: lowest agreement between starts</span></h3><canvas class="chart" id="rpCos"></canvas></div>
     </div>
     <div class="kpis" id="rpKpis"></div>
-    <div class="notes"><b>Say (60 s)</b>This is not a simulation: every frame is a logged value from the real model, inverted on CPU. The middle brain converges to the target and the median vertex R² climbs from 0.66 to 0.995, yet recovery of x stops near 0.5 and the three starts agree only 0.37 to 0.54 with each other. The last tile is a forward-only check: along the straight path between two equally good fits the prediction changes about four times more in the middle than between the ends, which a flat null space would not do. The full experiments run 16 000 to 32 000 steps; numbers are in the next scene.</div>
+    <div class="notes"><b>Say (60 s)</b>This is not a simulation: every frame is a logged value from the real model, inverted on CPU. The middle brain converges to the target and the median vertex R² climbs from 0.66 to 0.995, yet recovery of x stops near 0.5 and the three starts agree only 0.37 to 0.54 with each other. The last tile is a forward-only check: along the straight path between two equally good fits the prediction changes about four times more in the middle than between the ends, which a flat null space would not do. The full experiments run 16,000 to 32,000 steps; numbers are in the next scene.</div>
   </div>
 </section>
 
@@ -329,7 +329,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
       <div class="card" style="padding:10px"><canvas class="brain" id="roiBrain" style="aspect-ratio: 1.45" aria-label="Cortical networks"></canvas></div>
       <div class="stack"><div class="netlist" id="netList"></div><div class="card" id="netCard" aria-live="polite"></div></div>
     </div>
-    <div class="card"><h3>Sensitivity against recovery advantage</h3><svg id="roiScatter" class="pipe" viewBox="0 0 760 300" role="img" aria-label="Scatter of sensitivity and recovery advantage"></svg></div>
+    <div class="card"><h3>Sensitivity against recovery advantage</h3><svg id="roiScatter" class="pipe" viewBox="0 0,760,300" role="img" aria-label="Scatter of sensitivity and recovery advantage"></svg></div>
     <div class="notes"><b>Say (60 s)</b>Click Visual: the most responsive network, 1.6 times the cortical mean, yet 0.125 worse than random vertices. Click Somatomotor: the least responsive, yet 0.102 better, beating the whole cortex at the same budget. Both are ten times the control spread. Why: somatomotor responses are diverse, participation ratio 18.6; visual ones are concentrated in few directions, 10.3.</div>
   </div>
 </section>
@@ -340,7 +340,7 @@ kbd { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--line
     <div class="shead"><span class="eyebrow">LeBel et al. 2023 · subject UTS03 · held-out story “wheretheressmoke”</span><h2>On real fMRI: identify, but not reconstruct</h2></div>
     <div class="grid3">
       <div class="card"><h3>Alignment lag</h3><canvas class="chart" id="lagCh" style="height:190px"></canvas><p class="muted" style="font-size:.82rem">best lag 4 s, fitted on the five training stories</p></div>
-      <div class="card"><h3>Encoding accuracy by network</h3><canvas class="chart" id="encCh" style="height:190px"></canvas><p class="muted" style="font-size:.82rem">top-2 000 vertices r = 0.478, 56% of the 0.859 noise ceiling</p></div>
+      <div class="card"><h3>Encoding accuracy by network</h3><canvas class="chart" id="encCh" style="height:190px"></canvas><p class="muted" style="font-size:.82rem">top-2,000 vertices r = 0.478, 56% of the 0.859 noise ceiling</p></div>
       <div class="card"><h3>Which 20-s window?</h3><canvas class="chart" id="idCh" style="height:190px"></canvas><p class="muted" style="font-size:.82rem">forward identification among 194 windows, chance 0.5%</p></div>
     </div>
     <div class="card stack">

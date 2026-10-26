@@ -50,9 +50,9 @@ function chart(cv, o) {
   g.font = `11px ${css("--mono")}`; g.fillStyle = css("--muted"); g.strokeStyle = css("--grid"); g.lineWidth = 1;
   const yt = o.ylog ? Array.from({ length: ymax - ymin + 1 }, (_, i) => ymin + i).filter((v, i, a) => a.length < 8 || i % 2 === 0) : niceTicks(ymin, ymax, 4);
   g.textAlign = "right"; g.textBaseline = "middle";
-  for (const v of yt) { const yy = T + ph - (v - ymin) / (ymax - ymin) * ph; g.beginPath(); g.moveTo(L, yy); g.lineTo(L + pw, yy); g.stroke(); g.fillText(o.ylog ? `10${sup(v)}` : (o.yfmt ? o.yfmt(v) : +v.toFixed(2)), L - 6, yy); }
+  for (const v of yt) { const yy = T + ph - (v - ymin) / (ymax - ymin) * ph; g.beginPath(); g.moveTo(L, yy); g.lineTo(L + pw, yy); g.stroke(); g.fillText(o.ylog ? `10${sup(v)}` : (o.yfmt ? o.yfmt(v) : (+v.toFixed(2)).toLocaleString("en-US")), L - 6, yy); }
   g.textAlign = "center"; g.textBaseline = "top";
-  for (const v of (o.xticks || niceTicks(xmin, xmax, 5))) { const xx = X(v); g.fillText(o.xfmt ? o.xfmt(v) : +v.toFixed(2), xx, T + ph + 6); }
+  for (const v of (o.xticks || niceTicks(xmin, xmax, 5))) { const xx = X(v); g.fillText(o.xfmt ? o.xfmt(v) : (+v.toFixed(2)).toLocaleString("en-US"), xx, T + ph + 6); }
   if (o.xlabel) { g.textAlign = "right"; g.fillText(o.xlabel, L + pw, T + ph + 18); }
   for (const h of (o.hlines || [])) { g.save(); g.setLineDash([4, 4]); g.strokeStyle = h.color || css("--muted"); g.beginPath(); g.moveTo(L, Y(h.y)); g.lineTo(L + pw, Y(h.y)); g.stroke(); g.restore();
     if (h.label) { const yy = Y(h.y), top = yy < T + 14; g.textAlign = "left"; g.textBaseline = top ? "top" : "bottom"; g.fillStyle = h.color || css("--muted"); g.fillText(h.label, L + 4, top ? yy + 3 : yy - 2); } }
@@ -100,7 +100,7 @@ if (hero) { let drag = null; const cv = $("#heroBrain");
 // ---------------------------------------------------------------- data scene
 const DS = [
   { n: "CNeuroMod / Algonauts 2025", role: "train", subj: 4, sess: 1408, h: 268.7, tr: "1.49 s", what: "Watched the sitcom Friends (seasons 1–6) and four feature films: video, audio and dialogue together.", cite: "Gifford et al., 2025" },
-  { n: "BOLD Moments", role: "train", subj: 10, sess: 520, h: 61.9, tr: "1.75 s", what: "Watched 1 102 three-second video clips of everyday events; 102 test clips repeated 10 times.", cite: "Lahner et al., 2024" },
+  { n: "BOLD Moments", role: "train", subj: 10, sess: 520, h: 61.9, tr: "1.75 s", what: "Watched 1,102 three-second video clips of everyday events; 102 test clips repeated 10 times.", cite: "Lahner et al., 2024" },
   { n: "LeBel et al. 2023", role: "train", subj: 8, sess: 432, h: 85.8, tr: "2.0 s", what: "Listened to spoken autobiographical stories from podcasts (82 stories for three subjects). Our real-data subject UTS03 is one of these eight.", cite: "LeBel et al., 2023" },
   { n: "Wen et al. 2018", role: "train", subj: 3, sess: 258, h: 35.2, tr: "2.0 s", what: "Watched natural movie clips in 8-minute segments; test segments repeated 10 times.", cite: "Wen et al., 2018" },
   { n: "NNDb", role: "test", subj: 86, sess: null, h: 160.6, tr: "3T", what: "Watched full-length feature films. Used only to test TRIBE v2, never to train it.", cite: "Aliko et al., 2020" },
@@ -123,7 +123,7 @@ function drawData() {
   const d = DS[dsSel];
   $("#dataCard").innerHTML = `<span class="eyebrow">${d.role === "train" ? "Training set" : "Evaluation set (never trained on)"}</span><h3 style="font-size:1.35rem">${d.n}</h3>
     <p>${d.what}</p>
-    <div class="kpis"><div class="kpi"><b>${d.subj}</b><span>subjects</span></div>${d.sess ? `<div class="kpi"><b>${d.sess.toLocaleString("en-IN")}</b><span>sessions</span></div>` : ""}<div class="kpi"><b>${d.h} h</b><span>fMRI</span></div><div class="kpi"><b>${d.tr}</b><span>${d.sess ? "repetition time" : "scanner"}</span></div></div>
+    <div class="kpis"><div class="kpi"><b>${d.subj}</b><span>subjects</span></div>${d.sess ? `<div class="kpi"><b>${d.sess.toLocaleString("en-US")}</b><span>sessions</span></div>` : ""}<div class="kpi"><b>${d.h} h</b><span>fMRI</span></div><div class="kpi"><b>${d.tr}</b><span>${d.sess ? "repetition time" : "scanner"}</span></div></div>
     <p class="muted" style="font-size:.84rem">Source: ${d.cite}; counts from Table 1 of the TRIBE v2 paper (d'Ascoli et al., 2026). All passive viewing or listening, no task.</p>`;
 }
 drawData();
@@ -160,7 +160,7 @@ function paintEEG() {
 }
 $$("#eegSeg button").forEach(b => b.onclick = () => { eegN = +b.dataset.n; $$("#eegSeg button").forEach(x => x.setAttribute("aria-pressed", x === b)); paintEEG(); });
 const REASONS = [
-  ["Spatial detail", "≈2–3 mm voxels at 20 484 cortical vertices, against 32–128 scalp channels blurred over centimetres by volume conduction."],
+  ["Spatial detail", "≈2–3 mm voxels at 20,484 cortical vertices, against 32–128 scalp channels blurred over centimetres by volume conduction."],
   ["A model to invert", "TRIBE v2: 177 M parameters trained on 451.6 h. No open naturalistic EEG encoder exists at this scale."],
   ["One inverse, not two", "Decoding through EEG first needs source localisation, itself an ill-posed inverse problem, before ours."],
   ["Measured gap", "The same typing decoder reaches 32% character error from MEG but 67% from EEG (Lévy et al., 2025)."],
@@ -184,11 +184,11 @@ new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect()
   s += `<text x="10" y="22" class="small">NOT DIFFERENTIABLE (skipped)</text><text x="352" y="22" class="small" style="fill:var(--hot)">OPTIMISED</text><text x="520" y="22" class="small" style="fill:var(--accent)">FROZEN TRIBE v2 · 177.21 M PARAMETERS</text>`;
   s += box(10, 40, 140, 64, "Stimulus", "story audio + words", "nd") + box(10, 130, 140, 64, "TTS / ASR", "speech ↔ text", "nd") + box(170, 40, 150, 154, "Extractors", "Llama 3.2 · w2v-BERT · video", "nd");
   s += arr(150, 72, 170, 90) + arr(150, 162, 170, 150);
-  s += box(345, 70, 130, 100, "x", "T × 1 152 at 2 Hz", "x");
+  s += box(345, 70, 130, 100, "x", "T × 1,152 at 2 Hz", "x");
   s += arr(320, 118, 345, 118) + `<line x1="332" y1="40" x2="332" y2="200" stroke="var(--hot)" stroke-width="2" stroke-dasharray="5 4"/><text x="336" y="214" class="small" style="fill:var(--hot)">re-entry point</text>`;
-  s += box(510, 70, 140, 100, "Encoder", "127.47 M params", "frozen") + box(670, 70, 130, 100, "Head", "1 152 → 2 048", "frozen") + box(820, 70, 140, 100, "Subject layer", "41.97 M · avg. subject", "frozen") + box(980, 70, 80, 100, "Pool", "1 Hz", "frozen");
+  s += box(510, 70, 140, 100, "Encoder", "127.47 M params", "frozen") + box(670, 70, 130, 100, "Head", "1,152 → 2,048", "frozen") + box(820, 70, 140, 100, "Subject layer", "41.97 M · avg. subject", "frozen") + box(980, 70, 80, 100, "Pool", "1 Hz", "frozen");
   s += arr(475, 120, 510, 120, "flow") + arr(650, 120, 670, 120, "flow") + arr(800, 120, 820, 120, "flow") + arr(960, 120, 980, 120, "flow") + arr(1060, 120, 1080, 120, "flow");
-  s += `<text x="1088" y="112" style="font-size:14px;font-weight:600">f(x)</text><text x="1088" y="130" class="small">20 484 × 100</text>`;
+  s += `<text x="1088" y="112" style="font-size:14px;font-weight:600">f(x)</text><text x="1088" y="130" class="small">20,484 × 100</text>`;
   s += `<path d="M1100,150 C1100,250 420,260 410,178" fill="none" stroke="var(--hot)" stroke-width="2" marker-end="url(#ahh)" class="flow"/>`;
   s += `<text x="760" y="262" text-anchor="middle" style="font-size:13px;fill:var(--hot);font-weight:600">gradient of ‖f(x) − y‖² flows back to x only</text>`;
   s += `<text x="760" y="284" text-anchor="middle" class="small">x̂ = argmin ‖f(x) − y‖² + λR(x)   ·   ‖∂f/∂x‖ = 7.97 × 10³, no zero entries</text>`;
@@ -252,7 +252,7 @@ function drawLab() {
   chart($("#chCos"), { ymin: 0, ymax: 1, xmin: 0, xmax: STEPS, series: h.map((s, k) => ({ x: s.s, y: s.c, color: col[k], end: true })), xlabel: "step", xticks: [0, 600, 1200, 1800, 2400], hlines: [{ y: 1, label: "perfect recovery" }] });
   const last = h.map(s => s.L.length ? s.L[s.L.length - 1] : NaN), lc = h.map(s => s.c.length ? s.c[s.c.length - 1] : NaN);
   const L0 = h[0].L[0];
-  $("#labStatus").textContent = lab.step ? `step ${lab.step} / ${STEPS} · error ↓ ${L0 && last[0] ? Math.round(L0 / last[0]).toLocaleString("en-IN") : "–"}× · recovery ${lc.filter(isFinite).map(v => v.toFixed(3)).join(" / ")}` : `ready · 0 / ${STEPS} steps`;
+  $("#labStatus").textContent = lab.step ? `step ${lab.step.toLocaleString("en-US")} / ${STEPS.toLocaleString("en-US")} · error ↓ ${L0 && last[0] ? Math.round(L0 / last[0]).toLocaleString("en-US") : "–"}× · recovery ${lc.filter(isFinite).map(v => v.toFixed(3)).join(" / ")}` : `ready · 0 / ${STEPS.toLocaleString("en-US")} steps`;
   heat($("#hTrue"), xt); heat($("#hRec"), lab.xs[0]);
   // agreement matrix
   const cv = $("#agree"), K = lab.xs.length, dpr = Math.min(2, devicePixelRatio || 1), W = cv.clientWidth; cv.width = W * dpr; cv.height = W * dpr;
@@ -299,7 +299,7 @@ function paintReplay() {
     { colors: Brain.seq(rv, 0, 1, dark, Brain.viridis), x: 2 / 3, y: 0, w: 1 / 3, h: 1, layout: "lat2" }]);
   const st = rp.steps[i]; const k = rp.log.findIndex(l => l.step === st); const L = rp.log.slice(0, k + 1); const col = startColors();
   let medr = Float32Array.from(rv).sort()[rv.length >> 1];
-  $("#rpTxt").textContent = `step ${st} / ${rp.log[rp.log.length - 1].step} · median vertex R² ${Math.max(-1, medr).toFixed(2)} · recovery ${L[L.length - 1].cos.map(v => v.toFixed(2)).join(" / ")}`;
+  $("#rpTxt").textContent = `step ${st.toLocaleString("en-US")} / ${rp.log[rp.log.length - 1].step.toLocaleString("en-US")} · median vertex R² ${Math.max(-1, medr).toFixed(2)} · recovery ${L[L.length - 1].cos.map(v => v.toFixed(2)).join(" / ")}`;
   const xs = L.map(l => l.step), xmax = rp.log[rp.log.length - 1].step;
   chart($("#rpLoss"), { ylog: true, xmin: 0, xmax, series: rp.inits.map((n, j) => ({ x: xs, y: L.map(l => l.mse[j]), color: col[j], end: true })), xlabel: "step" });
   chart($("#rpCos"), { ymin: 0, ymax: 1, xmin: 0, xmax, series: [...rp.inits.map((n, j) => ({ x: xs, y: L.map(l => l.cos[j]), color: col[j], end: true })), { x: xs, y: L.map(l => Math.min(...l.pair)), color: css("--muted"), dash: [5, 4], end: true }], xlabel: "step", hlines: [{ y: 1, label: "perfect recovery" }] });
@@ -307,7 +307,7 @@ function paintReplay() {
 function rpKpis() {
   if (!rp) return; const f = rp.log[rp.log.length - 1], f0 = rp.log[0]; const col = startColors();
   let h = rp.inits.map((n, j) => `<div class="kpi"><b style="color:${col[j]}">${f.cos[j].toFixed(3)}</b><span>recovery · ${n}</span></div>`).join("");
-  h += `<div class="kpi"><b>${Math.round(f0.mse[0] / f.mse[0]).toLocaleString("en-IN")}×</b><span>prediction error reduction, start 1</span></div>`;
+  h += `<div class="kpi"><b>${Math.round(f0.mse[0] / f.mse[0]).toLocaleString("en-US")}×</b><span>prediction error reduction, start 1</span></div>`;
   h += `<div class="kpi"><b>${Math.min(...f.pair).toFixed(3)}</b><span>lowest agreement between starts</span></div>`;
   if (rp.barrier) { const mid = rp.barrier.find(b => b.scale === 0.5), end = rp.barrier.find(b => b.scale === 1.0);
     h += `<div class="kpi"><b>${(mid.mse_d / end.mse_d).toFixed(1)}×</b><span>not a flat null space: halfway between starts 1 and 2 the prediction changes this much more than between the two ends (forward passes only)</span></div>`; }
@@ -328,7 +328,7 @@ if (rp) {
 const FIG = D.figs;
 const F = [
   { k: "Dissociation", head: "Encoding accuracy does not certify decoding", big: "28.4×", sub: "lower encoding error, while recovery saturates at 0.944",
-    text: "Independent inversions at budgets from 250 to 32 000 steps. The last halving of encoding error (5.65 → 2.66 × 10⁻³) bought only +0.015 in recovery cosine.",
+    text: "Independent inversions at budgets from 250 to 32,000 steps. The last halving of encoding error (5.65 → 2.66 × 10⁻³) bought only +0.015 in recovery cosine.",
     draw: el => { const steps = [250, 500, 1000, 2000, 4000, 8000, 16000, 32000], err = [7.546e-2, 6.043e-2, 5.098e-2, 4.073e-2, 2.733e-2, 1.380e-2, 5.649e-3, 2.658e-3], rec = [.0505, .1081, .2374, .4529, .6708, .8362, .9282, .9436];
       el.innerHTML = `<canvas class="chart" style="height:300px"></canvas><p class="muted" style="font-size:.82rem">x: encoding relative error (log, falling to the right) · y: recovery cosine · labels: optimisation steps</p>`;
       const xs = err.map(v => -Math.log10(v)); chart(el.firstChild, { ymin: 0, ymax: 1, series: [{ x: xs, y: rec, color: css("--accent"), dots: true }], labels: steps.map((s, i) => ({ x: xs[i], y: rec[i], t: s >= 1000 ? s / 1000 + "k" : s })), xfmt: v => Math.pow(10, -v).toPrecision(1), xticks: [1.2, 1.6, 2, 2.4], hlines: [{ y: 1, label: "perfect" }] }); } },
@@ -341,7 +341,7 @@ const F = [
   { k: "Sensitivity", head: "The error hides in the weakest directions", big: "2.15×", sub: "below the median sensitivity of 200 random directions, mean of 4 ground truths (1.9× in the original run shown)",
     text: "At a recovered solution the operator responds about half as strongly along the solution difference as along a typical direction, and below every random direction sampled. All six pairwise differences sit below the median.", fig: "fig_sensitivity" },
   { k: "Conditioning", head: "Gain, noise, extent, priors and a linear baseline", big: "0.918 vs 0.060", sub: "gradient inversion against the best ridge decoder",
-    text: "Gain is identifiable (a 10% rescale gives 7.5× the noise floor). Recovery falls smoothly with noise while retrieval stays near 0.99. 2 000 random vertices recover 0.777. An ℓ₂ prior adds at most +0.032 and temporal smoothing destroys recovery.", gallery: ["fig_gain", "fig_noise", "fig_extent", "fig_priors", "fig_baseline"] },
+    text: "Gain is identifiable (a 10% rescale gives 7.5× the noise floor). Recovery falls smoothly with noise while retrieval stays near 0.99. 2,000 random vertices recover 0.777. An ℓ₂ prior adds at most +0.032 and temporal smoothing destroys recovery.", gallery: ["fig_gain", "fig_noise", "fig_extent", "fig_priors", "fig_baseline"] },
 ];
 let fSel = 0;
 function drawF() {
@@ -377,7 +377,7 @@ function paintROI() {
   $$("#netList button").forEach(b => b.onclick = () => { netSel = +b.dataset.i; paintROI(); });
   const n = NETS[netSel];
   $("#netCard").innerHTML = `<div class="kpis"><div class="kpi"><b>${n.sens.toFixed(2)}×</b><span>forward sensitivity vs cortex mean</span></div><div class="kpi"><b>${n.rec.toFixed(3)}</b><span>recovery from this network</span></div><div class="kpi"><b>${n.rnd.toFixed(3)}</b><span>random vertices, same size</span></div><div class="kpi"><b>${n.pr}</b><span>participation ratio (random control ${n.prc})</span></div></div>
-    <p style="margin-top:10px;font-size:.92rem">${n.v.toLocaleString("en-IN")} vertices · strongest input: ${n.dom === "none" ? "no single modality" : n.dom.replace(/(\w+) \+/, "$1, z = +")}. ${n.n === "Visual" ? "Most responsive, yet the hardest to decode from: its responses vary along few directions." : n.n === "Somatomotor" ? "Least responsive, yet the easiest: the only network whose responses are more diverse than random vertices." : "Close to random vertices of the same size."}</p>`;
+    <p style="margin-top:10px;font-size:.92rem">${n.v.toLocaleString("en-US")} vertices · strongest input: ${n.dom === "none" ? "no single modality" : n.dom.replace(/(\w+) \+/, "$1, z = +")}. ${n.n === "Visual" ? "Most responsive, yet the hardest to decode from: its responses vary along few directions." : n.n === "Somatomotor" ? "Least responsive, yet the easiest: the only network whose responses are more diverse than random vertices." : "Close to random vertices of the same size."}</p>`;
   scatter();
 }
 function scatter() {
