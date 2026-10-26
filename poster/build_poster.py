@@ -156,7 +156,7 @@ for k, g in GEOM.items():
 hb = box["VIT logo, School name, Program name"]
 fill(hb, None, [[("School of Electronics Engineering (SENSE)", True)],
                 [("B.Tech. Electronics and Communication Engineering (specialisation in Biomedical Engineering)", False)],
-                [("BECE497J Project-I  ·  Final Review and Poster Presentation  ·  29 October 2026", False)]],
+                [("Project ID SBT_SW15  ·  BECE497J Project-I  ·  Poster Presentation  ·  29 October 2026", False)]],
      size=30, anchor=MSO_ANCHOR.MIDDLE, space=2)
 for p in hb.text_frame.paragraphs:
     p.alignment = PP_ALIGN.CENTER
